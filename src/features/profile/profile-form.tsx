@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useForm, type UseFormRegisterReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,15 +16,15 @@ function ChoiceGroup({
   legend,
   name,
   options,
-  register,
-  current,
+  value,
+  onChange,
   columns = 2,
 }: {
   legend: string;
   name: string;
   options: Option[];
-  register: UseFormRegisterReturn;
-  current: unknown;
+  value: unknown;
+  onChange: (value: string | number) => void;
   columns?: 2 | 3 | 4;
 }) {
   return (
@@ -32,7 +32,7 @@ function ChoiceGroup({
       <legend className="text-sm font-semibold">{legend}</legend>
       <div className={cn("grid gap-2", columns === 2 && "sm:grid-cols-2", columns === 3 && "sm:grid-cols-3", columns === 4 && "grid-cols-2 sm:grid-cols-4")}>
         {options.map((o) => {
-          const checked = String(current) === String(o.value);
+          const checked = String(value) === String(o.value);
           return (
             <label
               key={String(o.value)}
@@ -41,7 +41,14 @@ function ChoiceGroup({
                 checked ? "border-primary ring-2 ring-primary/30" : "hover:bg-muted",
               )}
             >
-              <input type="radio" value={String(o.value)} className="sr-only" {...register} name={name} />
+              <input
+                type="radio"
+                name={name}
+                value={String(o.value)}
+                checked={checked}
+                onChange={() => onChange(o.value)}
+                className="sr-only"
+              />
               <span className="font-medium">{o.label}</span>
               {o.hint && <span className="text-xs text-muted-foreground">{o.hint}</span>}
             </label>
@@ -71,7 +78,6 @@ const TARGETS: Option[] = [
   { value: "accompany_songs", label: "Đệm hát được những bài đơn giản" },
 ];
 
-const asNumber = { setValueAs: (v: unknown) => Number(v) };
 
 export function OnboardingForm() {
   const [error, setError] = useState<string | null>(null);
@@ -97,20 +103,20 @@ export function OnboardingForm() {
           const r = await completeOnboarding(values);
           if (r && !r.ok) setError(r.error);
         }),
+        (errors) => setError(`Hãy kiểm tra lại: ${Object.keys(errors).join(", ")}`),
       )}
     >
-      <ChoiceGroup legend="Kinh nghiệm của bạn" name="experience" options={EXPERIENCE} register={form.register("experience")} current={v.experience} />
-      <ChoiceGroup legend="Loại đàn bạn có" name="guitarType" options={GUITAR} register={form.register("guitarType")} current={v.guitarType} columns={3} />
-      <ChoiceGroup legend="Bạn gảy bằng tay nào?" name="handedness" options={HANDEDNESS} register={form.register("handedness")} current={v.handedness} />
+      <ChoiceGroup legend="Kinh nghiệm của bạn" name="experience" options={EXPERIENCE} value={v.experience} onChange={(x) => form.setValue("experience", x as never, { shouldDirty: true })} />
+      <ChoiceGroup legend="Loại đàn bạn có" name="guitarType" options={GUITAR} value={v.guitarType} onChange={(x) => form.setValue("guitarType", x as never, { shouldDirty: true })} columns={3} />
+      <ChoiceGroup legend="Bạn gảy bằng tay nào?" name="handedness" options={HANDEDNESS} value={v.handedness} onChange={(x) => form.setValue("handedness", x as never, { shouldDirty: true })} />
       <ChoiceGroup
         legend="Mục tiêu luyện tập mỗi ngày"
         name="practiceGoalMinutes"
         options={GOALS}
-        register={form.register("practiceGoalMinutes", asNumber)}
-        current={v.practiceGoalMinutes}
+        value={v.practiceGoalMinutes} onChange={(x) => form.setValue("practiceGoalMinutes", x as never, { shouldDirty: true })}
         columns={4}
       />
-      <ChoiceGroup legend="Bạn muốn đạt được gì?" name="learningTarget" options={TARGETS} register={form.register("learningTarget")} current={v.learningTarget} />
+      <ChoiceGroup legend="Bạn muốn đạt được gì?" name="learningTarget" options={TARGETS} value={v.learningTarget} onChange={(x) => form.setValue("learningTarget", x as never, { shouldDirty: true })} />
       {error && (
         <p role="alert" className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
           {error}
@@ -146,18 +152,17 @@ export function ProfileForm({ defaults }: { defaults: ProfileInput }) {
           <p className="text-sm text-destructive">{form.formState.errors.displayName.message}</p>
         )}
       </div>
-      <ChoiceGroup legend="Bạn gảy bằng tay nào?" name="handedness" options={HANDEDNESS} register={form.register("handedness")} current={v.handedness} />
-      <ChoiceGroup legend="Loại đàn" name="guitarType" options={GUITAR} register={form.register("guitarType")} current={v.guitarType} columns={3} />
+      <ChoiceGroup legend="Bạn gảy bằng tay nào?" name="handedness" options={HANDEDNESS} value={v.handedness} onChange={(x) => form.setValue("handedness", x as never, { shouldDirty: true })} />
+      <ChoiceGroup legend="Loại đàn" name="guitarType" options={GUITAR} value={v.guitarType} onChange={(x) => form.setValue("guitarType", x as never, { shouldDirty: true })} columns={3} />
       <ChoiceGroup
         legend="Mục tiêu luyện tập mỗi ngày"
         name="practiceGoalMinutes"
         options={GOALS}
-        register={form.register("practiceGoalMinutes", asNumber)}
-        current={v.practiceGoalMinutes}
+        value={v.practiceGoalMinutes} onChange={(x) => form.setValue("practiceGoalMinutes", x as never, { shouldDirty: true })}
         columns={4}
       />
-      <ChoiceGroup legend="Kinh nghiệm" name="experience" options={EXPERIENCE} register={form.register("experience")} current={v.experience} />
-      <ChoiceGroup legend="Mục tiêu học" name="learningTarget" options={TARGETS} register={form.register("learningTarget")} current={v.learningTarget} />
+      <ChoiceGroup legend="Kinh nghiệm" name="experience" options={EXPERIENCE} value={v.experience} onChange={(x) => form.setValue("experience", x as never, { shouldDirty: true })} />
+      <ChoiceGroup legend="Mục tiêu học" name="learningTarget" options={TARGETS} value={v.learningTarget} onChange={(x) => form.setValue("learningTarget", x as never, { shouldDirty: true })} />
       {message && (
         <p role="status" className={cn("rounded-lg p-3 text-sm", message.ok ? "bg-accent" : "bg-destructive/10 text-destructive")}>
           {message.text}
