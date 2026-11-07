@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-be-vietnam), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-heading: var(--font-be-vietnam), ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,38 +49,54 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.985 0.006 80);
+  --foreground: oklch(0.2 0.02 50);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.2 0.02 50);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.2 0.02 50);
+  --primary: oklch(0.56 0.15 45);
+  --primary-foreground: oklch(0.99 0.01 80);
+  --secondary: oklch(0.95 0.015 75);
+  --secondary-foreground: oklch(0.28 0.03 50);
+  --muted: oklch(0.955 0.01 75);
+  --muted-foreground: oklch(0.5 0.02 55);
+  --accent: oklch(0.93 0.04 75);
+  --accent-foreground: oklch(0.3 0.05 50);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --border: oklch(0.9 0.015 75);
+  --input: oklch(0.88 0.015 75);
+  --ring: oklch(0.56 0.15 45);
+  --chart-1: oklch(0.56 0.15 45);
+  --chart-2: oklch(0.6 0.1 160);
+  --chart-3: oklch(0.55 0.12 250);
+  --chart-4: oklch(0.7 0.13 85);
+  --chart-5: oklch(0.5 0.1 20);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.97 0.01 75);
+  --sidebar-foreground: oklch(0.2 0.02 50);
+  --sidebar-primary: oklch(0.56 0.15 45);
+  --sidebar-primary-foreground: oklch(0.99 0.01 80);
+  --sidebar-accent: oklch(0.93 0.03 75);
+  --sidebar-accent-foreground: oklch(0.25 0.03 50);
+  --sidebar-border: oklch(0.9 0.015 75);
+  --sidebar-ring: oklch(0.56 0.15 45);
+
+  /* Guitar visual tokens — shared by every SVG so all diagrams look like one instrument */
+  --gl-wood-body: oklch(0.78 0.09 70);
+  --gl-wood-body-edge: oklch(0.55 0.09 55);
+  --gl-wood-neck: oklch(0.36 0.05 45);
+  --gl-wood-headstock: oklch(0.32 0.05 45);
+  --gl-fret: oklch(0.82 0.01 90);
+  --gl-nut: oklch(0.96 0.02 90);
+  --gl-string: oklch(0.86 0.06 85);
+  --gl-string-plain: oklch(0.9 0.01 250);
+  --gl-inlay: oklch(0.93 0.02 90);
+  --gl-finger: oklch(0.56 0.15 45);
+  --gl-finger-text: oklch(0.99 0 0);
+  --gl-root: oklch(0.45 0.16 25);
+  --gl-highlight: oklch(0.7 0.15 150);
+  --gl-diagram-ink: oklch(0.25 0.02 50);
 }
 
 .dark {
@@ -129,5 +145,17 @@
   }
   html {
     @apply font-sans;
+  }
+}
+@layer utilities {
+  .gl-pulse {
+    animation: gl-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes gl-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gl-pulse { animation: none; }
   }
 }

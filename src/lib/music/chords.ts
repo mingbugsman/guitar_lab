@@ -23,7 +23,9 @@ export type ChordShape = {
   baseFret: number;
 };
 
-export const CHORDS = {
+export type ChordId = "em" | "am" | "e" | "a" | "d";
+
+export const CHORDS: Record<ChordId, ChordShape> = {
   em: {
     id: "em",
     symbol: "Em",
@@ -84,9 +86,7 @@ export const CHORDS = {
     fingers: { 3: 1, 2: 3, 1: 2 },
     baseFret: 1,
   },
-} satisfies Record<string, ChordShape>;
-
-export type ChordId = keyof typeof CHORDS;
+};
 export const CHORD_IDS = Object.keys(CHORDS) as ChordId[];
 
 export function getChord(id: string): ChordShape | undefined {
