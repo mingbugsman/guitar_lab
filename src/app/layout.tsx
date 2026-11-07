@@ -29,8 +29,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi">
-      <body className={`${sans.variable} ${mono.variable} min-h-dvh antialiased`}>{children}</body>
+    <html lang="vi" className={`${sans.variable} ${mono.variable}`}>
+      <body className="min-h-dvh antialiased">{children}</body>
     </html>
   );
 }

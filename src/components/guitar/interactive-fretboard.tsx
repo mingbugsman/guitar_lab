@@ -22,7 +22,7 @@ export function InteractiveFretboard({ playable = true, showToggle = true, capti
       }
     : undefined;
   return (
-    <figure className="space-y-3">
+    <figure className="min-w-0 space-y-3">
       {showToggle && <ViewToggle />}
       <div className="overflow-x-auto rounded-xl border bg-card p-2">
         <div className="min-w-[520px]">

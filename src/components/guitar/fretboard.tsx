@@ -32,7 +32,7 @@ export type FretboardProps = {
   title?: string;
 };
 
-const LABEL_W = 78;
+const LABEL_W = 96;
 const NUT_W = 8;
 const FRET_W = 66;
 const STRING_GAP = 30;
@@ -192,7 +192,7 @@ export function Fretboard({
               {`Dây ${s}`}
             </text>
             <text
-              x={X(LABEL_W - 12)}
+              x={X(LABEL_W - 30)}
               y={y + 4}
               textAnchor={anchor("end")}
               className="fill-muted-foreground font-mono text-[12px]"
@@ -229,7 +229,7 @@ export function Fretboard({
       {markers.map((m, i) => {
         const y = rowY(m.string);
         if (m.fret === "x") {
-          const cx = X(boardX0 - 6);
+          const cx = X(boardX0 - 12);
           return (
             <g key={i} data-marker="muted" data-string={m.string}>
               <line x1={cx - 6} x2={cx + 6} y1={y - 6} y2={y + 6} stroke="var(--destructive)" strokeWidth={2.5} />
@@ -243,7 +243,7 @@ export function Fretboard({
               key={i}
               data-marker="open"
               data-string={m.string}
-              cx={X(boardX0 - 6)}
+              cx={X(boardX0 - 12)}
               cy={y}
               r={7}
               fill="var(--card)"

@@ -21,7 +21,7 @@ export function ChordCompare({ chord }: { chord: ChordShape }) {
   const steps = describeChord(chord);
   return (
     <div className="space-y-4" data-testid={`chord-compare-${chord.id}`}>
-      <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-[220px_minmax(0,1fr)]">
         <figure className="rounded-xl border bg-card p-3">
           <ChordDiagram chord={chord} handedness={handedness} className="mx-auto" />
           <figcaption className="mt-2 text-center text-xs text-muted-foreground">
@@ -29,7 +29,7 @@ export function ChordCompare({ chord }: { chord: ChordShape }) {
             {handedness === "right" ? "TRÁI" : "PHẢI"}.
           </figcaption>
         </figure>
-        <figure className="space-y-2">
+        <figure className="min-w-0 space-y-2">
           <ViewToggle />
           <div className="overflow-x-auto rounded-xl border bg-card p-2">
             <div className="min-w-[480px]">
