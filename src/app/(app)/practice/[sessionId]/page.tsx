@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { requireOnboardedProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatDuration } from "@/lib/format";
@@ -42,9 +43,22 @@ export default async function SessionPage({ params }: { params: Promise<{ sessio
       </Link>
       <h1 className="text-2xl font-bold">Buổi tập {session.planned_minutes} phút</h1>
       {session.status === "completed" ? (
-        <div className="rounded-2xl border bg-card p-5">
-          <p className="font-medium">Buổi tập này đã được lưu — {formatDuration(session.duration_seconds)}.</p>
-          {session.notes && <p className="mt-2 text-muted-foreground">“{session.notes}”</p>}
+        <div className="space-y-4 rounded-2xl border bg-card p-6 text-center" data-testid="session-saved">
+          <CheckCircle2 className="mx-auto size-12 text-[oklch(0.55_0.15_150)]" aria-hidden />
+          <h2 className="text-xl font-bold">Đã lưu buổi tập</h2>
+          <p className="text-muted-foreground">
+            Bạn đã luyện {formatDuration(session.duration_seconds)} và hoàn thành{" "}
+            {(activities ?? []).filter((a) => a.completed_at).length}/{(activities ?? []).length} hoạt động.
+          </p>
+          {session.notes && <p className="text-muted-foreground">“{session.notes}”</p>}
+          <div className="flex flex-wrap justify-center gap-2">
+            <Link href="/dashboard" className={buttonVariants()}>
+              Về tổng quan
+            </Link>
+            <Link href="/progress" className={buttonVariants({ variant: "outline" })}>
+              Xem tiến độ
+            </Link>
+          </div>
         </div>
       ) : (
         <SessionRunner
