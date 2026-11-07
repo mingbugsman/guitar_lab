@@ -1,9 +1,10 @@
 import type { FretMarker } from "@/components/guitar/fretboard";
+import type { PartId } from "@/components/guitar/guitar-anatomy";
 import type { ChordId } from "@/lib/music/chords";
 import type { StringNumber } from "@/lib/music/guitar";
 
 export type Visual =
-  | { kind: "anatomy"; initialPart?: string }
+  | { kind: "anatomy"; initialPart?: PartId }
   | { kind: "posture" }
   | { kind: "fingers" }
   | {

@@ -9,7 +9,7 @@ import type { Handedness } from "./orientation";
  * headstock at the top, string 6 on the LEFT for a right-handed guitar.
  */
 
-type PartId =
+export type PartId =
   | "headstock"
   | "tuners"
   | "nut"

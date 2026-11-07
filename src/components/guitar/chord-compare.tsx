@@ -4,19 +4,11 @@ import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { arpeggiateChord, strumChord } from "@/lib/audio/guitar-synth";
 import type { ChordShape } from "@/lib/music/chords";
-import { STRING_NUMBERS_LOW_TO_HIGH } from "@/lib/music/guitar";
+import { chordMarkersStatic as chordMarkers } from "./chord-markers";
 import { ChordDiagram, describeChord } from "./chord-diagram";
-import { Fretboard, type FretMarker } from "./fretboard";
+import { Fretboard } from "./fretboard";
 import { useGuitarView } from "./view-context";
 import { ViewToggle } from "./view-toggle";
-
-export function chordMarkers(chord: ChordShape): FretMarker[] {
-  return STRING_NUMBERS_LOW_TO_HIGH.map((s) => ({
-    string: s,
-    fret: chord.frets[s],
-    finger: chord.fingers[s],
-  }));
-}
 
 /**
  * The same chord shown two ways, side by side, generated from one data source:

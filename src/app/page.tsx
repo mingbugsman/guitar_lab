@@ -1,103 +1,112 @@
-import Image from "next/image";
+import Link from "next/link";
+import { BookOpen, Gauge, Guitar, Timer } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { Logo } from "@/components/layout/logo";
+import { ChordDiagram } from "@/components/guitar/chord-diagram";
+import { Fretboard } from "@/components/guitar/fretboard";
+import { chordMarkersStatic } from "@/components/guitar/chord-markers";
+import { CHORDS } from "@/lib/music/chords";
+import { getUser } from "@/lib/auth";
 
-export default function Home() {
+const FEATURES = [
+  {
+    icon: Guitar,
+    title: "Hình đàn để đối chiếu",
+    text: "Mọi bài có hình cần đàn ở góc nhìn của chính bạn khi ôm đàn — có cả chế độ tay trái. Lời hướng dẫn luôn khớp hướng với hình.",
+  },
+  {
+    icon: BookOpen,
+    title: "Level 0 + 5 hợp âm đầu tiên",
+    text: "12 bài làm quen cây đàn, lên dây, tư thế, nốt nhạc, nhịp — rồi Em, Am, E, A, D với sơ đồ chính xác và âm thanh mẫu.",
+  },
+  {
+    icon: Timer,
+    title: "Buổi tập 30 phút có mục tiêu",
+    text: "Ôn lại, nhạc lý, kỹ thuật, ứng dụng, chơi tự do, tự nhìn lại. Mọi buổi tập được lưu để bạn thấy mình tiến bộ.",
+  },
+  {
+    icon: Gauge,
+    title: "Tuner & Metronome thật",
+    text: "Tuner nghe tiếng đàn qua micro và báo lệch bao nhiêu cent. Metronome phát nhịp ổn định ngay trên trình duyệt.",
+  },
+];
+
+export default async function LandingPage() {
+  const user = await getUser();
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-dvh">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+        <Logo />
+        <nav className="flex items-center gap-2">
+          {user ? (
+            <Link href="/dashboard" className={buttonVariants()}>
+              Vào học
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className={buttonVariants({ variant: "ghost" })}>
+                Đăng nhập
+              </Link>
+              <Link href="/register" className={buttonVariants()}>
+                Đăng ký
+              </Link>
+            </>
+          )}
+        </nav>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+        <section className="grid items-center gap-10 py-10 lg:grid-cols-[1.1fr_1fr] lg:py-16">
+          <div className="space-y-5">
+            <p className="text-sm font-semibold tracking-wide text-primary uppercase">Learn. Understand. Practice. Create.</p>
+            <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+              Học guitar từ con số 0 — với cây đàn của bạn ngay cạnh màn hình.
+            </h1>
+            <p className="max-w-xl text-lg text-muted-foreground">
+              Không video. Giải thích ngắn, hình đàn đúng hướng bạn đang nhìn, âm thanh mẫu và bài tập trên đàn thật. Lưu tiến độ
+              để mai học tiếp.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href={user ? "/dashboard" : "/register"} className={buttonVariants({ className: "h-12 px-6 text-base" })}>
+                {user ? "Tiếp tục học" : "Bắt đầu miễn phí"}
+              </Link>
+              <Link href="/guitar" className={buttonVariants({ variant: "outline", className: "h-12 px-6 text-base" })}>
+                Xem Guitar Visual
+              </Link>
+            </div>
+          </div>
+          <div className="space-y-3 rounded-3xl border bg-card p-4 shadow-sm">
+            <div className="grid grid-cols-[110px_1fr] items-center gap-3">
+              <ChordDiagram chord={CHORDS.am} className="max-w-[110px]" showStringLabels={false} />
+              <div className="overflow-hidden">
+                <Fretboard frets={4} markers={chordMarkersStatic(CHORDS.am)} />
+              </div>
+            </div>
+            <p className="text-center text-xs text-muted-foreground">
+              Cùng một hợp âm Am: sơ đồ (đàn dựng đứng) và cần đàn (bạn ôm đàn nhìn xuống — dây 6 ở trên, gần mặt bạn).
+            </p>
+          </div>
+        </section>
+
+        <section className="grid gap-4 sm:grid-cols-2" aria-label="Tính năng">
+          {FEATURES.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="rounded-2xl border bg-card p-5">
+              <Icon className="size-6 text-primary" aria-hidden />
+              <h2 className="mt-3 font-semibold">{title}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="mt-12 rounded-3xl bg-secondary p-6 sm:p-10">
+          <h2 className="text-2xl font-bold">From Zero to Hero</h2>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Bản 0.1 gồm Level 0 và nhóm hợp âm đầu tiên. Lộ trình tiếp theo: Level 1 đầy đủ, nhịp điệu & strumming, luyện tai,
+            thư viện bài hát — mỗi phần chỉ ra mắt khi đã thực sự dùng được.
+          </p>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <footer className="border-t py-6 text-center text-xs text-muted-foreground">Guitar Lab · Learn. Understand. Practice. Create.</footer>
     </div>
   );
 }
