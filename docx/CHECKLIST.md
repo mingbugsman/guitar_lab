@@ -8,7 +8,7 @@
 
 - **Cập nhật lần cuối:** 2026-11-07
 - **Trạng thái:** Phase 0 + Phase 1 (MVP 0.1) **đã code xong và đã kiểm thử trên local** (Supabase local + Playwright). **Chưa deploy** — thiếu tài khoản Vercel/Supabase Cloud.
-- **Việc kế tiếp (theo thứ tự):**
+- **Việc kế tiếp (theo thứ tự)** — hướng dẫn chi tiết: [DEPLOY.md](DEPLOY.md)
   1. 🔑 Tạo Supabase Cloud project (dev + prod) → `npx supabase link` → `npx supabase db push`.
   2. 🔑 Import repo vào Vercel, đặt 3 biến môi trường (xem README → Deploy).
   3. Smoke test Preview: chạy `PLAYWRIGHT_BASE_URL=<preview-url> npm run test:e2e` (trỏ env tới Supabase **dev**, không phải prod).
