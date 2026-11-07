@@ -3,6 +3,7 @@ import { LogOut } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { BottomNav, SidebarNav } from "@/components/layout/app-nav";
 import { Logo } from "@/components/layout/logo";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { GuitarViewProvider } from "@/components/guitar/view-context";
 import { getProfile, getUser } from "@/lib/auth";
 import { signOut } from "@/features/authentication/actions";
@@ -50,7 +51,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </Link>
             )}
           </header>
-          <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-28 sm:px-6 md:pb-12">{children}</main>
+          <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-10 sm:px-6">{children}</main>
+          <SiteFooter className="mb-[calc(3.5rem+env(safe-area-inset-bottom))] md:mb-0" />
         </div>
       </div>
       <BottomNav />

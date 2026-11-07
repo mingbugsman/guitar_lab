@@ -6,6 +6,19 @@ test("landing page loads with the guitar visual", async ({ page }) => {
   await expect(page.locator('svg[data-chord="am"]')).toBeVisible();
 });
 
+test("footer credits the author and the About link is disabled", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.getByTestId("site-footer");
+  await expect(footer).toContainText("Made by Tran Tuan Minh");
+  await expect(footer).toContainText("6/8/2026");
+  const about = footer.getByTestId("about-link");
+  await expect(about).toHaveAttribute("aria-disabled", "true");
+  await expect(page.locator('a[href="/about"]')).toHaveCount(0);
+  // the page itself exists for later
+  await page.goto("/about");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Giới thiệu");
+});
+
 test("guitar visual: player view shows string 6 on top, tab view flips it", async ({ page }) => {
   await page.goto("/guitar");
   const board = page.locator('svg[data-view]').first();

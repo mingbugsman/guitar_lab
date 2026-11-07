@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BookOpen, Gauge, Guitar, Timer } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Logo } from "@/components/layout/logo";
+import { AboutLinkDisabled, SiteFooter } from "@/components/layout/site-footer";
 import { ChordDiagram } from "@/components/guitar/chord-diagram";
 import { Fretboard } from "@/components/guitar/fretboard";
 import { chordMarkersStatic } from "@/components/guitar/chord-markers";
@@ -11,23 +12,23 @@ import { getUser } from "@/lib/auth";
 const FEATURES = [
   {
     icon: Guitar,
-    title: "Hình đàn để đối chiếu",
-    text: "Mọi bài có hình cần đàn ở góc nhìn của chính bạn khi ôm đàn — có cả chế độ tay trái. Lời hướng dẫn luôn khớp hướng với hình.",
+    title: "Có hình cây đàn để so",
+    text: "Bài nào cũng có hình cần đàn vẽ đúng như lúc bạn ôm đàn cúi nhìn xuống. Thuận tay trái thì bấm một nút là hình lật lại.",
   },
   {
     icon: BookOpen,
-    title: "Level 0 + 5 hợp âm đầu tiên",
-    text: "12 bài làm quen cây đàn, lên dây, tư thế, nốt nhạc, nhịp — rồi Em, Am, E, A, D với sơ đồ chính xác và âm thanh mẫu.",
+    title: "Học từ con số 0",
+    text: "12 bài nhập môn: cầm đàn, lên dây, tên dây, nốt nhạc, giữ nhịp. Xong thì sang 5 hợp âm đầu tiên: Em, Am, E, A, D.",
   },
   {
     icon: Timer,
-    title: "Buổi tập 30 phút có mục tiêu",
-    text: "Ôn lại, nhạc lý, kỹ thuật, ứng dụng, chơi tự do, tự nhìn lại. Mọi buổi tập được lưu để bạn thấy mình tiến bộ.",
+    title: "Mỗi ngày tập 30 phút",
+    text: "Mỗi buổi tập được chia sẵn thành từng phần nhỏ, có đồng hồ bấm giờ. Tập xong thì lưu lại để hôm sau biết mình đã đi tới đâu.",
   },
   {
     icon: Gauge,
-    title: "Tuner & Metronome thật",
-    text: "Tuner nghe tiếng đàn qua micro và báo lệch bao nhiêu cent. Metronome phát nhịp ổn định ngay trên trình duyệt.",
+    title: "Tuner với metronome",
+    text: "Lên dây bằng micro điện thoại hoặc laptop, không cần mua tuner. Có metronome để tập giữ nhịp.",
   },
 ];
 
@@ -35,9 +36,10 @@ export default async function LandingPage() {
   const user = await getUser();
   return (
     <div className="min-h-dvh">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+      <header className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:px-6">
         <Logo />
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-2 text-sm">
+          <AboutLinkDisabled className="mr-2 hidden sm:inline" />
           {user ? (
             <Link href="/dashboard" className={buttonVariants()}>
               Vào học
@@ -55,23 +57,29 @@ export default async function LandingPage() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
         <section className="grid items-center gap-10 py-10 lg:grid-cols-[1.1fr_1fr] lg:py-16">
           <div className="space-y-5">
             <p className="text-sm font-semibold tracking-wide text-primary uppercase">Learn. Understand. Practice. Create.</p>
             <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl">
-              Học guitar từ con số 0 — với cây đàn của bạn ngay cạnh màn hình.
+              Học guitar từ con số 0, có cây đàn vẽ sẵn để so với đàn thật
             </h1>
-            <p className="max-w-xl text-lg text-muted-foreground">
-              Không video. Giải thích ngắn, hình đàn đúng hướng bạn đang nhìn, âm thanh mẫu và bài tập trên đàn thật. Lưu tiến độ
-              để mai học tiếp.
-            </p>
+            <div className="max-w-xl space-y-3 text-lg text-muted-foreground">
+              <p>
+                Mới tập đàn thì rất dễ rối. Sơ đồ hợp âm vẽ một kiểu, lúc cúi xuống nhìn cần đàn lại thấy một kiểu khác, nên
+                chẳng biết dây nào là dây nào.
+              </p>
+              <p>
+                Mình làm Guitar Lab để gỡ đúng chỗ đó. Bài nào cũng có hình đàn vẽ theo đúng hướng bạn đang nhìn, có âm thanh
+                mẫu để nghe, và web lưu lại bạn học tới đâu. Không có video, cứ để đàn cạnh màn hình rồi tập theo.
+              </p>
+            </div>
             <div className="flex flex-wrap gap-3">
               <Link href={user ? "/dashboard" : "/register"} className={buttonVariants({ className: "h-12 px-6 text-base" })}>
-                {user ? "Tiếp tục học" : "Bắt đầu miễn phí"}
+                {user ? "Học tiếp" : "Vào học thử"}
               </Link>
               <Link href="/guitar" className={buttonVariants({ variant: "outline", className: "h-12 px-6 text-base" })}>
-                Xem Guitar Visual
+                Xem hình cây đàn
               </Link>
             </div>
           </div>
@@ -83,12 +91,13 @@ export default async function LandingPage() {
               </div>
             </div>
             <p className="text-center text-xs text-muted-foreground">
-              Cùng một hợp âm Am: sơ đồ (đàn dựng đứng) và cần đàn (bạn ôm đàn nhìn xuống — dây 6 ở trên, gần mặt bạn).
+              Cùng là hợp âm Am. Bên trái là sơ đồ (đàn dựng đứng), bên phải là lúc bạn ôm đàn nhìn xuống: dây 6 nằm trên
+              cùng, gần mặt bạn nhất.
             </p>
           </div>
         </section>
 
-        <section className="grid gap-4 sm:grid-cols-2" aria-label="Tính năng">
+        <section className="grid gap-4 sm:grid-cols-2" aria-label="Có gì trong Guitar Lab">
           {FEATURES.map(({ icon: Icon, title, text }) => (
             <div key={title} className="rounded-2xl border bg-card p-5">
               <Icon className="size-6 text-primary" aria-hidden />
@@ -99,14 +108,14 @@ export default async function LandingPage() {
         </section>
 
         <section className="mt-12 rounded-3xl bg-secondary p-6 sm:p-10">
-          <h2 className="text-2xl font-bold">From Zero to Hero</h2>
+          <h2 className="text-2xl font-bold">Vẫn đang làm tiếp</h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Bản 0.1 gồm Level 0 và nhóm hợp âm đầu tiên. Lộ trình tiếp theo: Level 1 đầy đủ, nhịp điệu & strumming, luyện tai,
-            thư viện bài hát — mỗi phần chỉ ra mắt khi đã thực sự dùng được.
+            Hiện tại mới có phần nhập môn và 5 hợp âm đầu tiên. Mình đang làm tiếp các hợp âm còn lại, phần tập gảy theo nhịp,
+            luyện tai và vài bài hát để tập. Phần nào làm xong và chạy ổn thì mình mới đưa lên.
           </p>
         </section>
       </main>
-      <footer className="border-t py-6 text-center text-xs text-muted-foreground">Guitar Lab · Learn. Understand. Practice. Create.</footer>
+      <SiteFooter />
     </div>
   );
 }
