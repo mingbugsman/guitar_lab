@@ -7,13 +7,15 @@
 ## ▶ ĐANG Ở ĐÂU / LÀM GÌ TIẾP
 
 - **Cập nhật lần cuối:** 2026-11-07
-- **Trạng thái:** Phase 0 + Phase 1 (MVP 0.1) **đã code xong và đã kiểm thử trên local** (Supabase local + Playwright). **Chưa deploy** — thiếu tài khoản Vercel/Supabase Cloud.
-- **Việc kế tiếp (theo thứ tự)** — hướng dẫn chi tiết: [DEPLOY.md](DEPLOY.md)
-  1. 🔑 Tạo Supabase Cloud project (dev + prod) → `npx supabase link` → `npx supabase db push`.
-  2. 🔑 Import repo vào Vercel, đặt 3 biến môi trường (xem README → Deploy).
-  3. Smoke test Preview: chạy `PLAYWRIGHT_BASE_URL=<preview-url> npm run test:e2e` (trỏ env tới Supabase **dev**, không phải prod).
-  4. Merge `develop` → `main` → Production → kiểm tra production URL.
-  5. Bắt đầu Phase 2 (mục bên dưới), nhánh `feature/level-1-complete`.
+- **Trạng thái:** ✅ **MVP 0.1 đã lên Production** — https://guitar-lab-eight.vercel.app
+  - Vercel project `guitar-lab` (region sin1, Node 24) · `main` → Production, nhánh khác → Preview (có Vercel Deployment Protection)
+  - Supabase `guitar-lab-prod` (Singapore) cho Production · `guitar-lab-dev` (Sydney) cho Preview/local test · xác nhận email đang TẮT
+- **Việc kế tiếp (theo thứ tự):**
+  1. 🔑 Xóa 12 tài khoản test `@example.com` (6 prod + 6 dev): Supabase → Authentication → Users → lọc "example.com" → Delete. Dữ liệu liên quan tự xóa theo (cascade).
+  2. 🔑 Thu hồi 2 token đã dùng để deploy (Supabase Access Token, Vercel Token).
+  3. 🔑 Thử Tuner với đàn thật trên production (`/tools`) — mục duy nhất của Phase 1 chưa kiểm chứng bằng đàn thật.
+  4. Trước khi mời nhiều người dùng: cài SMTP riêng rồi bật lại "Confirm email" (xem [DEPLOY.md](DEPLOY.md) Bước 3.2).
+  5. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
 
 ## Kết quả kiểm thử gần nhất (2026-11-07, local)
 
@@ -24,6 +26,7 @@
 | `npm test` (Vitest) | ✅ 59 tests |
 | `npm run build` | ✅ |
 | `npm run test:e2e` (Playwright, desktop + mobile, Supabase local) | ✅ 14 passed (4 skipped theo thiết kế: test chỉ chạy 1 project) |
+| E2E trên **production** URL (RLS chạy trên Supabase dev) | ✅ 14 passed |
 
 ## Quy trình Git
 
@@ -46,7 +49,7 @@
 - [x] 7. Responsive app shell (sidebar desktop, header + bottom nav mobile)
 - [x] 8. Navigation (chỉ hiện tính năng đã chạy thật)
 - [x] 9. GitHub: `origin` → github.com/mingbugsman/guitar_lab (nhánh `main`, `develop`, `feature/foundation`)
-- [ ] 10. 🔑 Cấu hình Vercel
+- [x] 10. Cấu hình Vercel (env Production/Preview tách riêng, region sin1)
 - [x] 11. `.env.example`
 - [x] 12. README + hướng dẫn cài đặt
 - [x] 13. Lint, typecheck, Vitest, Playwright, production build, CI workflow
@@ -56,8 +59,8 @@
 
 ### Exit criteria
 - [x] Chạy local thành công
-- [ ] 🔑 Preview deployment thành công
-- [x] Database kết nối thành công (Supabase local; cloud chờ 🔑)
+- [x] Preview deployment thành công
+- [x] Database kết nối thành công (local + Supabase Cloud dev/prod)
 - [x] Authentication foundation hoạt động (E2E đăng ký/đăng nhập/đăng xuất)
 - [x] Không có secret trong repository (`.env.local` bị ignore)
 
@@ -122,8 +125,8 @@
 - [x] 13 Không có UI giả · [x] 14 Không lỗi auth/RLS (E2E RLS)
 
 ### Public deployment
-- [x] lint · [x] typecheck · [x] tests · [x] build · [x] migrations (local) · [x] RLS (local)
-- [ ] 🔑 Deploy Preview · [ ] 🔑 Smoke test Preview · [ ] 🔑 Deploy Production · [ ] 🔑 Kiểm tra production URL
+- [x] lint · [x] typecheck · [x] tests · [x] build · [x] migrations (dev + prod) · [x] RLS (dev + prod: 5 bảng đều bật RLS)
+- [x] Deploy Preview · [~] Smoke test Preview (Preview được Vercel bảo vệ → E2E chạy trên production) · [x] Deploy Production · [x] Kiểm tra production URL (E2E 14/14)
 
 ---
 
@@ -158,4 +161,5 @@
 ---
 
 ## Nhật ký phiên làm việc
-- **2026-11-07** — Khởi tạo repo, Phase 0 + Phase 1 code hoàn chỉnh, Guitar Visual, 59 unit tests + 14 E2E pass trên local. Chờ 🔑 Vercel/Supabase Cloud để deploy.
+- **2026-11-07** — Khởi tạo repo, Phase 0 + Phase 1 code hoàn chỉnh, Guitar Visual, 59 unit tests + 14 E2E pass trên local.
+- **2026-11-07** — Deploy: migrations lên Supabase dev/prod, cấu hình Auth, Vercel env + region sin1. E2E production phát hiện & sửa 2 vấn đề (độ trễ do server ở Mỹ; màn hình "đã lưu buổi tập" bị thay sau khi lưu). Production 14/14 pass.
