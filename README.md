@@ -5,6 +5,7 @@
 - Roadmap gốc: [`docx/roadmap.md`](docx/roadmap.md)
 - **Checklist tiến độ từng phase (xem đầu tiên mỗi lần quay lại):** [`docx/CHECKLIST.md`](docx/CHECKLIST.md)
 - Quy ước hướng đàn cho hình & nội dung: [`docx/GUITAR_VISUAL.md`](docx/GUITAR_VISUAL.md)
+- Hướng dẫn deploy từng bước: [`docx/DEPLOY.md`](docx/DEPLOY.md)
 
 ## Stack
 
