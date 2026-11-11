@@ -2,6 +2,8 @@
 
 **Learn. Understand. Practice. Create.** — Nền tảng học guitar từ con số 0, có hình cây đàn để đối chiếu với đàn thật.
 
+> Tài liệu trong `docx/` là tài liệu nội bộ, chỉ nằm trên máy phát triển (không đưa lên repository).
+
 - Roadmap gốc: [`docx/roadmap.md`](docx/roadmap.md)
 - **Checklist tiến độ từng phase (xem đầu tiên mỗi lần quay lại):** [`docx/CHECKLIST.md`](docx/CHECKLIST.md)
 - Quy ước hướng đàn cho hình & nội dung: [`docx/GUITAR_VISUAL.md`](docx/GUITAR_VISUAL.md)

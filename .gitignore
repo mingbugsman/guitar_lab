@@ -49,3 +49,6 @@ supabase/.branches/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# internal planning docs: kept on the local machine only
+/docx/
