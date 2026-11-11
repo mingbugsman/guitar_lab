@@ -140,5 +140,5 @@ Mỗi bài, ngoài "Lỗi thường gặp", phải có lối đi khi **thử nhi
 | §6 Khi kẹt | ⏳ Mẫu bài học chưa có mục này. |
 | §8 Tự biết đúng sai | ⏳ Chưa có âm mẫu tiếng rè / tiếng tắt; checklist còn chung chung. |
 | §9 Trình bày khi ôm đàn | ✅ Bài học chia 4 chặng, luyện từng bước một màn hình. |
-| §10 "Vì sao" và thành quả sớm | ⏳ Mẫu bài học chưa có câu mở đầu; 12 bài mới tới hợp âm đầu tiên. |
+| §10 "Vì sao" và thành quả sớm | ⏳ Mẫu bài học chưa có câu mở đầu. ✅ Hợp âm đầu tiên (Em) đã lên bài 10. |
 | Hình vẽ chuyển động (hướng gảy, chuyển hợp âm) | ⏳ Bổ sung vào `GUITAR_VISUAL.md` khi làm Level 2. |

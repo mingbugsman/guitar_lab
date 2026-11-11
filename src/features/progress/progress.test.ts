@@ -31,7 +31,7 @@ describe("buildLearningState", () => {
     expect(s.currentLevel.id).toBe("level-1");
     expect(s.nextLesson?.slug).toBe("reading-chord-diagrams");
     expect(s.recentlyCompleted?.lesson.slug).toBe("clean-sounds");
-    expect(s.completedByLevel["level-0"]).toEqual({ completed: 12, total: 12 });
+    expect(s.completedByLevel["level-0"]).toEqual({ completed: 13, total: 13 });
   });
 
   it("tracks the most recent in-progress lesson", () => {

@@ -11,7 +11,7 @@ export const MILESTONES = [
   { key: "first-practice", title: "Buổi tập đầu tiên", description: "Lưu buổi luyện tập đầu tiên." },
   { key: "practice-3-sessions", title: "Ba buổi tập", description: "Hoàn thành 3 buổi luyện tập." },
   { key: "practice-60-minutes", title: "60 phút luyện tập", description: "Tổng thời gian luyện tập đạt 60 phút." },
-  { key: "level-0-complete", title: "Hoàn thành Level 0", description: "Hoàn thành toàn bộ 12 bài Level 0." },
+  { key: "level-0-complete", title: "Hoàn thành Level 0", description: `Hoàn thành toàn bộ ${LESSONS.filter((l) => l.levelId === "level-0").length} bài Level 0.` },
   { key: "first-chord", title: "Hợp âm đầu tiên", description: "Hoàn thành bài hợp âm đầu tiên." },
   { key: "first-chords-complete", title: "5 hợp âm đầu tiên", description: "Hoàn thành Em, Am, E, A và D." },
 ] as const;

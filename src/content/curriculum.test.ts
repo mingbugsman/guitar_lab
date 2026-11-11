@@ -3,13 +3,29 @@ import { CHORDS } from "@/lib/music/chords";
 import { LESSONS, LEVELS, getLesson, lessonsForLevel, nextLesson } from "./curriculum";
 
 describe("curriculum integrity", () => {
-  it("has the 12 Level 0 lessons required by MVP 0.1", () => {
-    expect(lessonsForLevel("level-0")).toHaveLength(12);
+  it("has the 12 Level 0 lessons required by MVP 0.1, plus Em as the early first chord", () => {
+    const level0 = lessonsForLevel("level-0");
+    expect(level0).toHaveLength(13);
+    expect(level0.find((l) => l.order === 10)?.slug).toBe("chord-em");
   });
 
   it("ships the first chord group Em, Am, E, A, D", () => {
-    const slugs = lessonsForLevel("level-1").map((l) => l.slug);
+    const slugs = LESSONS.map((l) => l.slug);
     for (const id of ["em", "am", "e", "a", "d"]) expect(slugs).toContain(`chord-${id}`);
+  });
+
+  it("numbers lessons 1, 2, 3… inside each level, in learning order", () => {
+    for (const level of LEVELS) {
+      expect(lessonsForLevel(level.id).map((l) => l.order)).toEqual(lessonsForLevel(level.id).map((_, i) => i + 1));
+    }
+  });
+
+  it("does not ask the learner to read a chord diagram before the lesson that teaches it", () => {
+    const teach = LESSONS.findIndex((l) => l.slug === "reading-chord-diagrams");
+    LESSONS.slice(0, teach).forEach((l) => {
+      for (const o of l.objectives) expect(o, l.slug).not.toMatch(/theo sơ đồ/);
+      for (const c of l.checklist) expect(c.label, l.slug).not.toMatch(/sơ đồ/);
+    });
   });
 
   it("uses unique, URL-safe slugs that match the database constraint", () => {

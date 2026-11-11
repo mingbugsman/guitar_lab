@@ -1,84 +1,11 @@
-import { CHORDS, type ChordId } from "@/lib/music/chords";
+import { AT_60, chordLesson } from "./chord-lesson";
 import type { Lesson } from "./types";
 
 /**
- * LEVEL 1 — FIRST CHORDS (MVP 0.1 ships: reading diagrams + Em, Am, E, A, D).
- * Finger-by-finger steps are generated from chord data (describeChord) and shown next to
- * the diagram, so lesson text below only adds technique and context.
- * Writing rules: docx/WRITING_GUIDE.md, checked by src/content/writing.test.ts.
+ * LEVEL 1 — FIRST CHORDS (MVP 0.1 ships: reading diagrams + Am, E, A, D).
+ * Em, the easiest chord, is taught at the end of Level 0 (lesson 10) so the first chord comes
+ * early. This level opens by reading Em — a chord the learner can already play — on a diagram.
  */
-
-/** §5: what the fretting hand will feel, how long a chord takes, when to stop. */
-function chordBodyNote(symbol: string, sessions: string): string {
-  return [
-    "Đầu ngón tay bấm đau và có vết hằn dây là bình thường với dây sắt. Da sẽ dày lên sau 1 đến 2 tuần tập đều.",
-    `Thường mất ${sessions} buổi tập, mỗi buổi 10 đến 15 phút, để đặt ${symbol} sạch tiếng trong 3 giây. Vài buổi ngắn mỗi ngày tốt hơn một buổi dài.`,
-    "Dừng ngay nếu đau nhói ở cổ tay, khuỷu tay hoặc vai, hoặc tê đầu ngón: tay đang gồng sai, không phải do bạn tập chưa đủ. Nghỉ một ngày nếu đầu ngón bị phồng.",
-  ].join(" ");
-}
-
-function chordLesson(
-  id: ChordId,
-  order: number,
-  prerequisites: string[],
-  extra: Pick<Lesson, "summary" | "mistakes"> & {
-    intro: string[];
-    compare: string;
-    practice: string[];
-    tip?: string;
-    /** Typical number of practice sessions to play the chord cleanly in 3 seconds, e.g. "3 đến 5". */
-    sessions: string;
-  },
-): Lesson {
-  const chord = CHORDS[id];
-  return {
-    slug: `chord-${id}`,
-    levelId: "level-1",
-    order,
-    title: `Hợp âm ${chord.symbol} — ${chord.nameVi}`,
-    summary: extra.summary,
-    minutes: 15,
-    objectives: [
-      `Đặt đúng ${chord.symbol} theo sơ đồ hợp âm (hình chỉ chỗ đặt từng ngón), đúng ngón.`,
-      `Gảy ${chord.symbol} mà mọi dây cần gảy đều ngân rõ.`,
-      `Biết ${chord.symbol} gồm các nốt ${chord.tones.join(", ")}.`,
-    ],
-    prerequisites,
-    blocks: [
-      { type: "text", paragraphs: extra.intro },
-      { type: "visual", visual: { kind: "chord", chord: id } },
-      { type: "callout", tone: "compare", text: extra.compare },
-      ...(extra.tip ? [{ type: "callout" as const, tone: "tip" as const, text: extra.tip }] : []),
-      {
-        type: "steps",
-        heading: "Kiểm tra từng dây",
-        items: [
-          "Đặt tay vào thế bấm và giữ yên.",
-          "Gảy từng dây một, từ dây trầm nhất được gảy đến dây 1, giống nút 'Nghe từng dây'.",
-          "Dây nào rè hoặc tắt: chỉnh đúng ngón ở dây đó, cong hơn hoặc sát thanh kim loại hơn, rồi gảy lại.",
-          "Khi mọi dây đều rõ, gảy xuống cả hợp âm một lần.",
-        ],
-      },
-      { type: "callout", tone: "body", text: chordBodyNote(chord.symbol, extra.sessions) },
-    ],
-    practice: {
-      minutes: 10,
-      steps: extra.practice,
-    },
-    mistakes: extra.mistakes,
-    checklist: [
-      { id: "shape", label: `Tôi đặt đúng ${chord.symbol}, đúng ngón như sơ đồ.` },
-      { id: "compare", label: "Tôi đã đối chiếu tay mình với hình cần đàn." },
-      { id: "clean", label: "Tôi gảy từng dây và mọi dây cần gảy đều ngân rõ." },
-      { id: "reset", label: `Tôi nhấc tay ra và đặt lại ${chord.symbol} 10 lần liên tiếp.` },
-    ],
-    assessment: [`Đặt ${chord.symbol} trong 3 giây và mọi dây ngân rõ, 5 lần liên tiếp.`],
-    mastery: [`Đặt ${chord.symbol} trong 1 giây, không nhìn tay, không dây nào rè.`],
-  };
-}
-
-/** Wording reused by chord practice: the metronome and its speed are explained on first use. */
-const AT_60 = "theo máy đếm nhịp (Metronome: công cụ phát tiếng tích tắc đều) ở 60 BPM (60 tiếng tích mỗi phút)";
 
 export const LEVEL_1_LESSONS: Lesson[] = [
   {
@@ -98,7 +25,8 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       {
         type: "text",
         paragraphs: [
-          "Hợp âm là nhiều nốt vang cùng lúc. Sơ đồ cho biết đặt ngón nào, ở dây nào, phím nào.",
+          "Hợp âm là nhiều nốt vang cùng lúc. Bạn đã bấm được Em ở cuối Level 0 bằng hình cần đàn. Sách và trang hợp âm lại vẽ hợp âm theo một kiểu khác: sơ đồ. Học đọc sơ đồ, bạn tự tra được mọi hợp âm mới.",
+          "Sơ đồ cho biết đặt ngón nào, ở dây nào, phím nào.",
           "Dựng đàn đứng thẳng trước mặt, mặt đàn hướng về bạn, đầu đàn ở trên, giống hình Cấu tạo đàn. Sơ đồ hợp âm vẽ phần đầu cần đàn nhìn theo đúng góc này.",
           "Trên sơ đồ: 6 đường dọc là 6 dây, dây 6 bên {FRETSIDE}. Các đường ngang là thanh phím (thanh kim loại trên cần đàn). Vạch đậm trên cùng là lược đàn (thanh trắng có 6 rãnh).",
         ],
@@ -114,6 +42,11 @@ export const LEVEL_1_LESSONS: Lesson[] = [
           "Hàng chữ dưới cùng: tên nốt của từng dây khi không bấm (E A D G B E) và số dây (6 đến 1).",
         ],
       },
+      {
+        type: "text",
+        heading: "Em, nhìn bằng sơ đồ",
+        paragraphs: ["Dưới đây là Em, hợp âm bạn đã bấm được, vẽ theo hai cách: sơ đồ và hình cần đàn quen thuộc. Tìm hai chấm của ngón 2 và ngón 3 trên cả hai hình."],
+      },
       { type: "visual", visual: { kind: "chord", chord: "em" } },
       {
         type: "callout",
@@ -126,7 +59,8 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       steps: [
         "Dựng đàn đứng, đặt cạnh sơ đồ Em.",
         "Chỉ tay vào dây 5 phím 2 trên đàn thật, rồi chỉ ô đó trên sơ đồ.",
-        "Ôm đàn lại, nhìn xuống và tìm lại đúng ô đó. So với hình cần đàn.",
+        "Ôm đàn lại và bấm Em như bạn đã học.",
+        "Nhìn sơ đồ: chỉ ra chấm nào là ngón 2, chấm nào là ngón 3, và vì sao cả 6 dây đều có dấu O hoặc chấm.",
       ],
     },
     mistakes: [
@@ -143,29 +77,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
     assessment: ["Đọc to đúng một sơ đồ bất kỳ: dây nào, phím nào, ngón nào, dây nào không gảy."],
     mastery: ["Đặt tay theo một sơ đồ mới mà không cần hình cần đàn hỗ trợ."],
   },
-  chordLesson("em", 2, ["reading-chord-diagrams"], {
-    summary: "Hợp âm dễ nhất: hai ngón, cả sáu dây đều gảy.",
-    intro: [
-      "Hợp âm là nhiều nốt vang cùng lúc. Em (Mi thứ) chỉ cần hai ngón và gảy cả 6 dây, nên là hợp âm đầu tiên dễ nhất.",
-      "Em nghe trầm và hơi buồn. Đó là màu của hợp âm thứ.",
-    ],
-    compare:
-      "Trên hình cần đàn, hai chấm nằm ở hàng thứ hai và thứ ba tính từ trên (dây 5 và dây 4), cùng ở phím 2. Trên đàn thật: dây thứ hai và thứ ba tính từ phía mặt bạn.",
-    tip: "Đặt ngón 2 và ngón 3 cạnh nhau trong cùng ô phím 2. Ngón 2 ở dây to hơn, gần mặt bạn hơn.",
-    sessions: "2 đến 3",
-    practice: [
-      "Đặt Em và gảy từng dây, từ dây 6 đến dây 1.",
-      `Gảy xuống cả hợp âm 4 lần ${AT_60}.`,
-      "Nhấc tay ra rồi đặt lại Em. Làm 10 lần.",
-    ],
-    mistakes: [
-      {
-        mistake: "Dây 3 bị tắt tiếng.",
-        fix: "Ngón 3 đang chạm vào dây 3. Cong ngón 3 hơn để đầu ngón đứng thẳng trên dây 4.",
-      },
-    ],
-  }),
-  chordLesson("am", 3, ["chord-em"], {
+  chordLesson("am", { levelId: "level-1", order: 2, prerequisites: ["reading-chord-diagrams"] }, {
     summary: "Ba ngón, bỏ dây 6. Chuyển từ Em sang Am rất tự nhiên.",
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. Am (La thứ) dùng ba ngón và không gảy dây 6.",
@@ -191,7 +103,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       },
     ],
   }),
-  chordLesson("e", 4, ["chord-am"], {
+  chordLesson("e", { levelId: "level-1", order: 3, prerequisites: ["chord-am"] }, {
     summary: "Hợp âm trưởng đầu tiên: giống Am, dời lên một hàng dây.",
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. E (Mi trưởng) có đúng hình dạng của Am, nhưng dời về phía dây to hơn một hàng, và gảy cả 6 dây.",
@@ -213,7 +125,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       },
     ],
   }),
-  chordLesson("a", 5, ["chord-e"], {
+  chordLesson("a", { levelId: "level-1", order: 4, prerequisites: ["chord-e"] }, {
     summary: "Ba ngón chen nhau trong cùng ô phím 2.",
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. A (La trưởng) đặt ba ngón cạnh nhau trong cùng ô phím 2, trên dây 4, 3, 2. Không gảy dây 6.",
@@ -238,7 +150,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       },
     ],
   }),
-  chordLesson("d", 6, ["chord-a"], {
+  chordLesson("d", { levelId: "level-1", order: 5, prerequisites: ["chord-a"] }, {
     summary: "Hình tam giác trên ba dây mảnh nhất, chỉ gảy 4 dây.",
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. D (Rê trưởng) chỉ gảy 4 dây: dây 4 không bấm, và dây 3, 2, 1 có bấm.",
