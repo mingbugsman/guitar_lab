@@ -55,7 +55,7 @@ export function GuitarVisualLab() {
         <h2 id="fingers" className="text-xl font-bold">
           Số ngón tay bấm
         </h2>
-        <div className="rounded-2xl border bg-card p-4">
+        <div className="gl-stage p-4">
           <FingerNumberDiagram handedness={handedness} />
         </div>
       </section>

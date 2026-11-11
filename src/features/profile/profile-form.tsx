@@ -37,8 +37,8 @@ function ChoiceGroup({
             <label
               key={String(o.value)}
               className={cn(
-                "flex min-h-12 cursor-pointer flex-col justify-center rounded-xl border bg-card px-3 py-2 text-sm transition-colors",
-                checked ? "border-primary ring-2 ring-primary/30" : "hover:bg-muted",
+                "flex min-h-12 cursor-pointer flex-col justify-center rounded-lg border px-3 py-2 text-sm transition-colors",
+                checked ? "border-foreground bg-muted ring-1 ring-foreground" : "hover:bg-muted",
               )}
             >
               <input

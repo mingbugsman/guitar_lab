@@ -28,11 +28,18 @@ test("a new learner can learn, practice and come back tomorrow", async ({ page }
 
   // Dashboard from real data
   await expect(page).toHaveURL(/\/dashboard/);
+  // the new page starts at the top, greeting visible
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(page.getByTestId("today-lesson")).toHaveText("Làm quen với Guitar Lab và cây đàn");
   await expect(page.getByTestId("progress-count")).toContainText("0/18");
 
   // Complete lesson 1
   await page.goto("/academy/introduction");
+  // the lesson is a step-by-step player: walk through it to the last stage
+  await expect(page.getByTestId("lesson-stage-learn")).toHaveAttribute("aria-current", "step");
+  await page.getByTestId("lesson-forward").click();
+  await expect(page.getByTestId("practice-step")).toContainText("1/3");
+  await page.getByTestId("lesson-stage-evaluate").click();
   const panel = page.getByTestId("lesson-progress");
   const complete = panel.getByTestId("complete-lesson");
   await expect(complete).toBeDisabled();
@@ -49,6 +56,7 @@ test("a new learner can learn, practice and come back tomorrow", async ({ page }
 
   // Persists after reload
   await page.reload();
+  await page.getByTestId("lesson-stage-evaluate").click();
   await expect(page.getByTestId("lesson-status")).toContainText("Đã hoàn thành");
 
   // Practice session

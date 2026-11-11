@@ -20,9 +20,9 @@ export function ChordCompare({ chord }: { chord: ChordShape }) {
   const { view, handedness } = useGuitarView();
   const steps = describeChord(chord);
   return (
-    <div className="space-y-4" data-testid={`chord-compare-${chord.id}`}>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-[220px_minmax(0,1fr)]">
-        <figure className="rounded-xl border bg-card p-3">
+    <div className="@container space-y-4" data-testid={`chord-compare-${chord.id}`}>
+      <div className="grid grid-cols-1 gap-4 @2xl:grid-cols-[200px_minmax(0,1fr)]">
+        <figure className="gl-stage p-3">
           <ChordDiagram chord={chord} handedness={handedness} className="mx-auto" />
           <figcaption className="mt-2 text-center text-xs text-muted-foreground">
             Sơ đồ hợp âm: đàn dựng đứng, mặt đàn hướng về bạn, lược đàn ở trên. Dây 6 nằm bên{" "}
@@ -31,7 +31,7 @@ export function ChordCompare({ chord }: { chord: ChordShape }) {
         </figure>
         <figure className="min-w-0 space-y-2">
           <ViewToggle />
-          <div className="overflow-x-auto rounded-xl border bg-card p-2">
+          <div className="gl-stage overflow-x-auto p-2">
             <div className="min-w-[480px]">
               <Fretboard view={view} handedness={handedness} frets={4} markers={chordMarkers(chord)} />
             </div>
@@ -42,7 +42,7 @@ export function ChordCompare({ chord }: { chord: ChordShape }) {
         </figure>
       </div>
 
-      <div className="rounded-xl border bg-card p-4">
+      <div className="border-t pt-4">
         <p className="text-sm font-semibold">
           Cách bấm {chord.symbol}, lần lượt từ dây 6 (to nhất, gần mặt bạn) đến dây 1:
         </p>

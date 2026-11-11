@@ -6,6 +6,7 @@
 - **Checklist tiến độ từng phase (xem đầu tiên mỗi lần quay lại):** [`docx/CHECKLIST.md`](docx/CHECKLIST.md)
 - Quy ước hướng đàn cho hình & nội dung: [`docx/GUITAR_VISUAL.md`](docx/GUITAR_VISUAL.md)
 - Cách viết cho người mới chơi (giọng văn, thuật ngữ, tay thuận): [`docx/WRITING_GUIDE.md`](docx/WRITING_GUIDE.md)
+- Hướng giao diện, token, bố cục từng màn hình: [`docx/DESIGN.md`](docx/DESIGN.md)
 - Hướng dẫn deploy từng bước: [`docx/DEPLOY.md`](docx/DEPLOY.md)
 
 ## Stack

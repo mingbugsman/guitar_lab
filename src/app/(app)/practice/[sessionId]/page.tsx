@@ -39,23 +39,32 @@ export default async function SessionPage({ params }: { params: Promise<{ sessio
   return (
     <div className="space-y-5">
       <Link href="/practice" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="size-4" /> Practice Studio
+        <ArrowLeft className="size-4" /> Luyện tập
       </Link>
-      <h1 className="text-2xl font-bold">Buổi tập {session.planned_minutes} phút</h1>
+      <h1 className="gl-title text-2xl sm:text-3xl">
+        Buổi tập <span className="gl-num">{session.planned_minutes}</span> phút
+      </h1>
       {session.status === "completed" ? (
-        <div className="space-y-4 rounded-2xl border bg-card p-6 text-center" data-testid="session-saved">
-          <CheckCircle2 className="mx-auto size-12 text-[oklch(0.55_0.15_150)]" aria-hidden />
-          <h2 className="text-xl font-bold">Đã lưu buổi tập</h2>
-          <p className="text-muted-foreground">
-            Bạn đã luyện {formatDuration(session.duration_seconds)} và hoàn thành{" "}
-            {(activities ?? []).filter((a) => a.completed_at).length}/{(activities ?? []).length} hoạt động.
+        <div className="max-w-xl space-y-4 border-t pt-6" data-testid="session-saved">
+          <p className="flex items-center gap-2 text-sm font-medium text-[oklch(0.45_0.13_150)]">
+            <CheckCircle2 className="size-5" aria-hidden /> Đã lưu buổi tập
           </p>
-          {session.notes && <p className="text-muted-foreground">“{session.notes}”</p>}
-          <div className="flex flex-wrap justify-center gap-2">
-            <Link href="/dashboard" className={buttonVariants()}>
-              Về tổng quan
+          <p className="gl-title text-3xl">
+            Bạn đã tập <span className="gl-num">{formatDuration(session.duration_seconds)}</span>
+          </p>
+          <p className="text-muted-foreground">
+            Xong{" "}
+            <span className="gl-num">
+              {(activities ?? []).filter((a) => a.completed_at).length}/{(activities ?? []).length}
+            </span>{" "}
+            phần của buổi tập.
+          </p>
+          {session.notes && <p className="border-l-2 border-foreground/40 pl-4 text-muted-foreground">{session.notes}</p>}
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Link href="/dashboard" className={buttonVariants({ className: "h-12 px-6 text-base" })}>
+              Về trang Hôm nay
             </Link>
-            <Link href="/progress" className={buttonVariants({ variant: "outline" })}>
+            <Link href="/progress" className={buttonVariants({ variant: "outline", className: "h-12 px-6 text-base" })}>
               Xem tiến độ
             </Link>
           </div>

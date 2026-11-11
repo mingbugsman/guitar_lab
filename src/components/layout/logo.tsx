@@ -11,7 +11,7 @@ export function Logo({ href = "/" }: { href?: string }) {
         <circle cx="17" cy="14.6" r="2.6" fill="var(--primary-foreground)" />
       </svg>
       <span>
-        Guitar <span className="text-primary">Lab</span>
+        Guitar Lab
       </span>
     </Link>
   );

@@ -21,7 +21,7 @@ export default async function ProfilePage() {
           </Button>
         </form>
       </PageHeader>
-      <div className="max-w-2xl rounded-2xl border bg-card p-5">
+      <div className="max-w-2xl border-t pt-6">
         <ProfileForm
           defaults={{
             displayName: profile.display_name ?? "",

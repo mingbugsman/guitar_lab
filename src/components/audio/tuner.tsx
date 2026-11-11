@@ -115,7 +115,7 @@ export function Tuner() {
           : "Hơi cao — nới dây một chút.";
 
   return (
-    <div className="rounded-2xl border bg-card p-4 sm:p-6" data-testid="tuner">
+    <div className="gl-stage p-4 sm:p-6" data-testid="tuner">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Guitar Tuner</h3>
         <span className="text-xs text-muted-foreground">Standard: E A D G B E</span>
@@ -124,26 +124,27 @@ export function Tuner() {
       {/* gauge */}
       <div className="mt-5">
         <div className="relative mx-auto h-24 max-w-sm">
-          <div className="absolute inset-x-0 top-10 h-2 rounded-full bg-gradient-to-r from-destructive/40 via-[var(--gl-highlight)] to-destructive/40" />
+          <div className="absolute inset-x-0 top-10 h-2 rounded-[2px] bg-foreground/15" />
+          <div className="absolute top-10 left-[45%] h-2 w-[10%] bg-[var(--gl-highlight)]" title="Vùng chuẩn: lệch không quá 5 cent" />
           {[-50, -25, 0, 25, 50].map((c) => (
-            <div key={c} className="absolute top-6 -translate-x-1/2 text-[10px] text-muted-foreground" style={{ left: `${50 + c}%` }}>
+            <div key={c} className="gl-num absolute top-6 -translate-x-1/2 text-[10px] text-muted-foreground" style={{ left: `${50 + c}%` }}>
               {c > 0 ? `+${c}` : c}
             </div>
           ))}
           <div
             className={cn(
               "absolute top-4 h-14 w-1 -translate-x-1/2 rounded-full transition-[left] duration-100",
-              reading ? (inTune ? "bg-[var(--gl-highlight)]" : "bg-primary") : "bg-muted-foreground/30",
+              reading ? (inTune ? "bg-[oklch(0.5_0.15_150)]" : "bg-foreground") : "bg-foreground/25",
             )}
             style={{ left: `${50 + clamped}%` }}
             data-testid="tuner-needle"
           />
         </div>
         <div className="text-center">
-          <div className={cn("text-5xl font-bold tabular-nums", inTune && "text-[oklch(0.5_0.15_150)]")} data-testid="tuner-note">
+          <div className={cn("gl-num text-6xl font-semibold", inTune && "text-[oklch(0.45_0.13_150)]")} data-testid="tuner-note">
             {reading ? reading.note : "—"}
           </div>
-          <div className="mt-1 text-sm text-muted-foreground tabular-nums">
+          <div className="gl-num mt-1 text-sm text-muted-foreground">
             {reading
               ? `${reading.frequency.toFixed(1)} Hz · ${cents > 0 ? "+" : ""}${cents.toFixed(0)} cent so với dây ${reading.target} (${target?.label})`
               : target
@@ -169,11 +170,11 @@ export function Tuner() {
               aria-pressed={manualString === s}
               className={cn(
                 "flex min-h-14 flex-col items-center justify-center rounded-lg border text-xs transition-colors",
-                active ? "border-primary bg-primary/10" : "hover:bg-muted",
-                manualString === s && "ring-2 ring-primary",
+                active ? "border-foreground bg-muted" : "hover:bg-muted",
+                manualString === s && "ring-2 ring-foreground",
               )}
             >
-              <span className="text-base font-bold">{st.note}</span>
+              <span className="gl-num text-base font-semibold">{st.note}</span>
               <span className="text-muted-foreground">dây {s}</span>
             </button>
           );
