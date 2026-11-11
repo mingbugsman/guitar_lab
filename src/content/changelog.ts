@@ -15,6 +15,18 @@ export type UpdateEntry = {
 
 export const UPDATES: UpdateEntry[] = [
   {
+    id: "2026-11-11-chord-challenge",
+    publishedAt: "2026-11-11T22:30:00+07:00",
+    title: "Thử thách hợp âm",
+    items: [
+      "Chọn hợp âm theo nhóm (Cho người mới, Trưởng, Thứ, Bảy, Sus, Chặn, Power) hoặc bấm một mẫu có sẵn.",
+      "Hợp âm hiện ngẫu nhiên và trôi từ phải sang trái; thẻ chạm vạch cam thì gảy. Tốc độ nhanh dần theo từng chặng.",
+      "Để máy đề xuất thời gian và tốc độ, hoặc tự chỉnh số phút, tốc độ và số phách mỗi hợp âm.",
+      "Thư viện có thêm hơn 30 hợp âm, kể cả hợp âm chặn như F, Bm (sơ đồ có vẽ thanh chặn).",
+    ],
+    href: "/practice/challenge",
+  },
+  {
     id: "2026-11-11-hand-drills",
     publishedAt: "2026-11-11T21:00:00+07:00",
     title: "Bài tập ngón và 3 bài tập tay mỗi ngày",
@@ -56,8 +68,9 @@ export const LATEST_UPDATE_AT = UPDATES[0].publishedAt;
 /** Entries the learner has not seen: newer than both their last dismissal and their account. */
 export function unseenUpdates(
   entries: UpdateEntry[],
-  { seenAt, accountCreatedAt }: { seenAt: string | null; accountCreatedAt: string | null },
+  { seenAt, accountCreatedAt, now = Date.now() }: { seenAt: string | null; accountCreatedAt: string | null; now?: number },
 ): UpdateEntry[] {
   const after = Math.max(seenAt ? Date.parse(seenAt) : 0, accountCreatedAt ? Date.parse(accountCreatedAt) : 0);
-  return entries.filter((e) => Date.parse(e.publishedAt) > after);
+  // entries dated in the future are scheduled: they appear once their time comes
+  return entries.filter((e) => Date.parse(e.publishedAt) > after && Date.parse(e.publishedAt) <= now);
 }

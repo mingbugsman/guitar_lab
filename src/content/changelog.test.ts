@@ -19,6 +19,12 @@ describe("what's new", () => {
     expect(unseenUpdates(UPDATES, { seenAt: UPDATES[0].publishedAt, accountCreatedAt: null })).toEqual([]);
   });
 
+  it("keeps entries dated in the future hidden until their time", () => {
+    const at = Date.parse(UPDATES[0].publishedAt);
+    expect(unseenUpdates(UPDATES, { seenAt: null, accountCreatedAt: null, now: at - 1000 }).map((u) => u.id)).not.toContain(UPDATES[0].id);
+    expect(unseenUpdates(UPDATES, { seenAt: null, accountCreatedAt: null, now: at }).map((u) => u.id)).toContain(UPDATES[0].id);
+  });
+
   it("does not greet a brand-new account with older news", () => {
     expect(unseenUpdates(UPDATES, { seenAt: null, accountCreatedAt: "2030-01-01T00:00:00Z" })).toEqual([]);
   });

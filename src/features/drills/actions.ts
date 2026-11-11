@@ -24,3 +24,13 @@ export async function saveDrillResult(input: DrillResultInput): Promise<ActionRe
   const stats = await getDrillStats([drillId]);
   return { ok: true, data: stats[drillId] };
 }
+
+/** Last result for one drill or challenge, for suggestions. Signed-out visitors get null. */
+export async function getLastDrillResult(drillId: string): Promise<{ bpm: number; rating: "clean" | "some-buzz" | "lost" } | null> {
+  if (!/^[a-z0-9:-]{1,80}$/.test(drillId)) return null;
+  const user = await getUser();
+  if (!user) return null;
+  const stats = await getDrillStats([drillId]);
+  const last = stats[drillId]?.last;
+  return last ? { bpm: last.bpm, rating: last.rating } : null;
+}

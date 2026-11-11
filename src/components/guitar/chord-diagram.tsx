@@ -116,10 +116,30 @@ export function ChordDiagram({
         return null;
       })}
 
+      {/* barre: one finger across several strings, drawn as a bar with the finger number once */}
+      {chord.barre &&
+        (() => {
+          const b = chord.barre;
+          const i1 = columns.indexOf(b.from);
+          const i2 = columns.indexOf(b.to);
+          const x1 = colX(Math.min(i1, i2));
+          const x2 = colX(Math.max(i1, i2));
+          const cy = TOP + (b.fret - chord.baseFret) * ROW + ROW / 2;
+          return (
+            <g data-marker="barre" data-fret={b.fret} data-from={b.from} data-to={b.to}>
+              <rect x={x1 - 13} y={cy - 13} width={x2 - x1 + 26} height={26} rx={13} fill="var(--gl-finger)" />
+              <text x={(x1 + x2) / 2} y={cy + 5} textAnchor="middle" className="text-[14px] font-bold" fill="var(--gl-finger-text)">
+                {b.finger}
+              </text>
+            </g>
+          );
+        })()}
+
       {/* finger dots */}
       {columns.map((s, i) => {
         const fret = chord.frets[s];
         if (typeof fret !== "number" || fret === 0) return null;
+        if (chord.barre && fret === chord.barre.fret && s <= chord.barre.from && s >= chord.barre.to) return null;
         const r = fret - chord.baseFret;
         const cy = TOP + r * ROW + ROW / 2;
         const finger = chord.fingers[s];
@@ -185,6 +205,14 @@ export function describeChord(chord: ChordShape): ChordInstruction[] {
     if (fret === "x") return { string: s, kind: "muted", text: `${name}: không gảy — dấu X.` };
     if (fret === 0) return { string: s, kind: "open", text: `${name}: gảy buông — dấu O, không bấm.` };
     const finger = chord.fingers[s];
+    const b = chord.barre;
+    if (b && fret === b.fret && s <= b.from && s >= b.to) {
+      return {
+        string: s,
+        kind: "fretted",
+        text: `${name}: ngón ${finger} (${fingerName(finger ?? "")}) chặn phím ${fret}, nằm ngang từ dây ${b.from} đến dây ${b.to}.`,
+      };
+    }
     return {
       string: s,
       kind: "fretted",

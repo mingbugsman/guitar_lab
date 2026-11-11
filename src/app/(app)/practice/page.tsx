@@ -75,6 +75,21 @@ export default async function PracticePage() {
             </Link>
           </li>
           <li>
+            <Link
+              href="/practice/challenge"
+              className="flex items-center justify-between gap-4 py-3 hover:bg-muted/50"
+              data-testid="open-challenge"
+            >
+              <span>
+                <span className="block font-medium">Thử thách hợp âm</span>
+                <span className="block text-sm text-muted-foreground">
+                  Chọn hợp âm theo nhóm, hợp âm ngẫu nhiên trôi qua màn hình và nhanh dần. Máy đề xuất thời gian và tốc độ.
+                </span>
+              </span>
+              <ArrowRight className="size-4 shrink-0" />
+            </Link>
+          </li>
+          <li>
             <Link href="/tools" className="flex items-center justify-between gap-4 py-3 hover:bg-muted/50">
               <span>
                 <span className="block font-medium">Đổi hợp âm 1 phút</span>
