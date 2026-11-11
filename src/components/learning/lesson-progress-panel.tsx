@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { saveLessonProgress } from "@/features/academy/actions";
 import type { Lesson } from "@/content/types";
 import { cn } from "@/lib/utils";
+import { HandText } from "./hand-text";
 
 type Initial = {
   checklist: string[];
@@ -88,7 +89,9 @@ export function LessonProgressPanel({ lesson, initial }: { lesson: Lesson; initi
               disabled={pending}
               data-checklist-id={c.id}
             />
-            <span className="text-sm leading-relaxed">{c.label}</span>
+            <span className="text-sm leading-relaxed">
+              <HandText text={c.label} />
+            </span>
           </label>
         ))}
       </div>

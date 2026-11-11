@@ -80,7 +80,7 @@ export function LessonVisual({ visual }: { visual: Visual }) {
     case "anatomy":
       return <GuitarAnatomy handedness={handedness} initialPart={visual.initialPart} />;
     case "posture":
-      return <PostureDiagram />;
+      return <PostureDiagram handedness={handedness} />;
     case "fingers":
       return <FingerNumberDiagram handedness={handedness} />;
     case "fretboard":

@@ -68,7 +68,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
     summary: "Sơ đồ hợp âm nhìn cây đàn từ góc nào, và cách chuyển nó sang tay bạn.",
     minutes: 12,
     objectives: [
-      "Hiểu sơ đồ hợp âm là đàn dựng đứng nhìn từ phía trước: dây 6 bên trái, lược đàn ở trên.",
+      "Hiểu sơ đồ hợp âm là đàn dựng đứng nhìn từ phía trước: dây 6 bên {fretSide}, lược đàn ở trên.",
       "Đọc được: chấm tròn + số ngón, O (dây buông), X (không gảy).",
       "Chuyển được một sơ đồ sang góc 'Nhìn xuống' trên đàn thật.",
     ],
@@ -78,10 +78,10 @@ export const LEVEL_1_LESSONS: Lesson[] = [
         type: "text",
         paragraphs: [
           "Hợp âm là nhiều nốt vang cùng lúc. Sơ đồ hợp âm cho biết đặt ngón nào, ở dây nào, phím nào.",
-          "Hãy dựng đàn đứng thẳng trước mặt, mặt đàn hướng về bạn, đầu đàn ở trên — giống hình Cấu tạo đàn. Sơ đồ hợp âm chính là phần đầu cần đàn nhìn theo góc này: 6 đường dọc là 6 dây (dây 6 bên TRÁI), các đường ngang là thanh phím, vạch đậm trên cùng là lược đàn.",
+          "Hãy dựng đàn đứng thẳng trước mặt, mặt đàn hướng về bạn, đầu đàn ở trên — giống hình Cấu tạo đàn. Sơ đồ hợp âm chính là phần đầu cần đàn nhìn theo góc này: 6 đường dọc là 6 dây (dây 6 bên {FRETSIDE}), các đường ngang là thanh phím, vạch đậm trên cùng là lược đàn.",
         ],
       },
-      { type: "visual", visual: { kind: "anatomy", initialPart: "strings" }, caption: "Đàn dựng đứng: dây 6 bên trái — giống sơ đồ hợp âm." },
+      { type: "visual", visual: { kind: "anatomy", initialPart: "strings" }, caption: "Đàn dựng đứng: dây 6 bên {fretSide}, giống sơ đồ hợp âm." },
       {
         type: "steps",
         heading: "Ký hiệu trên sơ đồ",
@@ -96,7 +96,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       {
         type: "callout",
         tone: "compare",
-        text: "Từ sơ đồ sang tay bạn: khi ôm đàn và nhìn xuống, cột TRÁI của sơ đồ (dây 6) trở thành dây gần mặt bạn nhất; hàng phím TRÊN CÙNG của sơ đồ (phím 1) trở thành ô sát lược đàn, phía đầu đàn. Hình cần đàn bên cạnh sơ đồ cho thấy đúng điều này.",
+        text: "Từ sơ đồ sang tay bạn: khi ôm đàn và nhìn xuống, cột bên {FRETSIDE} của sơ đồ (dây 6) trở thành dây gần mặt bạn nhất; hàng phím TRÊN CÙNG của sơ đồ (phím 1) trở thành ô sát lược đàn, phía đầu đàn. Hình cần đàn bên cạnh sơ đồ cho thấy đúng điều này.",
       },
     ],
     practice: {
@@ -107,7 +107,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       ],
     },
     mistakes: [
-      { mistake: "Đọc sơ đồ như thể dây 1 nằm bên trái.", fix: "Đọc hàng số dây dưới sơ đồ: 6 bên trái, 1 bên phải (đàn tay phải)." },
+      { mistake: "Đọc sơ đồ như thể dây 1 nằm bên {fretSide}.", fix: "Đọc hàng số dây dưới sơ đồ: 6 bên {fretSide}, 1 bên {pickSide}." },
     ],
     checklist: [
       { id: "symbols", label: "Tôi hiểu ý nghĩa của chấm số, O và X." },

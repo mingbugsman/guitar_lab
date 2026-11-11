@@ -1,7 +1,7 @@
 # GUITAR VISUAL — Quy ước hướng đàn
 
 > Yêu cầu bổ sung (ngoài roadmap): Guitar Lab phải có **hình cây đàn để đối chiếu** với đàn thật, và **mọi lời hướng dẫn phải đúng theo hướng của hình**.
-> File này là quy ước bắt buộc cho mọi nội dung và component mới.
+> File này là quy ước bắt buộc cho mọi nội dung và component mới. Cách dùng từ, giọng văn: xem [WRITING_GUIDE.md](WRITING_GUIDE.md).
 
 ## 1. Ba góc nhìn
 
@@ -12,6 +12,8 @@
 | **Dựng đứng (sơ đồ hợp âm)** | `ChordDiagram`, `GuitarAnatomy` | Ở trên | — dây 6 **bên trái**, dây 1 **bên phải** | — |
 
 **Đàn tay trái** (`handedness="left"`, lấy từ hồ sơ): mọi hình được **lật gương ngang** — đầu đàn sang phải, sơ đồ hợp âm có dây 6 bên phải. Chữ trong hình không bị lật.
+
+**Chữ trong bài cũng đổi theo tay thuận.** Không viết cứng "tay trái / bên phải"; dùng token `{fretHand}`, `{pickHand}`, `{fretSide}`, `{pickSide}` — xem [WRITING_GUIDE.md](WRITING_GUIDE.md) §3.
 
 Mã nguồn: `src/components/guitar/orientation.ts` (một nguồn duy nhất cho thứ tự dây theo góc nhìn).
 

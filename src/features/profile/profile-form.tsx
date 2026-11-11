@@ -64,9 +64,9 @@ const EXPERIENCE: Option[] = [
   { value: "some_experience", label: "Đã thử một chút", hint: "Biết vài thứ nhưng chưa có nền tảng" },
 ];
 const GUITAR: Option[] = [
-  { value: "acoustic", label: "Acoustic", hint: "Dây sắt, có lỗ thoát âm" },
-  { value: "classical", label: "Classic", hint: "Dây nylon" },
-  { value: "electric", label: "Đàn điện", hint: "Thân đặc, cắm amply" },
+  { value: "acoustic", label: "Acoustic", hint: "Dây sắt, có lỗ thoát âm. Bài học viết cho loại này" },
+  { value: "classical", label: "Classic", hint: "Dây nylon. Học được, có ghi chú chỗ khác" },
+  { value: "electric", label: "Đàn điện", hint: "Cắm amply. Học được, có ghi chú chỗ khác" },
 ];
 const HANDEDNESS: Option[] = [
   { value: "right", label: "Tay phải gảy", hint: "Tay trái bấm hợp âm (phổ biến)" },
