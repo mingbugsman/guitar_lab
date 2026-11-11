@@ -59,48 +59,61 @@ export function FingerNumberDiagram({ handedness = "right", className }: { hande
   );
 }
 
-/** Seated posture, seen from the front (as if a friend were watching you play). */
-export function PostureDiagram({ className }: { className?: string }) {
+/**
+ * Seated posture, seen from the front (as if a friend were watching you play).
+ * Because it is a mirror-like view, the caption says so explicitly, and the whole drawing
+ * flips for left-handed players so the words in the lesson stay true.
+ */
+export function PostureDiagram({ handedness = "right", className }: { handedness?: Handedness; className?: string }) {
+  const left = handedness === "left";
+  const thigh = left ? "TRÁI" : "PHẢI";
+  // Label columns: the guitar body sits on the picture's left for right-handed players.
+  const bodyX = left ? 262 : 8;
+  const neckX = left ? 8 : 262;
   return (
     <svg
       viewBox="0 0 360 300"
       role="img"
-      aria-label="Tư thế ngồi: lưng thẳng, thùng đàn đặt trên đùi phải, cần đàn hơi chếch lên về bên trái của người chơi"
+      aria-label={`Tư thế ngồi nhìn từ phía trước: lưng thẳng, thùng đàn đặt trên đùi ${thigh.toLowerCase()} của người chơi, cần đàn hơi chếch lên`}
       className={cn("mx-auto h-auto w-full max-w-[420px]", className)}
+      data-handedness={handedness}
     >
-      {/* chair */}
-      <rect x={110} y={196} width={140} height={10} rx={3} fill="var(--muted-foreground)" opacity={0.5} />
-      <rect x={118} y={206} width={8} height={80} fill="var(--muted-foreground)" opacity={0.5} />
-      <rect x={234} y={206} width={8} height={80} fill="var(--muted-foreground)" opacity={0.5} />
-      {/* person (facing us: their right side is on OUR left) */}
-      <circle cx={180} cy={46} r={24} fill="var(--accent)" stroke="var(--gl-diagram-ink)" strokeWidth={2} />
-      <path d="M150,78 L210,78 L216,194 L144,194 Z" fill="var(--accent)" stroke="var(--gl-diagram-ink)" strokeWidth={2} />
-      {/* legs */}
-      <path d="M146,194 L146,206 L130,206 L130,286" stroke="var(--gl-diagram-ink)" strokeWidth={14} fill="none" strokeLinecap="round" />
-      <path d="M214,194 L214,206 L230,206 L230,286" stroke="var(--gl-diagram-ink)" strokeWidth={14} fill="none" strokeLinecap="round" />
-      {/* guitar: body on player's right thigh (our left), neck rising toward player's left (our right) */}
-      <g transform="rotate(-14 150 170)">
-        <ellipse cx={128} cy={170} rx={44} ry={36} fill="var(--gl-wood-body)" stroke="var(--gl-wood-body-edge)" strokeWidth={3} />
-        <ellipse cx={168} cy={170} rx={30} ry={28} fill="var(--gl-wood-body)" stroke="var(--gl-wood-body-edge)" strokeWidth={3} />
-        <circle cx={160} cy={170} r={11} fill="oklch(0.22 0.03 50)" />
-        <rect x={192} y={163} width={120} height={14} rx={3} fill="var(--gl-wood-neck)" />
-        <rect x={310} y={158} width={30} height={24} rx={5} fill="var(--gl-wood-headstock)" />
+      <g transform={left ? "translate(360,0) scale(-1,1)" : undefined}>
+        {/* chair */}
+        <rect x={110} y={196} width={140} height={10} rx={3} fill="var(--muted-foreground)" opacity={0.5} />
+        <rect x={118} y={206} width={8} height={80} fill="var(--muted-foreground)" opacity={0.5} />
+        <rect x={234} y={206} width={8} height={80} fill="var(--muted-foreground)" opacity={0.5} />
+        {/* person (facing us: their right side is on OUR left) */}
+        <circle cx={180} cy={46} r={24} fill="var(--accent)" stroke="var(--gl-diagram-ink)" strokeWidth={2} />
+        <path d="M150,78 L210,78 L216,194 L144,194 Z" fill="var(--accent)" stroke="var(--gl-diagram-ink)" strokeWidth={2} />
+        {/* legs */}
+        <path d="M146,194 L146,206 L130,206 L130,286" stroke="var(--gl-diagram-ink)" strokeWidth={14} fill="none" strokeLinecap="round" />
+        <path d="M214,194 L214,206 L230,206 L230,286" stroke="var(--gl-diagram-ink)" strokeWidth={14} fill="none" strokeLinecap="round" />
+        {/* guitar: body on the picking-hand thigh, neck rising toward the fretting hand */}
+        <g transform="rotate(-14 150 170)">
+          <ellipse cx={128} cy={170} rx={44} ry={36} fill="var(--gl-wood-body)" stroke="var(--gl-wood-body-edge)" strokeWidth={3} />
+          <ellipse cx={168} cy={170} rx={30} ry={28} fill="var(--gl-wood-body)" stroke="var(--gl-wood-body-edge)" strokeWidth={3} />
+          <circle cx={160} cy={170} r={11} fill="oklch(0.22 0.03 50)" />
+          <rect x={192} y={163} width={120} height={14} rx={3} fill="var(--gl-wood-neck)" />
+          <rect x={310} y={158} width={30} height={24} rx={5} fill="var(--gl-wood-headstock)" />
+        </g>
+        {/* arms */}
+        <path d="M152,86 Q118,120 140,160" stroke="var(--gl-diagram-ink)" strokeWidth={10} fill="none" strokeLinecap="round" />
+        <path d="M208,86 Q260,110 280,128" stroke="var(--gl-diagram-ink)" strokeWidth={10} fill="none" strokeLinecap="round" />
       </g>
-      {/* arms */}
-      <path d="M152,86 Q118,120 140,160" stroke="var(--gl-diagram-ink)" strokeWidth={10} fill="none" strokeLinecap="round" />
-      <path d="M208,86 Q260,110 280,128" stroke="var(--gl-diagram-ink)" strokeWidth={10} fill="none" strokeLinecap="round" />
-      {/* annotations */}
+      {/* annotations are not mirrored so the text stays readable */}
       <g className="fill-foreground text-[11px]">
-        <text x={8} y={20}>Lưng thẳng, vai thả lỏng</text>
-        <text x={8} y={250}>Thùng đàn trên</text>
-        <text x={8} y={264}>đùi PHẢI</text>
-        <text x={262} y={110}>Cần đàn hơi</text>
-        <text x={262} y={124}>chếch lên</text>
-        <text x={262} y={234}>Hai bàn chân</text>
-        <text x={262} y={248}>đặt phẳng</text>
+        <text x={bodyX} y={20}>Lưng thẳng,</text>
+        <text x={bodyX} y={34}>vai thả lỏng</text>
+        <text x={bodyX} y={250}>Thùng đàn trên</text>
+        <text x={bodyX} y={264} data-testid="posture-thigh">{`đùi ${thigh}`}</text>
+        <text x={neckX} y={110}>Cần đàn hơi</text>
+        <text x={neckX} y={124}>chếch lên</text>
+        <text x={neckX} y={234}>Hai bàn chân</text>
+        <text x={neckX} y={248}>đặt phẳng</text>
       </g>
       <text x={180} y={298} textAnchor="middle" className="fill-muted-foreground text-[10px]">
-        Nhìn từ phía trước (người đối diện) — người chơi thuận tay phải
+        Nhìn từ phía người đối diện, như soi gương: trái phải trong hình ngược với của bạn
       </text>
     </svg>
   );

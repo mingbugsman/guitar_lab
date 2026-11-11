@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { resolveHandedness } from "@/content/handedness";
 import type { Handedness } from "./orientation";
 
 /**
@@ -44,7 +45,7 @@ export const ANATOMY_PARTS: Part[] = [
     name: "Đầu đàn",
     en: "Headstock",
     description:
-      "Phần trên cùng của cây đàn, nơi gắn các khóa lên dây. Khi bạn ôm đàn đúng tư thế (tay phải gảy), đầu đàn chĩa sang bên TRÁI của bạn.",
+      "Phần trên cùng của cây đàn, nơi gắn các khóa lên dây. Khi bạn ôm đàn đúng tư thế, đầu đàn chĩa sang bên {FRETSIDE} của bạn.",
     anchor: [160, 42],
     side: "left",
     labelY: 42,
@@ -84,7 +85,7 @@ export const ANATOMY_PARTS: Part[] = [
     name: "Cần đàn & mặt phím",
     en: "Neck & fretboard",
     description:
-      "Phần dài nối đầu đàn với thùng đàn. Mặt phía trước (mặt phím) là nơi tay bấm — tay trái nếu bạn gảy bằng tay phải. Ngón cái tay bấm đặt ở mặt sau cần đàn.",
+      "Phần dài nối đầu đàn với thùng đàn. Mặt phía trước (mặt phím) là nơi tay bấm ({fretHand}) đặt các ngón. Ngón cái tay bấm đặt ở mặt sau cần đàn.",
     anchor: [190, 205],
     side: "right",
     labelY: 160,
@@ -124,7 +125,7 @@ export const ANATOMY_PARTS: Part[] = [
     name: "Dây đàn",
     en: "Strings",
     description:
-      "6 dây, đánh số từ dây 1 (mảnh nhất, nốt Mi cao) đến dây 6 (to nhất, nốt Mi trầm). Nhìn đàn dựng đứng từ phía trước như hình này: dây 6 ở BÊN TRÁI. Khi bạn ôm đàn và nhìn xuống: dây 6 ở TRÊN CÙNG, gần mặt bạn nhất.",
+      "6 dây, đánh số từ dây 1 (mảnh nhất, nốt Mi cao) đến dây 6 (to nhất, nốt Mi trầm). Nhìn đàn dựng đứng từ phía trước như hình này: dây 6 ở bên {FRETSIDE}. Khi bạn ôm đàn và nhìn xuống: dây 6 ở TRÊN CÙNG, gần mặt bạn nhất.",
     anchor: [150, 530],
     side: "left",
     labelY: 500,
@@ -312,7 +313,7 @@ export function GuitarAnatomy({
             <p className="font-semibold">
               {part.name} <span className="font-normal text-muted-foreground">({part.en})</span>
             </p>
-            <p className="mt-1 leading-relaxed">{part.description}</p>
+            <p className="mt-1 leading-relaxed">{resolveHandedness(part.description, handedness)}</p>
           </>
         ) : (
           <p className="text-muted-foreground">

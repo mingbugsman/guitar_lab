@@ -2,11 +2,11 @@
 
 > File này là "bản đồ" để mỗi lần quay lại biết ngay **đang ở đâu** và **làm gì tiếp theo**.
 > Quy ước: `[x]` xong & đã kiểm chứng · `[~]` làm một phần / cần xác minh thêm · `[ ]` chưa làm · 🔑 cần chủ dự án cung cấp (tài khoản, credentials).
-> Roadmap gốc: [roadmap.md](roadmap.md) · Quy ước hướng đàn: [GUITAR_VISUAL.md](GUITAR_VISUAL.md) · Cách chạy: [../README.md](../README.md)
+> Roadmap gốc: [roadmap.md](roadmap.md) · Quy ước hướng đàn: [GUITAR_VISUAL.md](GUITAR_VISUAL.md) · Cách viết cho người mới: [WRITING_GUIDE.md](WRITING_GUIDE.md) · Cách chạy: [../README.md](../README.md)
 
 ## ▶ ĐANG Ở ĐÂU / LÀM GÌ TIẾP
 
-- **Cập nhật lần cuối:** 2026-11-07
+- **Cập nhật lần cuối:** 2026-11-11
 - **Trạng thái:** ✅ **MVP 0.1 đã lên Production** — https://guitar-lab-eight.vercel.app
   - Vercel project `guitar-lab` (region sin1, Node 24) · `main` → Production, nhánh khác → Preview (có Vercel Deployment Protection)
   - Supabase `guitar-lab-prod` (Singapore) cho Production · `guitar-lab-dev` (Sydney) cho Preview/local test · xác nhận email đang TẮT
@@ -15,7 +15,8 @@
   2. 🔑 Thu hồi 2 token đã dùng để deploy (Supabase Access Token, Vercel Token).
   3. 🔑 Thử Tuner với đàn thật trên production (`/tools`) — mục duy nhất của Phase 1 chưa kiểm chứng bằng đàn thật.
   4. Trước khi mời nhiều người dùng: cài SMTP riêng rồi bật lại "Confirm email" (xem [DEPLOY.md](DEPLOY.md) Bước 3.2).
-  5. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
+  5. **Rà lại 18 bài theo WRITING_GUIDE** (mục "Diễn đạt cho người mới" bên dưới) — nên làm trước Phase 2 để bài mới viết đúng ngay từ đầu.
+  6. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
 
 ## Kết quả kiểm thử gần nhất (2026-11-07, local)
 
@@ -130,6 +131,21 @@
 
 ---
 
+## DIỄN ĐẠT CHO NGƯỜI MỚI (rà soát 11/11/2026 — chi tiết: [WRITING_GUIDE.md](WRITING_GUIDE.md))
+
+- [x] 1. Chữ đổi theo tay thuận: token `{fretHand}`… trong 18 bài, hình cấu tạo đàn, hình tư thế lật gương; test chặn viết cứng
+- [~] 2. Giọng văn & xưng hô: đã có quy ước (§2) · [ ] rà 18 bài
+- [~] 3. Thuật ngữ: đã có bảng từ + quy tắc "giải thích lần đầu" (§4) · [ ] rà 18 bài · [ ] menu tiếng Việt · [ ] nút "Kiểu Tab" không hiện trước khi dạy Tab
+- [~] 4. Cơ thể & kỳ vọng (đau ngón tay, bao lâu, khi nào dừng): đã có quy ước (§5) · [ ] viết vào bài 3, 4, 9 và các bài hợp âm
+- [ ] 5. Hình vẽ chuyển động (hướng gảy, chuyển hợp âm) · [x] hình tư thế ghi rõ "như soi gương"
+- [~] 6. Tự biết đúng/sai: đã có quy ước (§8) · [ ] âm mẫu tiếng rè / tiếng tắt · [ ] viết lại checklist thành thứ nghe/nhìn được
+- [~] 7. Lối đi khi kẹt: đã có quy ước (§6) · [ ] thêm trường `stuck` vào mẫu bài học + viết cho 18 bài
+- [~] 8. Trình bày khi đang ôm đàn: đã có quy ước (§9) · [ ] chế độ luyện tập từng bước một màn hình
+- [~] 9. "Vì sao" & thành quả sớm: đã có quy ước (§10) · [ ] câu mở đầu "học xong làm được gì" cho 18 bài · [ ] cân nhắc đưa hợp âm Em lên sớm hơn
+- [x] 10. Ưu tiên acoustic: bài viết cho acoustic; classic và đàn điện có ghi chú riêng đầu bài
+
+---
+
 ## PHASE 2 — MVP 0.2: CORE LEARNING EXPERIENCE
 - [ ] Level 1 đầy đủ: Dm, C, G, A7, D7, E7 (thêm vào `CHORDS` + test nốt), cấu tạo hợp âm, trưởng/thứ, bài chuyển hợp âm
 - [ ] Level 2: down/up stroke, 4/4, 3/4, 6/8, strumming patterns, arpeggio, trường độ, dấu lặng, phách mạnh/nhẹ, capo
@@ -161,5 +177,6 @@
 ---
 
 ## Nhật ký phiên làm việc
+- **2026-11-11** — Rà soát cách diễn đạt cho người mới: thêm `WRITING_GUIDE.md`, chữ đổi theo tay thuận, ưu tiên acoustic.
 - **2026-11-07** — Khởi tạo repo, Phase 0 + Phase 1 code hoàn chỉnh, Guitar Visual, 59 unit tests + 14 E2E pass trên local.
 - **2026-11-07** — Deploy: migrations lên Supabase dev/prod, cấu hình Auth, Vercel env + region sin1. E2E production phát hiện & sửa 2 vấn đề (độ trễ do server ở Mỹ; màn hình "đã lưu buổi tập" bị thay sau khi lưu). Production 14/14 pass.

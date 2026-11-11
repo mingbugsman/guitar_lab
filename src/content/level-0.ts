@@ -46,7 +46,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       {
         type: "callout",
         tone: "tip",
-        text: "Nếu bạn chơi đàn tay trái (tay phải bấm, tay trái gảy), hãy chọn 'Đàn tay trái' trong hồ sơ hoặc nút ⇄ trên hình — mọi hình sẽ được lật gương cho khớp với đàn của bạn.",
+        text: "Nếu bạn gảy bằng tay trái và bấm bằng tay phải, hãy chọn 'Đàn tay trái' trong hồ sơ hoặc bấm nút ⇄ trên hình. Cả hình lẫn chữ trong bài sẽ đổi theo cho khớp với đàn của bạn.",
       },
     ],
     practice: {
@@ -92,7 +92,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       {
         type: "callout",
         tone: "compare",
-        text: "Dựng đàn của bạn đứng thẳng, mặt đàn hướng về bạn. Lần lượt chạm tay vào từng bộ phận trên đàn thật theo thứ tự nhãn trong hình. Dây to nhất phải nằm bên TRÁI của bạn (đàn tay phải).",
+        text: "Dựng đàn của bạn đứng thẳng, mặt đàn hướng về bạn. Lần lượt chạm tay vào từng bộ phận trên đàn thật theo thứ tự nhãn trong hình. Dây to nhất nằm ở bên {FRETSIDE} của bạn.",
       },
       {
         type: "text",
@@ -106,7 +106,8 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         type: "text",
         heading: "Acoustic, classic hay điện?",
         paragraphs: [
-          "Acoustic: dây sắt, thùng rỗng có lỗ thoát âm. Classic: dây nylon, cần đàn rộng hơn. Đàn điện: thân đặc, không có lỗ thoát âm, cần amply. Mọi bài trong Level 0 dùng được cho cả ba loại.",
+          "Acoustic: dây sắt, thùng rỗng có lỗ thoát âm. Classic: dây nylon, cần đàn rộng hơn. Đàn điện: thân đặc, không có lỗ thoát âm, cần amply.",
+          "Guitar Lab viết bài cho đàn acoustic. Dùng classic hoặc đàn điện vẫn học được: đầu mỗi bài sẽ có ghi chú những chỗ khác với đàn của bạn.",
         ],
       },
     ],
@@ -145,36 +146,36 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       { type: "visual", visual: { kind: "posture" } },
       {
         type: "steps",
-        heading: "Từng bước (người thuận tay phải)",
+        heading: "Từng bước",
         items: [
           "Ngồi trên ghế không tay vịn, ngồi về nửa trước mặt ghế, hai bàn chân đặt phẳng trên sàn.",
-          "Đặt chỗ thắt eo của thùng đàn lên đùi PHẢI. Đầu đàn chĩa sang bên TRÁI của bạn.",
+          "Đặt chỗ thắt eo của thùng đàn lên đùi {PICKSIDE}. Đầu đàn chĩa sang bên {FRETSIDE} của bạn.",
           "Mặt sau thùng đàn tựa nhẹ vào bụng/ngực. Mặt đàn gần như thẳng đứng — chỉ hơi ngả ra sau một chút để bạn liếc thấy cần đàn.",
-          "Đặt cẳng tay phải lên cạnh trên của thùng đàn (phía gần mặt bạn). Bàn tay phải rơi tự nhiên trước lỗ thoát âm.",
+          "Đặt cẳng {pickHand} lên cạnh trên của thùng đàn (phía gần mặt bạn). Bàn {pickHand} rơi tự nhiên trước lỗ thoát âm.",
           "Cần đàn hơi chếch lên (đầu đàn cao hơn thùng đàn một chút, khoảng ngang vai).",
-          "Thử buông tay trái khỏi cần đàn: đàn phải đứng yên. Nếu đàn trượt, chỉnh lại vị trí trên đùi và cẳng tay phải.",
+          "Thử buông {fretHand} khỏi cần đàn: đàn phải đứng yên. Nếu đàn trượt, chỉnh lại vị trí trên đùi và cẳng {pickHand}.",
         ],
       },
       {
         type: "callout",
         tone: "compare",
-        text: "Đặt điện thoại trước mặt và chụp ảnh chính mình (hoặc soi gương). So với hình: đàn ở đùi phải? Cần đàn chếch lên? Lưng thẳng? Người tay trái: mọi thứ đổi bên.",
+        text: "Đặt điện thoại trước mặt và chụp ảnh chính mình (hoặc soi gương). So với hình: đàn ở đùi {pickSide}? Cần đàn chếch lên? Lưng thẳng? Lưu ý hình vẽ nhìn từ phía người đối diện, nên trái phải trong hình ngược với của bạn, giống như soi gương.",
       },
       {
         type: "callout",
         tone: "warning",
-        text: "Đừng ngả mặt đàn nằm ngửa lên để nhìn cho rõ. Bạn sẽ phải vặn cổ tay trái và tiếng đàn bị bí. Chỉ liếc nhìn bằng cách hơi nghiêng đầu.",
+        text: "Đừng ngả mặt đàn nằm ngửa lên để nhìn cho rõ. Bạn sẽ phải vặn cổ {fretHand} và tiếng đàn bị bí. Chỉ liếc nhìn bằng cách hơi nghiêng đầu.",
       },
     ],
     practice: {
       minutes: 5,
       steps: [
-        "Ngồi đúng tư thế, buông tay trái, đếm chậm đến 20: đàn không được trượt.",
+        "Ngồi đúng tư thế, buông {fretHand}, đếm chậm đến 20: đàn không được trượt.",
         "Đứng dậy, đặt đàn xuống, rồi ngồi lại vào tư thế đúng. Lặp lại 3 lần.",
       ],
     },
     mistakes: [
-      { mistake: "Tay trái phải đỡ cần đàn cho khỏi rơi.", fix: "Đàn được giữ bởi đùi, thân và cẳng tay phải. Tay trái chỉ để bấm." },
+      { mistake: "{FretHand} phải đỡ cần đàn cho khỏi rơi.", fix: "Đàn được giữ bởi đùi, thân và cẳng {pickHand}. {FretHand} chỉ để bấm." },
       { mistake: "Gù lưng để nhìn cần đàn.", fix: "Giữ lưng thẳng, chỉ nghiêng đầu nhẹ." },
     ],
     checklist: [
@@ -202,7 +203,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       { type: "visual", visual: { kind: "fingers" } },
       {
         type: "text",
-        heading: "Tay bấm (tay trái với người thuận tay phải)",
+        heading: "Tay bấm ({fretHand})",
         paragraphs: [
           "Mọi sơ đồ hợp âm trong Guitar Lab ghi SỐ NGÓN trong chấm tròn: 1 = trỏ, 2 = giữa, 3 = áp út, 4 = út. Ngón cái (T) gần như luôn ở mặt sau cần đàn.",
         ],
@@ -239,7 +240,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       },
       {
         type: "text",
-        heading: "Tay gảy (tay phải)",
+        heading: "Tay gảy ({pickHand})",
         paragraphs: [
           "Cầm phím gảy giữa đầu ngón cái và cạnh đốt đầu ngón trỏ, chỉ để lộ khoảng 2–3 mm đầu phím. Nếu chưa có phím gảy, dùng phần thịt bên cạnh ngón cái.",
           "Gảy ở khoảng giữa lỗ thoát âm và cuối cần đàn. Chuyển động đến từ cổ tay, không phải cả cánh tay.",

@@ -1,6 +1,7 @@
 import { AlertTriangle, Eye, Lightbulb } from "lucide-react";
 import type { Block } from "@/content/types";
 import { cn } from "@/lib/utils";
+import { HandText } from "./hand-text";
 import { LessonVisual } from "./lesson-visual";
 
 const CALLOUT = {
@@ -17,10 +18,14 @@ export function LessonBlocks({ blocks }: { blocks: Block[] }) {
           case "text":
             return (
               <section key={i} className="space-y-3">
-                {b.heading && <h3 className="text-lg font-semibold">{b.heading}</h3>}
+                {b.heading && (
+                  <h3 className="text-lg font-semibold">
+                    <HandText text={b.heading} />
+                  </h3>
+                )}
                 {b.paragraphs.map((p, j) => (
                   <p key={j} className="leading-relaxed">
-                    {p}
+                    <HandText text={p} />
                   </p>
                 ))}
               </section>
@@ -29,20 +34,28 @@ export function LessonBlocks({ blocks }: { blocks: Block[] }) {
             return (
               <figure key={i} className="space-y-2">
                 <LessonVisual visual={b.visual} />
-                {b.caption && <figcaption className="text-sm text-muted-foreground">{b.caption}</figcaption>}
+                {b.caption && (
+                  <figcaption className="text-sm text-muted-foreground">
+                    <HandText text={b.caption} />
+                  </figcaption>
+                )}
               </figure>
             );
           case "steps":
             return (
               <section key={i} className="space-y-2">
-                <h3 className="text-lg font-semibold">{b.heading}</h3>
+                <h3 className="text-lg font-semibold">
+                  <HandText text={b.heading} />
+                </h3>
                 <ol className="space-y-2">
                   {b.items.map((item, j) => (
                     <li key={j} className="flex gap-3">
                       <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
                         {j + 1}
                       </span>
-                      <span className="leading-relaxed">{item}</span>
+                      <span className="leading-relaxed">
+                        <HandText text={item} />
+                      </span>
                     </li>
                   ))}
                 </ol>
@@ -56,7 +69,9 @@ export function LessonBlocks({ blocks }: { blocks: Block[] }) {
                 <Icon className="mt-0.5 size-5 shrink-0" aria-hidden />
                 <div>
                   <p className="text-sm font-semibold">{c.title}</p>
-                  <p className="mt-1 text-sm leading-relaxed">{b.text}</p>
+                  <p className="mt-1 text-sm leading-relaxed">
+                    <HandText text={b.text} />
+                  </p>
                 </div>
               </aside>
             );

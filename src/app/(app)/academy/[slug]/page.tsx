@@ -3,9 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { HandText } from "@/components/learning/hand-text";
 import { LessonBlocks } from "@/components/learning/lesson-blocks";
 import { LessonProgressPanel } from "@/components/learning/lesson-progress-panel";
 import { getLesson, getLevel, nextLesson, previousLesson } from "@/content/curriculum";
+import { GUITAR_TYPE_NOTES } from "@/content/guitar-type";
 import { requireOnboardedProfile } from "@/lib/auth";
 import { getLessonProgressFor } from "@/features/progress/queries";
 
@@ -18,7 +20,9 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const lesson = getLesson(slug);
   if (!lesson) notFound();
-  await requireOnboardedProfile(`/academy/${slug}`);
+  const profile = await requireOnboardedProfile(`/academy/${slug}`);
+  const typeNote =
+    profile.guitar_type && profile.guitar_type !== "acoustic" ? GUITAR_TYPE_NOTES[profile.guitar_type] : null;
   const progress = await getLessonProgressFor(slug);
   const level = getLevel(lesson.levelId);
   const next = nextLesson(slug);
@@ -41,12 +45,25 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         </p>
       </header>
 
+      {typeNote && (
+        <aside className="rounded-2xl border border-primary/30 bg-primary/5 p-4 text-sm" data-testid="guitar-type-note">
+          <p className="font-semibold">{typeNote.title}</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {typeNote.points.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border bg-card p-4">
           <h2 className="text-sm font-semibold">Mục tiêu</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
             {lesson.objectives.map((o) => (
-              <li key={o}>{o}</li>
+              <li key={o}>
+                <HandText text={o} />
+              </li>
             ))}
           </ul>
         </div>
@@ -82,7 +99,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         <ol className="list-decimal space-y-2 pl-5">
           {lesson.practice.steps.map((s) => (
             <li key={s} className="leading-relaxed">
-              {s}
+              <HandText text={s} />
             </li>
           ))}
         </ol>
@@ -95,8 +112,12 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         <div className="grid gap-3 sm:grid-cols-2">
           {lesson.mistakes.map((m) => (
             <div key={m.mistake} className="rounded-xl border bg-card p-4 text-sm">
-              <p className="font-medium text-destructive">✗ {m.mistake}</p>
-              <p className="mt-1">✓ {m.fix}</p>
+              <p className="font-medium text-destructive">
+                ✗ <HandText text={m.mistake} />
+              </p>
+              <p className="mt-1">
+                ✓ <HandText text={m.fix} />
+              </p>
             </div>
           ))}
         </div>
@@ -111,7 +132,9 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
             <p className="font-semibold">Tiêu chí đạt</p>
             <ul className="mt-1 list-disc pl-5">
               {lesson.assessment.map((a) => (
-                <li key={a}>{a}</li>
+                <li key={a}>
+                  <HandText text={a} />
+                </li>
               ))}
             </ul>
           </div>
@@ -119,7 +142,9 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
             <p className="font-semibold">Tiêu chí thành thạo</p>
             <ul className="mt-1 list-disc pl-5">
               {lesson.mastery.map((a) => (
-                <li key={a}>{a}</li>
+                <li key={a}>
+                  <HandText text={a} />
+                </li>
               ))}
             </ul>
           </div>
