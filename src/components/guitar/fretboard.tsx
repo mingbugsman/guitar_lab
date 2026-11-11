@@ -26,8 +26,9 @@ export type FretCell = { string: StringNumber; fret: number };
  * - next: coming up (dashed ring)
  * - held: a finger that stays down (pale fill)
  * - pressed: the cell the learner just tapped (ring + note name)
+ * - skip: a string to jump over without touching (grey ✕ before the nut)
  */
-export type FretOverlay = FretCell & { kind: "active" | "next" | "held" | "pressed"; label?: string };
+export type FretOverlay = FretCell & { kind: "active" | "next" | "held" | "pressed" | "skip"; label?: string };
 
 export type FretboardProps = {
   view?: View;
@@ -388,6 +389,15 @@ export function Fretboard({
           return (
             <circle key={i} {...common} cx={cx} cy={cy} r={r} fill="none" stroke="var(--gl-finger)" strokeWidth={2} strokeDasharray="3 3" />
           );
+        if (o.kind === "skip") {
+          const x0 = X(OPEN_X);
+          return (
+            <g key={i} {...common} stroke="var(--muted-foreground)" strokeWidth={2.5} strokeLinecap="round">
+              <line x1={x0 - 6} x2={x0 + 6} y1={cy - 6} y2={cy + 6} />
+              <line x1={x0 - 6} x2={x0 + 6} y1={cy + 6} y2={cy - 6} />
+            </g>
+          );
+        }
         if (o.kind === "held")
           return (
             <g key={i} {...common}>

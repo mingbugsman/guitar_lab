@@ -56,6 +56,7 @@ export function ExercisePlayer({ drill, stats: initialStats, signedIn }: { drill
   const overlays: FretOverlay[] = [];
   if (current) {
     for (const h of current.hold ?? []) overlays.push({ ...h, kind: "held", label: h.finger ? String(h.finger) : undefined });
+    for (const s of current.skip ?? []) overlays.push({ string: s, fret: 0, kind: "skip" });
     for (const h of current.hits) overlays.push({ ...h, kind: "active", label: h.finger ? String(h.finger) : undefined });
   }
   const showNext = playing ? upcoming : steps[0];
@@ -130,10 +131,17 @@ export function ExercisePlayer({ drill, stats: initialStats, signedIn }: { drill
           )}
           {player.status === "running" && current && (
             <p className="flex items-center gap-3 text-lg font-medium">
-              {current.hits[0]?.finger && (
+              {current.hits[0]?.finger ? (
                 <span>
                   Ngón <span className="gl-num text-2xl">{current.hits[0].finger}</span>
                 </span>
+              ) : (
+                current.hits[0] && (
+                  <span>
+                    Dây <span className="gl-num text-2xl">{current.hits[0].string}</span>
+                    {current.hits[0].fret === 0 && <span className="text-base text-muted-foreground"> buông</span>}
+                  </span>
+                )
               )}
               {current.action === "pick-down" && (
                 <span className="inline-flex items-center gap-1">
