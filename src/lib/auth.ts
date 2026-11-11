@@ -13,6 +13,8 @@ export type Profile = {
   practice_goal_minutes: number;
   learning_target: string;
   onboarded_at: string | null;
+  created_at: string;
+  updates_seen_at: string | null;
 };
 
 /** Current user, verified with Supabase Auth (cached per request). */
@@ -29,7 +31,9 @@ export const getProfile = cache(async (): Promise<Profile | null> => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("profiles")
-    .select("id, display_name, experience, guitar_type, handedness, practice_goal_minutes, learning_target, onboarded_at")
+    .select(
+      "id, display_name, experience, guitar_type, handedness, practice_goal_minutes, learning_target, onboarded_at, created_at, updates_seen_at",
+    )
     .eq("id", user.id)
     .single();
   return (data as Profile | null) ?? null;

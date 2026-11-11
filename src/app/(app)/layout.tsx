@@ -5,6 +5,7 @@ import { BottomNav, BottomNavSpacer, SidebarNav } from "@/components/layout/app-
 import { Logo } from "@/components/layout/logo";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { WhatsNew } from "@/components/layout/whats-new";
 import { GuitarViewProvider } from "@/components/guitar/view-context";
 import { getProfile, getUser } from "@/lib/auth";
 import { signOut } from "@/features/authentication/actions";
@@ -53,7 +54,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </Link>
             )}
           </header>
-          <main className="mx-auto w-full max-w-4xl flex-1 px-4 pt-6 pb-10 sm:px-8 md:pt-10">{children}</main>
+          <main className="mx-auto w-full max-w-4xl flex-1 px-4 pt-6 pb-10 sm:px-8 md:pt-10">
+            <WhatsNew
+              signedIn={Boolean(user)}
+              seenAt={profile?.updates_seen_at ?? null}
+              accountCreatedAt={profile?.created_at ?? null}
+            />
+            {children}
+          </main>
           <SiteFooter />
           <BottomNavSpacer />
         </div>

@@ -8,10 +8,12 @@ import { LandingStage } from "@/components/guitar/landing-stage";
 import { RoutineBar } from "@/components/learning/routine-bar";
 import { DAILY_30 } from "@/features/practice/routine";
 import { CHORDS } from "@/lib/music/chords";
-import { getUser } from "@/lib/auth";
+import { getProfile, getUser } from "@/lib/auth";
+import { WhatsNew } from "@/components/layout/whats-new";
 
 export default async function LandingPage() {
   const user = await getUser();
+  const profile = user ? await getProfile() : null;
   const am = CHORDS.am;
 
   return (
@@ -38,6 +40,7 @@ export default async function LandingPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 pb-16 sm:px-8">
+        <WhatsNew signedIn={Boolean(user)} seenAt={profile?.updates_seen_at ?? null} accountCreatedAt={profile?.created_at ?? null} />
         {/* promise on the left edge, not a centered hero */}
         <section className="grid gap-x-12 gap-y-6 pt-8 pb-10 md:grid-cols-[1.25fr_1fr] md:pt-14">
           <h1 className="gl-title text-4xl text-balance sm:text-5xl">

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /** "Giới thiệu" link that is visible but disabled until the About page is written. */
@@ -22,7 +23,10 @@ export function SiteFooter({ className }: { className?: string }) {
         Guitar Lab · Made by <span className="font-medium text-foreground">Tran Tuan Minh</span>
       </p>
       <p className="mt-1">Bắt đầu phát triển từ 6/8/2026</p>
-      <p className="mt-2">
+      <p className="mt-2 flex justify-center gap-4">
+        <Link href="/updates" className="underline-offset-4 hover:text-foreground hover:underline" data-testid="updates-link">
+          Có gì mới
+        </Link>
         <AboutLinkDisabled />
       </p>
     </footer>
