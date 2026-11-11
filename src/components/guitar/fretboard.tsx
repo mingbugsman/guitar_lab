@@ -388,7 +388,17 @@ export function Fretboard({
           return (
             <circle key={i} {...common} cx={cx} cy={cy} r={r} fill="none" stroke="var(--gl-finger)" strokeWidth={2} strokeDasharray="3 3" />
           );
-        if (o.kind === "held") return <circle key={i} {...common} cx={cx} cy={cy} r={r} fill="var(--gl-finger)" opacity={0.35} />;
+        if (o.kind === "held")
+          return (
+            <g key={i} {...common}>
+              <circle cx={cx} cy={cy} r={r} fill="var(--gl-finger)" opacity={0.35} />
+              {o.label && (
+                <text x={cx} y={cy + 4.5} textAnchor="middle" className="fill-foreground text-[12px] font-bold" opacity={0.7}>
+                  {o.label}
+                </text>
+              )}
+            </g>
+          );
         if (o.kind === "pressed")
           return (
             <g key={i} {...common} className="pointer-events-none">

@@ -21,5 +21,10 @@ export const MOBILE_NAV = NAV_ITEMS.filter((i) =>
  * hidden there so the big step button owns the bottom of the screen.
  */
 export function isFocusRoute(pathname: string): boolean {
-  return /^\/academy\/[^/]+$/.test(pathname) || /^\/practice\/[^/]+$/.test(pathname);
+  if (pathname === "/practice/drills") return false;
+  return (
+    /^\/academy\/[^/]+$/.test(pathname) ||
+    /^\/practice\/[^/]+$/.test(pathname) ||
+    /^\/practice\/drills\/[^/]+$/.test(pathname)
+  );
 }

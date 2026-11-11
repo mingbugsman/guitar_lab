@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Minus, Pause, Play, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getTone } from "@/lib/audio/tone";
+import { claimTransport, ownsTransport, releaseTransport } from "@/lib/audio/transport-owner";
 import { cn } from "@/lib/utils";
 
 const MIN_BPM = 30;
@@ -35,6 +36,7 @@ export function Metronome({ initialBpm = 60, initialBeats = 4, compact = false }
         const Tone = await getTone();
         if (cancelled) return;
         const transport = Tone.getTransport();
+        claimTransport("metronome", () => setRunning(false));
         transport.bpm.value = bpm;
         const hi = new Tone.Synth({
           oscillator: { type: "square" },
@@ -58,8 +60,11 @@ export function Metronome({ initialBpm = 60, initialBeats = 4, compact = false }
         transport.start("+0.05");
         cleanup.current = () => {
           transport.clear(id);
-          transport.stop();
-          transport.position = 0;
+          if (ownsTransport("metronome")) {
+            transport.stop();
+            transport.position = 0;
+            releaseTransport("metronome");
+          }
           hi.dispose();
           lo.dispose();
         };

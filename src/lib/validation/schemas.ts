@@ -60,3 +60,12 @@ export const chordChangeRunSchema = z.object({
   countedBy: z.enum(["mic", "manual"]),
 });
 export type ChordChangeRunInput = z.infer<typeof chordChangeRunSchema>;
+
+export const drillResultSchema = z.object({
+  drillId: z.string().regex(/^[a-z0-9:-]{1,80}$/),
+  kind: z.enum(["finger", "chord-challenge", "picking"]),
+  bpmReached: z.number().int().min(20).max(300),
+  rating: z.enum(["clean", "some-buzz", "lost"]),
+  seconds: z.number().int().min(5).max(1800),
+});
+export type DrillResultInput = z.infer<typeof drillResultSchema>;
