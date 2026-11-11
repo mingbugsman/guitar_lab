@@ -12,6 +12,7 @@ import { useGuitarView } from "./view-context";
 export function GuitarVisualLab() {
   const { handedness } = useGuitarView();
   const [showNotes, setShowNotes] = useState(false);
+  const [zoom, setZoom] = useState(false);
   const [chord, setChord] = useState<ChordId>("em");
 
   return (
@@ -27,7 +28,16 @@ export function GuitarVisualLab() {
         <Button size="sm" variant={showNotes ? "default" : "outline"} onClick={() => setShowNotes((v) => !v)} aria-pressed={showNotes}>
           {showNotes ? "Ẩn tên nốt" : "Hiện tên nốt tự nhiên"}
         </Button>
-        <InteractiveFretboard frets={12} showAllNotes={showNotes} />
+        <Button
+          size="sm"
+          variant={zoom ? "default" : "outline"}
+          onClick={() => setZoom((v) => !v)}
+          aria-pressed={zoom}
+          className="ml-2"
+        >
+          {zoom ? "Xem đủ 12 phím" : "Phóng to phím 1–5"}
+        </Button>
+        <InteractiveFretboard frets={zoom ? 5 : 12} showAllNotes={showNotes} />
       </section>
 
       <section aria-labelledby="chords" className="space-y-3">

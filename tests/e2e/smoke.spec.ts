@@ -52,3 +52,21 @@ test("protected routes redirect to login", async ({ page }) => {
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login\?next=%2Fdashboard/);
 });
+
+test("every cell of the fretboard can be played, also when mirrored for left-handed players", async ({ page }) => {
+  await page.goto("/guitar");
+  const stage = page.locator('[role="application"]').first();
+  await stage.locator('[data-cell="6-3"]').click();
+  await expect(stage).toHaveAttribute("data-pressed", "6-3");
+  await expect(stage.locator('[data-overlay="pressed"]')).toContainText("G");
+
+  await page.getByRole("button", { name: /Đàn tay phải/ }).first().click();
+  await stage.locator('[data-cell="1-0"]').click();
+  await expect(stage).toHaveAttribute("data-pressed", "1-0");
+
+  // keyboard: focus the neck, move one cell towards the body, play it
+  await stage.focus();
+  await page.keyboard.press("ArrowLeft"); // mirrored: the body is to the left
+  await page.keyboard.press("Enter");
+  await expect(stage).toHaveAttribute("data-pressed", "6-1");
+});

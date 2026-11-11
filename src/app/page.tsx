@@ -59,7 +59,7 @@ export default async function LandingPage() {
 
         {/* the one big object */}
         <section aria-label="Thử cần đàn">
-          <p className="gl-label mb-2">Thử luôn: đây là hình cần đàn dùng trong mọi bài. Chạm vào một dây để nghe.</p>
+          <p className="gl-label mb-2">Thử luôn: đây là hình cần đàn dùng trong mọi bài. Chạm vào ô nào cũng nghe đúng nốt ở đó.</p>
           <LandingStage />
         </section>
 
