@@ -17,7 +17,8 @@
   4. Trước khi mời nhiều người dùng: cài SMTP riêng rồi bật lại "Confirm email" (xem [DEPLOY.md](DEPLOY.md) Bước 3.2).
   5. Phần còn lại của WRITING_GUIDE (mục "Diễn đạt cho người mới" bên dưới): lối đi khi kẹt (§6), checklist nghe/nhìn được + âm mẫu rè/tắt (§8), câu mở đầu "học xong làm được gì" (§10). Giọng văn, thuật ngữ, cơ thể đã xong.
   6. Thử "Đổi hợp âm 1 phút" với đàn thật: máy đếm có thiếu/thừa không (chỉnh `createStrumDetector` trong `src/lib/audio/strum-detector.ts`).
-  7. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
+  7. **BIG UPDATE — Practice Engine** (mục bên dưới, thiết kế: [PRACTICE_ENGINE.md](PRACTICE_ENGINE.md)): làm trước Phase 2.
+  8. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
 
 ## Kết quả kiểm thử gần nhất (2026-11-11, local)
 
@@ -146,6 +147,50 @@
 
 ---
 
+## BIG UPDATE — PRACTICE ENGINE (quyết định 11/11/2026 — thiết kế: [PRACTICE_ENGINE.md](PRACTICE_ENGINE.md))
+
+Không chấm bằng micro (micro laptop yếu): người học tự đánh giá. Mọi bài tập đều có Xem mẫu trên hình, tốc độ tăng từ chậm lên nhanh.
+
+### Bước 1 — Cần đàn bấm được từng ô (`feature/playable-fretboard`)
+- [ ] `cellAt()` + unit test (2 tay thuận × 2 hướng nhìn)
+- [ ] `Fretboard` có `onCellPress`, `pressedCell`; vùng dây buông trước lược đàn
+- [ ] Bàn phím: `role="grid"`, phím mũi tên + Enter
+- [ ] Nút "Phóng to phím 1–5" trên trang Cây đàn
+- [ ] E2E: chạm ô → đúng dây/phím, cả khi đàn tay trái
+
+### Bước 2a — Bộ máy chuỗi nốt (`feature/drill-engine`)
+- [ ] Kiểu dữ liệu `Step / Sequence / Drill / Tempo` (`src/lib/practice/sequence.ts`)
+- [ ] Bộ dựng `spider`, `shiftPositions`, `stringSkip`… + ràng buộc có test
+- [ ] `tempoForRound()` + test
+- [ ] `usePatternPlayer` trên Tone.Transport + Tone.Draw; `transport-owner` (không chạy cùng Metronome)
+
+### Bước 2b — Màn hình Bài tập ngón (`feature/finger-drills`)
+- [ ] `ExercisePlayer`: ô cần bấm / ô kế tiếp / ngón đang giữ, phách, caption
+- [ ] Xem mẫu (30 BPM, có caption) → đếm vào → chạy → tự đánh giá 3 mức
+- [ ] Chậm lên nhanh + "Giữ tốc độ này" + "Chỉ nghe tiếng tích"
+- [ ] 12 bài: spider-1234, spider-4321, spider-updown, spider-hold, perm-1324, perm-1423, diagonal, shift, pairs, string-skip, alternate, burst
+- [ ] Trang `/drills`, `/drills/[id]`; khóa bài theo `unlockAfter`
+- [ ] Migration `drill_results` (local → dev → prod) + RLS test
+- [ ] E2E với `page.clock`
+
+### Bước 3 — Thử thách hợp âm (`feature/chord-challenge`)
+- [ ] `buildChallenge()` có seed, không lặp hợp âm liền nhau, các chặng tăng dần + test
+- [ ] Màn hình: sơ đồ lớn + hợp âm kế tiếp + phách + chặng/BPM/thời gian còn lại
+- [ ] 1 / 3 / 5 phút; chọn nhóm hợp âm (mặc định: đã học); tùy chọn nghe mẫu
+- [ ] Tự đánh giá "theo kịp tới chặng …" → lưu `drill_results`
+- [ ] E2E
+
+### Bước 4 — Gắn vào app (`feature/drills-integration`)
+- [ ] Visual `{ kind: "drill" }` trong bài 4, 9, 12 và các bài A, D
+- [ ] Buổi tập: phần Kỹ thuật gợi ý bài tập ngón; công cụ "Bài tập ngón"
+- [ ] Trang Luyện tập: 3 lối vào; trang Tiến độ: tốc độ sạch cao nhất + kỷ lục
+- [ ] Test: drill được tham chiếu tồn tại và đã mở ở bài đó
+
+### Sau này — Fingerpicking (thuộc Phase 2, Level 2)
+- [ ] `pick: p/i/m/a`, mẫu `B-3-2-1`, `B-(321)`, `B-(321)-slap`; `PatternLane`; tiếng vỗ đàn; hình tay gảy lật gương
+
+---
+
 ## PHASE 2 — MVP 0.2: CORE LEARNING EXPERIENCE
 - [ ] Level 1 đầy đủ: Dm, C, G, A7, D7, E7 (thêm vào `CHORDS` + test nốt), cấu tạo hợp âm, trưởng/thứ, bài chuyển hợp âm
 - [ ] Level 2: down/up stroke, 4/4, 3/4, 6/8, strumming patterns, arpeggio, trường độ, dấu lặng, phách mạnh/nhẹ, capo
@@ -177,6 +222,7 @@
 ---
 
 ## Nhật ký phiên làm việc
+- **2026-11-11** — Chốt BIG UPDATE Practice Engine (cần đàn bấm từng ô, 12 bài tập ngón có Xem mẫu và tăng tốc, thử thách hợp âm, hướng fingerpicking). Thiết kế: `docx/PRACTICE_ENGINE.md`.
 - **2026-11-11** — Công cụ "Đổi hợp âm 1 phút": micro tự đếm tiếng gảy (`src/lib/audio/strum-detector.ts`), có chế độ tự đếm bằng tay, giữ màn hình sáng khi đang đo, lưu kết quả theo hợp âm/cặp hợp âm (bảng `chord_change_runs`, RLS). Có trong mọi bài hợp âm (Em: 1 hợp âm; Am: Em–Am; E: E–Am; A: A–E; D: D–A), trang Công cụ và buổi tập. Migration `20261111000000_chord_change_runs.sql` đã áp local, dev, prod.
 - **2026-11-11** — Đưa Em lên làm bài 10 của Level 0 (hợp âm đầu tiên sớm hơn 4 bài). Bài Em đọc từ hình cần đàn, không cần sơ đồ; bài Đọc sơ đồ dùng Em làm ví dụ.
 - **2026-11-11** — Cần đàn tự co theo bề ngang màn hình (hết cuộn ngang trên điện thoại). Rà 18 bài theo WRITING_GUIDE §2, §4, §5; ẩn "Kiểu Tab"; thêm `writing.test.ts`.
