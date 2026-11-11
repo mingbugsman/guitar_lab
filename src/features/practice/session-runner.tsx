@@ -13,6 +13,7 @@ import { formatClock, formatDuration } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { completeActivity, finishPracticeSession } from "./actions";
 import { guidanceFor, type ActivityKind } from "./routine";
+import { DailyDrills, type DailyDrillItem } from "@/components/practice/daily-drills";
 
 export type RunnerActivity = {
   id: string;
@@ -29,9 +30,11 @@ type Props = {
   plannedMinutes: number;
   activities: RunnerActivity[];
   currentLesson: { slug: string; title: string } | null;
+  /** Today's three hand drills, shown during the "Kỹ thuật" part. */
+  dailyDrills?: DailyDrillItem[];
 };
 
-export function SessionRunner({ sessionId, plannedMinutes, activities: initial, currentLesson }: Props) {
+export function SessionRunner({ sessionId, plannedMinutes, activities: initial, currentLesson, dailyDrills = [] }: Props) {
   const [activities, setActivities] = useState(initial);
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
@@ -164,6 +167,11 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
               </li>
             ))}
           </ul>
+          {current.kind === "technical" && dailyDrills.length > 0 && (
+            <div className="mt-5">
+              <DailyDrills items={dailyDrills} compact />
+            </div>
+          )}
           {(current.kind === "technical" || current.kind === "recall") && currentLesson && (
             <Link href={`/academy/${currentLesson.slug}`} className="mt-2 inline-block text-sm underline underline-offset-4" target="_blank">
               Mở bài: {currentLesson.title}

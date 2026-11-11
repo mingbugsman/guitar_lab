@@ -9,6 +9,8 @@ import { formatDuration } from "@/lib/format";
 import { getLessonProgress } from "@/features/progress/queries";
 import { buildLearningState } from "@/features/progress/learning-state";
 import { SessionRunner, type RunnerActivity } from "@/features/practice/session-runner";
+import { getDailyDrills } from "@/features/drills/queries";
+import { toDailyItems } from "@/components/practice/daily-drills";
 
 export const metadata: Metadata = { title: "Buổi tập" };
 
@@ -35,6 +37,7 @@ export default async function SessionPage({ params }: { params: Promise<{ sessio
   if (!session) notFound();
   const state = buildLearningState(progress);
   const lesson = state.inProgressLesson ?? state.nextLesson;
+  const daily = await getDailyDrills(new Set(progress.filter((p) => p.completed_at).map((p) => p.lesson_slug)));
 
   return (
     <div className="space-y-5">
@@ -75,6 +78,7 @@ export default async function SessionPage({ params }: { params: Promise<{ sessio
           plannedMinutes={session.planned_minutes}
           activities={(activities ?? []) as RunnerActivity[]}
           currentLesson={lesson ? { slug: lesson.slug, title: lesson.title } : null}
+          dailyDrills={toDailyItems(daily)}
         />
       )}
     </div>
