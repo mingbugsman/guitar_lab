@@ -16,7 +16,7 @@
   3. 🔑 Thử Tuner với đàn thật trên production (`/tools`) — mục duy nhất của Phase 1 chưa kiểm chứng bằng đàn thật.
   4. Trước khi mời nhiều người dùng: cài SMTP riêng rồi bật lại "Confirm email" (xem [DEPLOY.md](DEPLOY.md) Bước 3.2).
   5. Phần còn lại của WRITING_GUIDE (mục "Diễn đạt cho người mới" bên dưới): lối đi khi kẹt (§6), checklist nghe/nhìn được + âm mẫu rè/tắt (§8), câu mở đầu "học xong làm được gì" (§10). Giọng văn, thuật ngữ, cơ thể đã xong.
-  6. ⚠️ Áp migration `20261111000000_chord_change_runs.sql` lên Supabase dev rồi prod (`npx supabase link --project-ref <ref>` → `npx supabase db push --remote`), sau đó merge `develop` → `main`.
+  6. Thử "Đổi hợp âm 1 phút" với đàn thật: máy đếm có thiếu/thừa không (chỉnh `createStrumDetector` trong `src/lib/audio/strum-detector.ts`).
   7. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
 
 ## Kết quả kiểm thử gần nhất (2026-11-11, local)
@@ -177,7 +177,7 @@
 ---
 
 ## Nhật ký phiên làm việc
-- **2026-11-11** — Công cụ "Đổi hợp âm 1 phút": micro tự đếm tiếng gảy (`src/lib/audio/strum-detector.ts`), có chế độ tự đếm bằng tay, giữ màn hình sáng khi đang đo, lưu kết quả theo hợp âm/cặp hợp âm (bảng `chord_change_runs`, RLS). Có trong mọi bài hợp âm (Em: 1 hợp âm; Am: Em–Am; E: E–Am; A: A–E; D: D–A), trang Công cụ và buổi tập. ⚠️ Migration `20261111000000_chord_change_runs.sql` mới áp ở local — cần áp lên dev + prod trước khi merge vào `main`.
+- **2026-11-11** — Công cụ "Đổi hợp âm 1 phút": micro tự đếm tiếng gảy (`src/lib/audio/strum-detector.ts`), có chế độ tự đếm bằng tay, giữ màn hình sáng khi đang đo, lưu kết quả theo hợp âm/cặp hợp âm (bảng `chord_change_runs`, RLS). Có trong mọi bài hợp âm (Em: 1 hợp âm; Am: Em–Am; E: E–Am; A: A–E; D: D–A), trang Công cụ và buổi tập. Migration `20261111000000_chord_change_runs.sql` đã áp local, dev, prod.
 - **2026-11-11** — Đưa Em lên làm bài 10 của Level 0 (hợp âm đầu tiên sớm hơn 4 bài). Bài Em đọc từ hình cần đàn, không cần sơ đồ; bài Đọc sơ đồ dùng Em làm ví dụ.
 - **2026-11-11** — Cần đàn tự co theo bề ngang màn hình (hết cuộn ngang trên điện thoại). Rà 18 bài theo WRITING_GUIDE §2, §4, §5; ẩn "Kiểu Tab"; thêm `writing.test.ts`.
 - **2026-11-11** — Làm lại giao diện theo hướng "sổ tập đàn" (DESIGN.md): bài học từng bước, buổi tập dạng dòng thời gian, trang Hôm nay một cột, trang chủ có cần đàn bấm được, menu tiếng Việt. ui_lint 8.0 → 1.5.
