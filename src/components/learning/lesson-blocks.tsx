@@ -1,4 +1,4 @@
-import { AlertTriangle, Eye, Lightbulb } from "lucide-react";
+import { AlertTriangle, Eye, Hand, Lightbulb } from "lucide-react";
 import type { Block } from "@/content/types";
 import { cn } from "@/lib/utils";
 import { HandText } from "./hand-text";
@@ -8,6 +8,7 @@ const CALLOUT = {
   tip: { icon: Lightbulb, title: "Mẹo", className: "border-[var(--gl-highlight)]" },
   warning: { icon: AlertTriangle, title: "Lưu ý", className: "border-destructive" },
   compare: { icon: Eye, title: "Đối chiếu với đàn của bạn", className: "border-foreground" },
+  body: { icon: Hand, title: "Cảm giác khi tập", className: "border-[var(--gl-finger)]" },
 } as const;
 
 export function LessonBlocks({ blocks }: { blocks: Block[] }) {

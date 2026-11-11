@@ -88,7 +88,9 @@ export function Metronome({ initialBpm = 60, initialBeats = 4, compact = false }
   return (
     <div className={cn("gl-stage p-4", !compact && "sm:p-6")} data-testid="metronome">
       <div className="flex items-center justify-between gap-2">
-        <h3 className="font-semibold">Metronome</h3>
+        <h3 className="font-semibold">
+          Máy đếm nhịp <span className="font-normal text-muted-foreground">(Metronome)</span>
+        </h3>
         <span className="gl-num text-xs text-muted-foreground">{beats}/4</span>
       </div>
 

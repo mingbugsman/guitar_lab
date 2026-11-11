@@ -24,8 +24,12 @@ export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }
   | { type: "visual"; visual: Visual; caption?: string }
   | { type: "steps"; heading: string; items: string[] }
-  /** "compare" = put your real guitar next to the picture and check it. */
-  | { type: "callout"; tone: "tip" | "warning" | "compare"; text: string };
+  /**
+   * "compare" = put your real guitar next to the picture and check it.
+   * "body" = what the learner's hands and body will feel, how many sessions it takes, and when
+   * to stop (docx/WRITING_GUIDE.md §5).
+   */
+  | { type: "callout"; tone: "tip" | "warning" | "compare" | "body"; text: string };
 
 export type Lesson = {
   slug: string;

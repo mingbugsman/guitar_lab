@@ -108,17 +108,19 @@ export function Tuner() {
       ? "Chuẩn rồi! Chuyển sang dây tiếp theo."
       : cents < 0
         ? cents < -50
-          ? "Thấp hơn nhiều — vặn khóa để CĂNG dây (nốt sẽ cao lên)."
+          ? "Thấp hơn nhiều — vặn khóa để căng dây (nốt sẽ cao lên)."
           : "Hơi thấp — vặn khóa để căng dây thêm một chút."
         : cents > 50
-          ? "Cao hơn nhiều — vặn khóa để NỚI dây (nốt sẽ thấp xuống)."
+          ? "Cao hơn nhiều — vặn khóa để nới dây (nốt sẽ thấp xuống)."
           : "Hơi cao — nới dây một chút.";
 
   return (
     <div className="gl-stage p-4 sm:p-6" data-testid="tuner">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold">Guitar Tuner</h3>
-        <span className="text-xs text-muted-foreground">Standard: E A D G B E</span>
+        <h3 className="font-semibold">
+          Máy lên dây <span className="font-normal text-muted-foreground">(Tuner)</span>
+        </h3>
+        <span className="text-xs text-muted-foreground">Chuẩn: E A D G B E</span>
       </div>
 
       {/* gauge */}
@@ -181,7 +183,7 @@ export function Tuner() {
         })}
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        Mặc định Tuner tự nhận dây gần nhất. Chạm vào một dây để khóa mục tiêu (chạm lần nữa để bỏ khóa).
+        Mặc định máy tự nhận dây gần nhất. Chạm vào một dây để khóa mục tiêu (chạm lần nữa để bỏ khóa).
       </p>
 
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">

@@ -20,7 +20,7 @@ export function LandingStage() {
             <Volume2 /> Nghe hợp âm Am
           </Button>
           <p className="text-sm text-muted-foreground">
-            Chấm cam là chỗ đặt ngón tay, số bên trong là ngón nào. Thử bấm “Kiểu Tab” để thấy hình lật ngược ra sao.
+            Chấm cam là chỗ đặt ngón tay, số bên trong là ngón nào. Chạm vào một dây để nghe. Nếu bạn gảy bằng tay trái, bấm nút ⇄ để lật hình cho khớp với đàn của bạn.
           </p>
         </div>
       </div>

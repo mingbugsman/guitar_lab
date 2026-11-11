@@ -23,7 +23,7 @@ test("left-handed learner gets mirrored words, not just mirrored pictures", asyn
   await expect(page.getByTestId("guitar-type-note")).toContainText("đàn điện");
   await expect(page.getByText("lên đùi TRÁI. Đầu đàn chĩa sang bên PHẢI")).toBeVisible();
   await expect(page.getByTestId("posture-thigh")).toHaveText("đùi TRÁI");
-  await expect(page.getByText("Thử buông tay phải khỏi cần đàn")).toBeVisible();
+  await expect(page.getByText("Buông tay phải khỏi cần đàn")).toBeVisible();
   await expect(page.getByText(/\{\w+\}/)).toHaveCount(0);
 
   // Switching the guitar back with ⇄ flips the words together with the pictures.

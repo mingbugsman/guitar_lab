@@ -72,7 +72,7 @@ Hình được lật gương cho người dùng đàn tay trái, nên **chữ c�
 | máy đếm nhịp (Metronome) | công cụ phát tiếng tích tắc đều | |
 
 - Không đưa khái niệm lên giao diện trước khi dạy nó. Ví dụ: nút "Kiểu Tab" phải có một dòng giải thích Tab là gì, hoặc chỉ hiện sau bài dạy đọc Tab.
-- Tên mục trên menu sẽ chuyển dần sang tiếng Việt (xem mục "Việc còn lại").
+- Thuật ngữ trong bài được test tự kiểm: thêm thuật ngữ mới vào danh sách `TERMS` trong `src/content/writing.test.ts`.
 
 ## 5. Nói trước về cơ thể và kỳ vọng
 
@@ -120,7 +120,8 @@ Mỗi bài, ngoài "Lỗi thường gặp", phải có lối đi khi **thử nhi
 ## 11. Danh sách kiểm trước khi đưa một bài lên
 
 - [ ] Không còn "trái / phải" viết cứng (test tự động).
-- [ ] Mọi thuật ngữ được giải thích ở lần đầu, đúng bảng từ ở mục 4.
+- [ ] Mọi thuật ngữ được giải thích ở lần đầu, đúng bảng từ ở mục 4 (test tự động cho các từ trong `TERMS`).
+- [ ] Bài có bấm dây nhiều thì có khung "Cảm giác khi tập" (`tone: "body"`).
 - [ ] Bài có hình cần đàn thì có khung "Đối chiếu với đàn của bạn" (test tự động, xem `GUITAR_VISUAL.md`).
 - [ ] Có câu mở đầu "học xong làm được gì".
 - [ ] Có lối đi khi kẹt (mục 6).
@@ -133,11 +134,11 @@ Mỗi bài, ngoài "Lỗi thường gặp", phải có lối đi khi **thử nhi
 |---|---|
 | §3 Tay thuận | ✅ Đã áp dụng cho 18 bài, hình cấu tạo đàn và hình tư thế. Có test chặn. |
 | §7 Acoustic trước | ✅ Đã có ghi chú riêng cho classic và đàn điện. |
-| §2 Giọng văn | ⏳ Cần rà lại 18 bài. |
-| §4 Thuật ngữ | ⏳ Cần rà lại 18 bài; menu còn tiếng Anh; nút "Kiểu Tab" hiện quá sớm. |
-| §5 Cơ thể và kỳ vọng | ⏳ Chưa có trong bài nào. |
+| §2 Giọng văn | ✅ Đã rà 18 bài. Test chặn "ta/chúng ta", chữ in hoa, checklist không bắt đầu bằng "Tôi". |
+| §4 Thuật ngữ | ✅ 18 bài giải thích thuật ngữ ở lần đầu (test `src/content/writing.test.ts`). Menu và tên công cụ tiếng Việt. Nút "Kiểu Tab" ẩn cho tới khi có bài dạy Tab. |
+| §5 Cơ thể và kỳ vọng | ✅ Khung "Cảm giác khi tập" (callout `tone: "body"`) trong bài 3, 4, 9 và mọi bài hợp âm. Test bắt buộc. |
 | §6 Khi kẹt | ⏳ Mẫu bài học chưa có mục này. |
 | §8 Tự biết đúng sai | ⏳ Chưa có âm mẫu tiếng rè / tiếng tắt; checklist còn chung chung. |
-| §9 Trình bày khi ôm đàn | ⏳ Trang bài học còn là một trang dài. |
+| §9 Trình bày khi ôm đàn | ✅ Bài học chia 4 chặng, luyện từng bước một màn hình. |
 | §10 "Vì sao" và thành quả sớm | ⏳ Mẫu bài học chưa có câu mở đầu; 12 bài mới tới hợp âm đầu tiên. |
 | Hình vẽ chuyển động (hướng gảy, chuyển hợp âm) | ⏳ Bổ sung vào `GUITAR_VISUAL.md` khi làm Level 2. |
