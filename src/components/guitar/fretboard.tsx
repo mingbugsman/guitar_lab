@@ -30,15 +30,31 @@ export type FretboardProps = {
   onStringClick?: (string: StringNumber) => void;
   className?: string;
   title?: string;
+  /**
+   * Real pixel width available. When the roomy layout would not fit, the board is laid out
+   * for exactly this width (narrower frets, labels moved) so text stays readable and the
+   * picture never needs sideways scrolling.
+   */
+  fitWidth?: number;
 };
 
-const LABEL_W = 96;
 const NUT_W = 8;
-const FRET_W = 66;
 const STRING_GAP = 30;
 const TOP = 40;
 const BOTTOM = 46;
-const SIDE = 92;
+const ROOMY = { labelW: 96, fretW: 66, side: 92 };
+const COMPACT = { labelW: 84, side: 20 };
+
+/** Geometry of the board; exported for tests. */
+export function fretboardLayout(frets: number, fitWidth?: number) {
+  const roomyWidth = ROOMY.labelW + NUT_W + frets * ROOMY.fretW + ROOMY.side;
+  if (!fitWidth || fitWidth >= roomyWidth) {
+    return { compact: false, labelW: ROOMY.labelW, fretW: ROOMY.fretW, side: ROOMY.side, width: roomyWidth };
+  }
+  const width = Math.max(fitWidth, 240);
+  const fretW = (width - COMPACT.labelW - NUT_W - COMPACT.side) / frets;
+  return { compact: true, labelW: COMPACT.labelW, fretW, side: COMPACT.side, width };
+}
 
 export function Fretboard({
   view = "player",
@@ -51,10 +67,15 @@ export function Fretboard({
   onStringClick,
   className,
   title,
+  fitWidth,
 }: FretboardProps) {
   const rows = stringRowsTopToBottom(view);
+  const { compact, labelW: LABEL_W, fretW: FRET_W, width } = fretboardLayout(frets, fitWidth);
   const boardW = NUT_W + frets * FRET_W;
-  const width = LABEL_W + boardW + SIDE;
+  // Finger dots and note bubbles shrink with narrow frets so neighbours never touch.
+  const dotR = Math.min(12, FRET_W * 0.4);
+  const noteR = Math.min(10, FRET_W * 0.36);
+  const shortFretNumbers = FRET_W < 46;
   const boardH = STRING_GAP * 5;
   const height = TOP + boardH + BOTTOM;
   const left = handedness === "left";
@@ -192,7 +213,7 @@ export function Fretboard({
               {`Dây ${s}`}
             </text>
             <text
-              x={X(LABEL_W - 30)}
+              x={X(LABEL_W - (compact ? 27 : 30))}
               y={y + 4}
               textAnchor={anchor("end")}
               className="fill-muted-foreground font-mono text-[12px]"
@@ -211,12 +232,12 @@ export function Fretboard({
             if (n.includes("#")) return null;
             return (
               <g key={`${s}-${f}`}>
-                <circle cx={X(fretCenterX(f))} cy={rowY(s)} r={10} fill="var(--card)" stroke="var(--gl-fret)" />
+                <circle cx={X(fretCenterX(f))} cy={rowY(s)} r={noteR} fill="var(--card)" stroke="var(--gl-fret)" />
                 <text
                   x={X(fretCenterX(f))}
                   y={rowY(s) + 4}
                   textAnchor="middle"
-                  className="fill-foreground text-[11px] font-semibold"
+                  className={cn("fill-foreground font-semibold", noteR < 9 ? "text-[10px]" : "text-[11px]")}
                 >
                   {n}
                 </text>
@@ -256,7 +277,7 @@ export function Fretboard({
           m.tone === "root" ? "var(--gl-root)" : m.tone === "highlight" ? "var(--gl-highlight)" : "var(--gl-finger)";
         return (
           <g key={i} data-marker="fretted" data-string={m.string} data-fret={m.fret}>
-            <circle cx={X(fretCenterX(m.fret))} cy={y} r={12} fill={fill} stroke="var(--card)" strokeWidth={2} />
+            <circle cx={X(fretCenterX(m.fret))} cy={y} r={dotR} fill={fill} stroke="var(--card)" strokeWidth={2} />
             <text
               x={X(fretCenterX(m.fret))}
               y={y + 4.5}
@@ -278,10 +299,22 @@ export function Fretboard({
           y={TOP + boardH + 32}
           textAnchor="middle"
           className="fill-muted-foreground text-[11px]"
+          data-fret-number={f}
         >
-          {`Phím ${f}`}
+          {shortFretNumbers ? `${f}` : `Phím ${f}`}
         </text>
       ))}
+      {shortFretNumbers && (
+        <text
+          x={X(boardX0)}
+          y={TOP + boardH + 32}
+          textAnchor={anchor("end")}
+          dx={left ? 10 : -10}
+          className="fill-muted-foreground text-[11px]"
+        >
+          Phím
+        </text>
+      )}
 
       {/* orientation anchors that match the real guitar */}
       {showOrientation && (
@@ -289,12 +322,32 @@ export function Fretboard({
           <text x={X(boardX0 + boardW / 2)} y={14} textAnchor="middle" data-edge="top">
             {edges.top}
           </text>
-          <text x={X(boardX0)} y={TOP + boardH + 32} textAnchor={anchor("end")} dx={left ? 10 : -10}>
-            {left ? `${PHYSICAL.headstock} ▶` : `◀ ${PHYSICAL.headstock}`}
-          </text>
-          <text x={X(width - 4)} y={TOP + boardH / 2 + 4} textAnchor={anchor("end")}>
-            {left ? `◀ ${PHYSICAL.body}` : `${PHYSICAL.body} ▶`}
-          </text>
+          {compact ? (
+            <>
+              {/* narrow screens: headstock / body move to the top and bottom corners */}
+              <text x={X(4)} y={14} textAnchor={anchor("start")} data-edge="headstock">
+                {left ? `${PHYSICAL.headstock} ▶` : `◀ ${PHYSICAL.headstock}`}
+              </text>
+              <text x={X(width - 4)} y={height - 2} textAnchor={anchor("end")} data-edge="body">
+                {left ? `◀ ${PHYSICAL.body}` : `${PHYSICAL.body} ▶`}
+              </text>
+            </>
+          ) : (
+            <>
+              <text
+                x={X(boardX0)}
+                y={TOP + boardH + 32}
+                textAnchor={anchor("end")}
+                dx={left ? 10 : -10}
+                data-edge="headstock"
+              >
+                {left ? `${PHYSICAL.headstock} ▶` : `◀ ${PHYSICAL.headstock}`}
+              </text>
+              <text x={X(width - 4)} y={TOP + boardH / 2 + 4} textAnchor={anchor("end")} data-edge="body">
+                {left ? `◀ ${PHYSICAL.body}` : `${PHYSICAL.body} ▶`}
+              </text>
+            </>
+          )}
           <text x={X(boardX0 + boardW / 2)} y={height - 2} textAnchor="middle" data-edge="bottom">
             {edges.bottom}
           </text>
