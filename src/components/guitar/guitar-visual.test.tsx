@@ -139,3 +139,27 @@ describe("Fretboard cells can be played", () => {
     expect(container.querySelector('[data-overlay="next"]')?.getAttribute("data-string")).toBe("4");
   });
 });
+
+describe("barre chords", () => {
+  it("draws one bar for the barre instead of a dot per string, mirrored for left-handed players", () => {
+    const right = render(<ChordDiagram chord={CHORDS.f} />).container;
+    const bar = right.querySelector('[data-marker="barre"]')!;
+    expect(bar).not.toBeNull();
+    expect(bar.textContent).toBe("1");
+    // strings 2 and 1 are only covered by the bar; strings 5, 4, 3 have their own fingers
+    expect(right.querySelectorAll('[data-marker="fretted"]')).toHaveLength(3);
+    const leftX = Number(render(<ChordDiagram chord={CHORDS.f} handedness="left" />).container.querySelector('[data-marker="barre"] rect')!.getAttribute("x"));
+    expect(leftX).toBe(Number(bar.querySelector("rect")!.getAttribute("x"))); // the bar spans all 6 strings either way
+  });
+
+  it("says where the barre goes in words", () => {
+    const lines = describeChord(CHORDS.bm).map((l) => l.text);
+    expect(lines[1]).toBe("Dây 5 (A): ngón 1 (ngón trỏ) chặn phím 2, nằm ngang từ dây 5 đến dây 1.");
+    expect(lines[0]).toBe("Dây 6 (E): không gảy — dấu X.");
+  });
+
+  it("labels the starting fret when the shape is up the neck", () => {
+    const { container } = render(<ChordDiagram chord={CHORDS.bm} />);
+    expect(container.textContent).toContain("2fr");
+  });
+});
