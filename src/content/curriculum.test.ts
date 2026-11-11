@@ -70,6 +70,14 @@ describe("curriculum integrity", () => {
     }
   });
 
+  it("gives every chord lesson a 1-minute drill, in the lesson and in its practice steps", () => {
+    for (const l of LESSONS.filter((x) => x.slug.startsWith("chord-"))) {
+      const drill = l.blocks.find((b) => b.type === "visual" && b.visual.kind === "chordChange");
+      expect(drill, l.slug).toBeDefined();
+      expect(l.practice.steps.at(-1), l.slug).toMatch(/^Đo 1 phút/);
+    }
+  });
+
   it("only references chords that exist", () => {
     for (const l of LESSONS)
       for (const b of l.blocks)

@@ -79,6 +79,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
   },
   chordLesson("am", { levelId: "level-1", order: 2, prerequisites: ["reading-chord-diagrams"] }, {
     summary: "Ba ngón, bỏ dây 6. Chuyển từ Em sang Am rất tự nhiên.",
+    drill: ["em", "am"],
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. Am (La thứ) dùng ba ngón và không gảy dây 6.",
       "Dây trầm nhất được gảy là dây 5 buông. Đó là nốt gốc (nốt mà hợp âm mang tên): A.",
@@ -105,6 +106,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
   }),
   chordLesson("e", { levelId: "level-1", order: 3, prerequisites: ["chord-am"] }, {
     summary: "Hợp âm trưởng đầu tiên: giống Am, dời lên một hàng dây.",
+    drill: ["e", "am"],
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. E (Mi trưởng) có đúng hình dạng của Am, nhưng dời về phía dây to hơn một hàng, và gảy cả 6 dây.",
       "Nghe E rồi nghe Em: chỉ khác một nốt, G# (G thăng, cao hơn G nửa cung) thay cho G. Vậy mà tiếng đàn đổi từ sáng sang buồn. Đó là khác biệt giữa hợp âm trưởng và hợp âm thứ.",
@@ -127,6 +129,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
   }),
   chordLesson("a", { levelId: "level-1", order: 4, prerequisites: ["chord-e"] }, {
     summary: "Ba ngón chen nhau trong cùng ô phím 2.",
+    drill: ["a", "e"],
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. A (La trưởng) đặt ba ngón cạnh nhau trong cùng ô phím 2, trên dây 4, 3, 2. Không gảy dây 6.",
       "Ô phím hẹp nên ba ngón không thể cùng sát thanh kim loại. Xếp hơi chéo: ngón 1 lùi về phía đầu đàn một chút, ngón 3 sát thanh kim loại nhất.",
@@ -152,6 +155,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
   }),
   chordLesson("d", { levelId: "level-1", order: 5, prerequisites: ["chord-a"] }, {
     summary: "Hình tam giác trên ba dây mảnh nhất, chỉ gảy 4 dây.",
+    drill: ["d", "a"],
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. D (Rê trưởng) chỉ gảy 4 dây: dây 4 không bấm, và dây 3, 2, 1 có bấm.",
       "Dây 4 không bấm cho nốt D. Đó là nốt gốc (nốt mà hợp âm mang tên) và là nốt trầm nhất của hợp âm này.",

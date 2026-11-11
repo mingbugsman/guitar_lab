@@ -7,6 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Metronome } from "@/components/audio/metronome";
 import { Tuner } from "@/components/audio/tuner";
+import { ChordChangeTimer } from "@/components/audio/chord-change-timer";
 import { RoutineBar } from "@/components/learning/routine-bar";
 import { formatClock, formatDuration } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -34,7 +35,7 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
   const [activities, setActivities] = useState(initial);
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
-  const [tool, setTool] = useState<"metronome" | "tuner" | null>(null);
+  const [tool, setTool] = useState<"metronome" | "tuner" | "changes" | null>(null);
   const [notes, setNotes] = useState("");
   const [focus, setFocus] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -201,7 +202,7 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
       )}
 
       <section className="mt-10 border-t pt-5" aria-label="Công cụ">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant={tool === "metronome" ? "default" : "outline"}
             className="h-11"
@@ -218,6 +219,14 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
           >
             Máy lên dây
           </Button>
+          <Button
+            variant={tool === "changes" ? "default" : "outline"}
+            className="h-11"
+            onClick={() => setTool(tool === "changes" ? null : "changes")}
+            aria-pressed={tool === "changes"}
+          >
+            Đổi hợp âm 1 phút
+          </Button>
         </div>
         {tool === "metronome" && (
           <div className="mt-4">
@@ -227,6 +236,11 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
         {tool === "tuner" && (
           <div className="mt-4">
             <Tuner />
+          </div>
+        )}
+        {tool === "changes" && (
+          <div className="mt-4">
+            <ChordChangeTimer chords={["em", "am"]} allowPick />
           </div>
         )}
       </section>

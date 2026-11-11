@@ -116,6 +116,11 @@ describe("writing guide §2 and §4 — wording", () => {
     expect(hits).toEqual([]);
   });
 
+  it("§9: practice has at most 4 steps, one screen each", () => {
+    const long = LESSONS.filter((l) => l.practice.steps.length > 4).map((l) => `${l.slug}: ${l.practice.steps.length}`);
+    expect(long).toEqual([]);
+  });
+
   it("self-check lines are said by the learner: they start with 'Tôi'", () => {
     const hits = LESSONS.flatMap((l) => l.checklist.filter((c) => !c.label.startsWith("Tôi ")).map((c) => `${l.slug}: ${c.label}`));
     expect(hits).toEqual([]);

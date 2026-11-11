@@ -656,6 +656,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
   },
   chordLesson("em", { levelId: "level-0", order: 10, prerequisites: ["fretboard-basics"] }, {
     readFrom: "fretboard",
+    drill: ["em"],
     summary: "Hợp âm đầu tiên: hai ngón, cả sáu dây đều gảy.",
     intro: [
       "Hợp âm là nhiều nốt vang cùng lúc. Em (Mi thứ) chỉ cần hai ngón và gảy cả 6 dây, nên là hợp âm dễ nhất để bắt đầu.",
@@ -670,7 +671,6 @@ export const LEVEL_0_LESSONS: Lesson[] = [
     practice: [
       "Đặt Em và gảy từng dây, từ dây 6 đến dây 1.",
       `Gảy xuống cả hợp âm 4 lần ${AT_60}.`,
-      "Nhấc tay ra rồi đặt lại Em. Làm 10 lần.",
     ],
     mistakes: [
       {

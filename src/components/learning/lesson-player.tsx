@@ -46,7 +46,7 @@ export function toScenes(blocks: Block[]): Scene[] {
 export function practiceVisuals(blocks: Block[]): Visual[] {
   const visuals = blocks.flatMap((b) => (b.type === "visual" ? [b.visual] : []));
   const board = [...visuals].reverse().find((v) => v.kind === "chord" || v.kind === "fretboard") ?? visuals[0];
-  const tool = visuals.find((v) => v.kind === "tuner" || v.kind === "metronome");
+  const tool = visuals.find((v) => v.kind === "chordChange" || v.kind === "tuner" || v.kind === "metronome");
   return [board, tool].filter((v, i, arr): v is Visual => Boolean(v) && arr.indexOf(v) === i);
 }
 

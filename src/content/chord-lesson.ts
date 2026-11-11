@@ -35,10 +35,20 @@ export function chordLesson(
      * lesson must say "hình cần đàn" (the view they already know), not "sơ đồ".
      */
     readFrom?: "diagram" | "fretboard";
+    /**
+     * One-minute chord changes for this lesson: the chord alone (place, lift, replace) or the
+     * chord paired with one learned before it.
+     */
+    drill: [ChordId] | [ChordId, ChordId];
   },
 ): Lesson {
   const chord = CHORDS[id];
   const fromDiagram = (extra.readFrom ?? "diagram") === "diagram";
+  const drillLabel = extra.drill.map((c) => CHORDS[c].symbol).join(" – ");
+  const drillText =
+    extra.drill.length === 2
+      ? `Đổi qua lại ${drillLabel} càng nhiều lần càng tốt trong 1 phút. Mỗi lần đặt xong hợp âm thì gảy xuống một cái, không cần theo nhịp.`
+      : `Đặt ${chord.symbol}, gảy xuống một cái, nhấc cả bàn tay lên rồi đặt lại, càng nhiều lần càng tốt trong 1 phút.`;
   return {
     slug: `chord-${id}`,
     levelId: placement.levelId,
@@ -70,10 +80,19 @@ export function chordLesson(
         ],
       },
       { type: "callout", tone: "body", text: chordBodyNote(chord.symbol, extra.sessions) },
+      { type: "visual", visual: { kind: "chordChange", chords: extra.drill } },
+      {
+        type: "text",
+        heading: "Đo tiến bộ bằng con số",
+        paragraphs: [
+          drillText,
+          "Máy nghe tiếng gảy qua micro và đếm giúp bạn, nên hai tay cứ để trên đàn. Ngày đầu được 8 đến 10 lần là bình thường. Con số được lưu lại: mỗi ngày làm 2 lượt và thử vượt lần trước.",
+        ],
+      },
     ],
     practice: {
       minutes: 10,
-      steps: extra.practice,
+      steps: [...extra.practice, `Đo 1 phút ${drillLabel}: bấm 'Bắt đầu, máy tự đếm' và làm 2 lượt.`],
     },
     mistakes: extra.mistakes,
     checklist: [
