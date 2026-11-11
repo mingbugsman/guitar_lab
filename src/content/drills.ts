@@ -91,10 +91,20 @@ function burstSteps(): Step[] {
   );
 }
 
-/** String skip: finger 1 at fret 1, jumping strings 6 4 5 3 4 2 3 1 and back. */
-function stringSkipNotes(): FingerNote[] {
-  const order: StringNumber[] = [6, 4, 5, 3, 4, 2, 3, 1];
-  return [...order, ...[...order].reverse()].map((s) => ({ string: s, finger: 1 }));
+/**
+ * String skip, picking hand only (open strings, nothing to fret): pick a string, skip the one
+ * next to it, pick the one after. Pairs move one string at a time: 6→4, 5→3, 4→2, 3→1, then back.
+ */
+function stringSkipSteps(): Step[] {
+  const down: [StringNumber, StringNumber][] = [[6, 4], [5, 3], [4, 2], [3, 1]];
+  const up: [StringNumber, StringNumber][] = [[1, 3], [2, 4], [3, 5], [4, 6]];
+  return [...down, ...up].flatMap(([a, b], i) => {
+    const skipped = ((a + b) / 2) as StringNumber;
+    return [
+      { at: i * 1, hits: [{ string: a, fret: 0 }], caption: `Gảy dây ${a}.` },
+      { at: i * 1 + 0.5, hits: [{ string: b, fret: 0 }], skip: [skipped], caption: `Bỏ qua dây ${skipped}, gảy dây ${b}.` },
+    ];
+  });
 }
 
 export const FINGER_DRILLS: Drill[] = [
@@ -245,14 +255,15 @@ export const FINGER_DRILLS: Drill[] = [
     title: "Nhảy dây",
     goal: "Tay gảy trúng đúng dây khi phải nhảy qua một dây.",
     howTo: [
-      "Ngón 1 bấm phím 1. Gảy theo thứ tự dây 6, 4, 5, 3, 4, 2, 3, 1.",
-      "Rồi đi ngược lại từ dây 1 về dây 6.",
-      "Nhìn dây kế tiếp trước khi gảy, phím gảy chỉ chạm đúng một dây.",
+      "Cả bài chỉ gảy dây buông, tay bấm để yên. Bài này tập riêng tay gảy.",
+      "Gảy một dây, bỏ qua dây ngay cạnh nó, rồi gảy dây sau đó. Ví dụ: gảy dây 6, bỏ qua dây 5, gảy dây 4.",
+      "Dời xuống một dây và làm lại: 5 rồi 3, 4 rồi 2, 3 rồi 1. Sau đó đi ngược lên: 1 rồi 3, 2 rồi 4…",
+      "Dây bị bỏ qua không được kêu. Nhìn trước dây kế tiếp để phím gảy chạm đúng dây đó.",
     ],
     body: BODY_PICKING,
     tempo: tempo(40, 80),
     unlockAfter: "open-strings",
-    steps: stepsFromNotes(stringSkipNotes()),
+    steps: stringSkipSteps(),
   }),
   drill({
     id: "alternate",

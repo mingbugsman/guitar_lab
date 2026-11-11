@@ -22,6 +22,8 @@ export type Step = {
   /** Fretting fingers that stay down from earlier steps (drawn pale). */
   hold?: Hit[];
   action?: StepAction;
+  /** Strings the pick must jump over without touching (drawn as a grey ✕). */
+  skip?: StringNumber[];
   chord?: ChordId;
   /** Shown while previewing, e.g. "Dây 6, phím 2: ngón 2. Ngón 1 vẫn giữ." */
   caption?: string;

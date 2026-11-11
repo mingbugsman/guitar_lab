@@ -85,3 +85,15 @@ describe("finger drills", () => {
     }
   });
 });
+
+describe("string skip drill", () => {
+  it("only picks open strings and always skips exactly one string, saying which", () => {
+    const steps = getDrill("string-skip")!.sequence.steps;
+    expect(steps.every((s) => s.hits[0].fret === 0 && s.hits[0].finger === undefined)).toBe(true);
+    for (let i = 0; i < steps.length; i += 2) {
+      expect(Math.abs(steps[i].hits[0].string - steps[i + 1].hits[0].string)).toBe(2);
+    }
+    expect(steps.slice(0, 2).map((s) => s.caption)).toEqual(["Gảy dây 6.", "Bỏ qua dây 5, gảy dây 4."]);
+    expect(steps[1].skip).toEqual([5]);
+  });
+});
