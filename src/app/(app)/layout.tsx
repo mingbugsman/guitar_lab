@@ -5,7 +5,7 @@ import { BottomNav, BottomNavSpacer, SidebarNav } from "@/components/layout/app-
 import { Logo } from "@/components/layout/logo";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { WhatsNew } from "@/components/layout/whats-new";
+import { NotificationBell } from "@/components/layout/notification-bell";
 import { GuitarViewProvider } from "@/components/guitar/view-context";
 import { getProfile, getUser } from "@/lib/auth";
 import { signOut } from "@/features/authentication/actions";
@@ -13,13 +13,21 @@ import { signOut } from "@/features/authentication/actions";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser();
   const profile = user ? await getProfile() : null;
+  const bell = {
+    signedIn: Boolean(user),
+    seenAt: profile?.updates_seen_at ?? null,
+    accountCreatedAt: profile?.created_at ?? null,
+  };
 
   return (
     <GuitarViewProvider handedness={profile?.handedness ?? "right"}>
       <ScrollToTop />
       <div className="min-h-dvh md:grid md:grid-cols-[208px_1fr]">
-        <aside className="sticky top-0 hidden h-dvh flex-col gap-8 border-r px-5 py-6 md:flex">
-          <Logo href={user ? "/dashboard" : "/"} />
+        <aside className="sticky top-0 z-40 hidden h-dvh flex-col gap-8 border-r px-5 py-6 md:flex">
+          <div className="flex items-center justify-between gap-2">
+            <Logo href={user ? "/dashboard" : "/"} />
+            <NotificationBell {...bell} placement="sidebar" />
+          </div>
           <SidebarNav />
           <div className="mt-auto space-y-2 text-sm">
             {user ? (
@@ -44,22 +52,20 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="flex min-w-0 flex-col">
           <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
             <Logo href={user ? "/dashboard" : "/"} />
-            {user ? (
-              <Link href="/profile" className={buttonVariants({ variant: "ghost", size: "sm" })}>
-                {profile?.display_name ?? "Hồ sơ"}
-              </Link>
-            ) : (
-              <Link href="/login" className={buttonVariants({ variant: "outline", size: "sm" })}>
-                Đăng nhập
-              </Link>
-            )}
+            <div className="flex items-center gap-1">
+              <NotificationBell {...bell} placement="header" />
+              {user ? (
+                <Link href="/profile" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+                  {profile?.display_name ?? "Hồ sơ"}
+                </Link>
+              ) : (
+                <Link href="/login" className={buttonVariants({ variant: "outline", size: "sm" })}>
+                  Đăng nhập
+                </Link>
+              )}
+            </div>
           </header>
           <main className="mx-auto w-full max-w-4xl flex-1 px-4 pt-6 pb-10 sm:px-8 md:pt-10">
-            <WhatsNew
-              signedIn={Boolean(user)}
-              seenAt={profile?.updates_seen_at ?? null}
-              accountCreatedAt={profile?.created_at ?? null}
-            />
             {children}
           </main>
           <SiteFooter />
