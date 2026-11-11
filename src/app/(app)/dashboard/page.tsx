@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Flame, PlayCircle, Timer } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { RoutineBar } from "@/components/learning/routine-bar";
 import { requireOnboardedProfile } from "@/lib/auth";
-import { formatClock, formatDate, formatDuration, isToday } from "@/lib/format";
+import { APP_TIMEZONE, formatDate, formatDuration, isToday } from "@/lib/format";
 import { getLessonProgress, getPracticeSessions, getPracticeTotals } from "@/features/progress/queries";
 import { buildLearningState } from "@/features/progress/learning-state";
 import { routineForGoal } from "@/features/practice/routine";
 import { startPracticeSession } from "@/features/practice/actions";
 
-export const metadata: Metadata = { title: "Tổng quan" };
+export const metadata: Metadata = { title: "Hôm nay" };
 
 export default async function DashboardPage() {
   const profile = await requireOnboardedProfile("/dashboard");
@@ -18,130 +19,113 @@ export default async function DashboardPage() {
   const todaySessions = sessions.filter((s) => isToday(s.started_at));
   const todaySeconds = todaySessions.filter((s) => s.status === "completed").reduce((t, s) => t + s.duration_seconds, 0);
   const openToday = todaySessions.find((s) => s.status === "in_progress");
-  const goalSeconds = profile.practice_goal_minutes * 60;
-  const routine = routineForGoal(profile.practice_goal_minutes);
-  const continueLesson = state.inProgressLesson ?? state.nextLesson;
+  const goalMinutes = profile.practice_goal_minutes;
+  const practicedToday = todaySeconds >= goalMinutes * 60;
+  const routine = routineForGoal(goalMinutes);
+  const lesson = state.inProgressLesson ?? state.nextLesson;
+  const today = new Intl.DateTimeFormat("vi-VN", { timeZone: APP_TIMEZONE, weekday: "long", day: "numeric", month: "numeric" }).format(new Date());
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <p className="text-sm text-muted-foreground">Level {state.currentLevel.number} · {state.currentLevel.title}</p>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Chào {profile.display_name ?? "bạn"} 👋
-        </h1>
-      </div>
+    <div className="max-w-2xl">
+      <p className="gl-label first-letter:uppercase">{today}</p>
+      <h1 className="gl-title mt-1 text-3xl sm:text-4xl">Chào {profile.display_name ?? "bạn"}</h1>
 
-      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        {/* Continue learning / today's lesson */}
-        <section className="rounded-2xl border bg-card p-5" aria-labelledby="today-lesson">
-          <p className="text-xs font-semibold text-primary uppercase">
-            {state.inProgressLesson ? "Tiếp tục học" : "Bài học hôm nay"}
-          </p>
-          {continueLesson ? (
-            <>
-              <h2 id="today-lesson" className="mt-1 text-xl font-bold" data-testid="today-lesson">
-                {continueLesson.title}
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">{continueLesson.summary}</p>
-              <Link href={`/academy/${continueLesson.slug}`} className={buttonVariants({ className: "mt-4 h-11" })}>
-                <PlayCircle /> {state.inProgressLesson ? "Học tiếp" : "Bắt đầu bài"}
-              </Link>
-            </>
-          ) : (
-            <>
-              <h2 id="today-lesson" className="mt-1 text-xl font-bold">
-                Bạn đã hoàn thành mọi bài trong bản này 🎉
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Tiếp tục luyện tập hằng ngày để thành thạo. Bài mới (Dm, C, G, nhịp điệu…) sẽ có ở bản 0.2.
-              </p>
-            </>
-          )}
-          <div className="mt-5 space-y-1.5">
-            <div className="flex justify-between text-sm">
-              <span>Tiến độ giáo trình</span>
-              <span className="tabular-nums" data-testid="progress-count">
-                {state.completedCount}/{state.totalCount} bài · {state.percent}%
-              </span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={state.percent} aria-valuemin={0} aria-valuemax={100}>
-              <div className="h-full rounded-full bg-primary" style={{ width: `${state.percent}%` }} />
-            </div>
-          </div>
-        </section>
-
-        {/* Today's practice */}
-        <section className="rounded-2xl border bg-card p-5" aria-labelledby="today-practice">
-          <div className="flex items-center justify-between">
-            <h2 id="today-practice" className="font-semibold">
-              Luyện tập hôm nay
+      {/* the one thing to do now */}
+      <section aria-labelledby="today-lesson" className="mt-8 border-t pt-6">
+        <p className="gl-label">
+          {lesson ? (state.inProgressLesson ? "Bài đang học dở" : "Bài hôm nay") : "Bài học"} · Level{" "}
+          <span className="gl-num">{state.currentLevel.number}</span> {state.currentLevel.subtitle}
+        </p>
+        {lesson ? (
+          <>
+            <h2 id="today-lesson" className="gl-title mt-2 text-2xl" data-testid="today-lesson">
+              {lesson.title}
             </h2>
-            <Timer className="size-5 text-muted-foreground" aria-hidden />
-          </div>
-          <p className="mt-2 text-3xl font-bold tabular-nums">
-            {formatClock(todaySeconds)} <span className="text-base font-normal text-muted-foreground">/ {profile.practice_goal_minutes} phút</span>
-          </p>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-[var(--gl-highlight)]" style={{ width: `${Math.min(100, (todaySeconds / goalSeconds) * 100)}%` }} />
-          </div>
-          <ul className="mt-4 space-y-1 text-sm">
-            {routine.map((a) => (
-              <li key={a.kind} className="flex justify-between">
-                <span>{a.title}</span>
-                <span className="text-muted-foreground tabular-nums">{a.minutes} phút</span>
-              </li>
-            ))}
-          </ul>
-          {openToday ? (
-            <Link href={`/practice/${openToday.id}`} className={buttonVariants({ className: "mt-4 h-11 w-full" })}>
-              Tiếp tục buổi tập <ArrowRight />
+            <p className="mt-1.5 text-muted-foreground">{lesson.summary}</p>
+            <Link href={`/academy/${lesson.slug}`} className={buttonVariants({ className: "mt-5 h-12 px-6 text-base" })}>
+              {state.inProgressLesson ? "Học tiếp" : "Bắt đầu bài"} <ArrowRight />
             </Link>
-          ) : (
-            <form action={startPracticeSession}>
-              <Button type="submit" className="mt-4 h-11 w-full">
-                <PlayCircle /> Bắt đầu buổi tập {profile.practice_goal_minutes} phút
-              </Button>
-            </form>
-          )}
-        </section>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border bg-card p-4">
-          <p className="text-sm text-muted-foreground">Tổng thời gian luyện</p>
-          <p className="mt-1 text-xl font-bold" data-testid="total-practice">{formatDuration(totals.totalSeconds)}</p>
-        </div>
-        <div className="rounded-2xl border bg-card p-4">
-          <p className="text-sm text-muted-foreground">Buổi tập đã lưu</p>
-          <p className="mt-1 flex items-center gap-1 text-xl font-bold">
-            <Flame className="size-5 text-primary" aria-hidden /> {totals.completedSessions}
-          </p>
-        </div>
-        <div className="rounded-2xl border bg-card p-4">
-          <p className="text-sm text-muted-foreground">Vừa hoàn thành</p>
-          {state.recentlyCompleted ? (
-            <Link href={`/academy/${state.recentlyCompleted.lesson.slug}`} className="mt-1 flex items-start gap-1.5 font-semibold hover:underline">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-[oklch(0.55_0.15_150)]" aria-hidden />
-              <span>
-                {state.recentlyCompleted.lesson.title}
-                <span className="block text-xs font-normal text-muted-foreground">{formatDate(state.recentlyCompleted.completedAt)}</span>
-              </span>
-            </Link>
-          ) : (
-            <p className="mt-1 text-sm">Chưa có bài nào — bắt đầu với bài đầu tiên nhé.</p>
-          )}
-        </div>
-      </div>
-
-      <section className="rounded-2xl border bg-card p-5">
-        <h2 className="font-semibold">Công cụ nhanh</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Link href="/tools" className={buttonVariants({ variant: "outline" })}>Tuner</Link>
-          <Link href="/tools" className={buttonVariants({ variant: "outline" })}>Metronome</Link>
-          <Link href="/guitar" className={buttonVariants({ variant: "outline" })}>Đối chiếu cây đàn</Link>
-          <Link href="/progress" className={buttonVariants({ variant: "outline" })}>Tiến độ của tôi</Link>
+          </>
+        ) : (
+          <>
+            <h2 id="today-lesson" className="gl-title mt-2 text-2xl">
+              Bạn đã học hết các bài hiện có
+            </h2>
+            <p className="mt-1.5 text-muted-foreground">
+              Cứ tập đều mỗi ngày cho chắc tay. Mình đang làm tiếp các hợp âm Dm, C, G và phần gảy theo nhịp.
+            </p>
+          </>
+        )}
+        <p className="mt-5 text-sm text-muted-foreground" data-testid="progress-count">
+          Đã xong{" "}
+          <span className="gl-num text-foreground">
+            {state.completedCount}/{state.totalCount}
+          </span>{" "}
+          bài
+        </p>
+        <div
+          className="mt-2 flex gap-0.5"
+          role="progressbar"
+          aria-valuenow={state.completedCount}
+          aria-valuemin={0}
+          aria-valuemax={state.totalCount}
+          aria-label="Tiến độ giáo trình"
+        >
+          {Array.from({ length: state.totalCount }, (_, i) => (
+            <span key={i} className={i < state.completedCount ? "h-1.5 flex-1 rounded-[1px] bg-[var(--gl-highlight)]" : "h-1.5 flex-1 rounded-[1px] bg-foreground/15"} />
+          ))}
         </div>
       </section>
+
+      {/* today's practice as a timeline */}
+      <section aria-labelledby="today-practice" className="mt-10 border-t pt-6">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 id="today-practice" className="text-lg font-semibold">
+            Buổi tập hôm nay
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            <span className="gl-num text-foreground">{Math.floor(todaySeconds / 60)}</span>/<span className="gl-num">{goalMinutes}</span> phút
+          </p>
+        </div>
+        <RoutineBar
+          className="mt-4"
+          segments={routine.map((a) => ({ key: a.kind, title: a.title, minutes: a.minutes, state: practicedToday ? "done" : "todo" }))}
+        />
+        {openToday ? (
+          <Link href={`/practice/${openToday.id}`} className={buttonVariants({ variant: "outline", className: "mt-5 h-12 px-6 text-base" })}>
+            Tập tiếp buổi đang dở <ArrowRight />
+          </Link>
+        ) : (
+          <form action={startPracticeSession}>
+            <Button type="submit" variant="outline" className="mt-5 h-12 px-6 text-base">
+              {practicedToday ? "Tập thêm một buổi" : `Bắt đầu tập ${goalMinutes} phút`} <ArrowRight />
+            </Button>
+          </form>
+        )}
+      </section>
+
+      {/* quiet facts, one line each */}
+      <dl className="mt-10 divide-y border-y text-sm">
+        <div className="flex justify-between gap-4 py-3">
+          <dt className="text-muted-foreground">Tổng thời gian đã tập</dt>
+          <dd className="font-medium" data-testid="total-practice">
+            {formatDuration(totals.totalSeconds)} · <span className="gl-num">{totals.completedSessions}</span> buổi
+          </dd>
+        </div>
+        <div className="flex justify-between gap-4 py-3">
+          <dt className="text-muted-foreground">Bài vừa xong</dt>
+          <dd className="text-right font-medium">
+            {state.recentlyCompleted ? (
+              <Link href={`/academy/${state.recentlyCompleted.lesson.slug}`} className="underline-offset-4 hover:underline">
+                {state.recentlyCompleted.lesson.title}
+                <span className="block text-xs font-normal text-muted-foreground">{formatDate(state.recentlyCompleted.completedAt)}</span>
+              </Link>
+            ) : (
+              <span className="font-normal text-muted-foreground">Chưa có</span>
+            )}
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 }

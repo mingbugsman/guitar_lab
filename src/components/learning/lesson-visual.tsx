@@ -17,9 +17,9 @@ import type { Visual } from "@/content/types";
 
 function StringsTable() {
   return (
-    <div className="overflow-hidden rounded-xl border bg-card">
+    <div className="overflow-hidden border-y">
       <table className="w-full text-sm">
-        <thead className="bg-muted text-left text-xs text-muted-foreground">
+        <thead className="text-left text-xs text-muted-foreground">
           <tr>
             <th className="px-3 py-2">Dây</th>
             <th className="px-3 py-2">Nốt</th>
@@ -34,7 +34,7 @@ function StringsTable() {
             return (
               <tr key={s} className="border-t">
                 <td className="px-3 py-2 font-semibold">Dây {s}</td>
-                <td className="px-3 py-2 font-mono">{st.label}</td>
+                <td className="gl-num px-3 py-2">{st.label}</td>
                 <td className="hidden px-3 py-2 tabular-nums sm:table-cell">{st.frequency.toFixed(2)} Hz</td>
                 <td className="px-3 py-2 text-muted-foreground">
                   {s === 6 ? "Trên cùng — gần mặt bạn, to nhất" : s === 1 ? "Dưới cùng — gần sàn nhà, mảnh nhất" : `Thứ ${7 - s} tính từ phía mặt bạn`}
@@ -57,11 +57,11 @@ function NotesRow() {
   return (
     <div className="grid grid-cols-7 gap-1.5 text-center">
       {NATURAL_NOTES.map((n, i) => (
-        <div key={n.letter} className="rounded-lg border bg-card py-2">
+        <div key={n.letter} className="border-y py-2">
           <div className="text-lg font-bold">{n.letter}</div>
           <div className="text-xs text-muted-foreground">{n.solfege}</div>
           {i < 6 && (
-            <div className="mt-1 text-[10px] font-medium text-primary">
+            <div className="gl-num mt-1 text-[10px] text-muted-foreground">
               {n.letter === "E" || n.letter === "B" ? "→ ½" : "→ 1"}
             </div>
           )}

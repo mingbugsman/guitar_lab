@@ -50,7 +50,7 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         Chưa có tài khoản?{" "}
-        <Link href="/register" className="font-medium text-primary underline-offset-4 hover:underline">
+        <Link href="/register" className="font-medium text-foreground underline underline-offset-4">
           Đăng ký
         </Link>
       </p>
@@ -79,7 +79,7 @@ export function RegisterForm() {
 
   if (needsConfirmation) {
     return (
-      <div role="status" className="space-y-2 rounded-xl border bg-card p-5 text-sm">
+      <div role="status" className="space-y-2 border-l-2 border-foreground/40 pl-4 text-sm">
         <p className="font-semibold">Kiểm tra hộp thư của bạn</p>
         <p className="text-muted-foreground">
           Chúng tôi đã gửi email xác nhận tới <strong>{form.getValues("email")}</strong>. Mở liên kết trong email để kích hoạt
@@ -117,7 +117,7 @@ export function RegisterForm() {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         Đã có tài khoản?{" "}
-        <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
+        <Link href="/login" className="font-medium text-foreground underline underline-offset-4">
           Đăng nhập
         </Link>
       </p>

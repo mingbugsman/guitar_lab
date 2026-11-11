@@ -86,10 +86,10 @@ export function Metronome({ initialBpm = 60, initialBeats = 4, compact = false }
   }, [bpm, running]);
 
   return (
-    <div className={cn("rounded-2xl border bg-card p-4", !compact && "sm:p-6")} data-testid="metronome">
+    <div className={cn("gl-stage p-4", !compact && "sm:p-6")} data-testid="metronome">
       <div className="flex items-center justify-between gap-2">
         <h3 className="font-semibold">Metronome</h3>
-        <span className="text-xs text-muted-foreground">{beats}/4</span>
+        <span className="gl-num text-xs text-muted-foreground">{beats}/4</span>
       </div>
 
       <div className="mt-4 flex items-center justify-center gap-2" aria-hidden>
@@ -98,8 +98,8 @@ export function Metronome({ initialBpm = 60, initialBeats = 4, compact = false }
             key={i}
             data-active={beat === i}
             className={cn(
-              "size-5 rounded-full border-2 border-primary/40 transition-colors duration-75 sm:size-6",
-              beat === i && (i === 0 && accent ? "border-primary bg-primary" : "border-primary bg-primary/50"),
+              "size-5 rounded-full border-2 border-foreground/30 transition-colors duration-75 sm:size-6",
+              beat === i && (i === 0 && accent ? "border-foreground bg-foreground" : "border-foreground/60 bg-foreground/60"),
             )}
           />
         ))}
@@ -113,7 +113,7 @@ export function Metronome({ initialBpm = 60, initialBeats = 4, compact = false }
           <Minus />
         </Button>
         <div className="w-28 text-center">
-          <div className="text-4xl font-bold tabular-nums" data-testid="bpm">
+          <div className="gl-num text-5xl font-semibold" data-testid="bpm">
             {bpm}
           </div>
           <div className="text-xs text-muted-foreground">BPM (phách/phút)</div>

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { CheckCircle2, Circle, Pause, Play } from "lucide-react";
+import { CheckCircle2, Pause, Play } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Metronome } from "@/components/audio/metronome";
 import { Tuner } from "@/components/audio/tuner";
+import { RoutineBar } from "@/components/learning/routine-bar";
 import { formatClock, formatDuration } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { completeActivity, finishPracticeSession } from "./actions";
@@ -100,126 +101,175 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
     });
   }
 
+  const segments = activities.map((a, i) => ({
+    key: a.id,
+    title: a.title,
+    minutes: Math.round(a.planned_seconds / 60),
+    state: a.completed_at ? ("done" as const) : i === currentIndex ? ("current" as const) : ("todo" as const),
+  }));
+
   if (finished !== null) {
     return (
-      <div className="space-y-4 rounded-2xl border bg-card p-6 text-center" data-testid="session-saved">
-        <CheckCircle2 className="mx-auto size-12 text-[oklch(0.55_0.15_150)]" />
-        <h2 className="text-xl font-bold">Đã lưu buổi tập</h2>
-        <p className="text-muted-foreground">
-          Bạn đã luyện {formatDuration(finished)} và hoàn thành {activities.filter((a) => a.completed_at).length}/{activities.length} hoạt động.
+      <div className="max-w-xl space-y-4 border-t pt-6" data-testid="session-saved">
+        <p className="flex items-center gap-2 text-sm font-medium text-[oklch(0.45_0.13_150)]">
+          <CheckCircle2 className="size-5" aria-hidden /> Đã lưu buổi tập
         </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          <Link href="/dashboard" className={buttonVariants()}>Về tổng quan</Link>
-          <Link href="/progress" className={buttonVariants({ variant: "outline" })}>Xem tiến độ</Link>
+        <p className="gl-title text-3xl">
+          Bạn vừa tập <span className="gl-num">{formatDuration(finished)}</span>
+        </p>
+        <p className="text-muted-foreground">
+          Xong{" "}
+          <span className="gl-num">
+            {activities.filter((a) => a.completed_at).length}/{activities.length}
+          </span>{" "}
+          phần của buổi tập.
+        </p>
+        <div className="flex flex-wrap gap-2 pt-2">
+          <Link href="/dashboard" className={buttonVariants({ className: "h-12 px-6 text-base" })}>
+            Về trang Hôm nay
+          </Link>
+          <Link href="/progress" className={buttonVariants({ variant: "outline", className: "h-12 px-6 text-base" })}>
+            Xem tiến độ
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-      <div className="space-y-4">
-        <div className="rounded-2xl border bg-card p-5">
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>Tổng buổi tập</span>
-            <span className="tabular-nums" data-testid="session-total">
-              {formatClock(totalSeconds)} / {plannedMinutes}:00
+    <div className="max-w-2xl">
+      <RoutineBar segments={segments} />
+      <p className="mt-3 text-sm text-muted-foreground" data-testid="session-total">
+        Đã tập <span className="gl-num text-foreground">{formatClock(totalSeconds)}</span> /{" "}
+        <span className="gl-num">{plannedMinutes}:00</span>
+      </p>
+
+      {current ? (
+        <section className="mt-8" aria-labelledby="current-activity">
+          <p className="gl-label">
+            Phần{" "}
+            <span className="gl-num">
+              {currentIndex + 1}/{activities.length}
             </span>
-          </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full bg-primary transition-[width]" style={{ width: `${Math.min(100, (totalSeconds / (plannedMinutes * 60)) * 100)}%` }} />
-          </div>
-
-          {current ? (
-            <div className="mt-5 space-y-3">
-              <p className="text-xs font-semibold text-primary uppercase">
-                Hoạt động {currentIndex + 1}/{activities.length}
-              </p>
-              <h2 className="text-2xl font-bold" data-testid="current-activity">
-                {current.title}
-              </h2>
-              <ul className="list-disc space-y-1 pl-5 text-sm">
-                {guidanceFor(current.kind).map((g) => (
-                  <li key={g}>{g}</li>
-                ))}
-              </ul>
-              {(current.kind === "technical" || current.kind === "recall") && currentLesson && (
-                <Link href={`/academy/${currentLesson.slug}`} className="inline-block text-sm text-primary underline-offset-4 hover:underline" target="_blank">
-                  Mở bài: {currentLesson.title} ↗
-                </Link>
-              )}
-              <div className="flex items-baseline gap-2">
-                <span className={cn("text-5xl font-bold tabular-nums", elapsed > current.planned_seconds && "text-primary")} data-testid="activity-timer">
-                  {formatClock(elapsed)}
-                </span>
-                <span className="text-muted-foreground">/ {formatClock(current.planned_seconds)}</span>
-              </div>
-              {elapsed >= current.planned_seconds && (
-                <p className="text-sm font-medium text-primary">Đã đủ thời gian dự kiến — hoàn thành khi bạn sẵn sàng.</p>
-              )}
-              <div className="flex flex-wrap gap-2">
-                <Button className="h-11" variant={running ? "outline" : "default"} onClick={() => setRunning((r) => !r)} data-testid="timer-toggle">
-                  {running ? <Pause /> : <Play />} {running ? "Tạm dừng" : elapsed ? "Tiếp tục" : "Bắt đầu"}
-                </Button>
-                <Button className="h-11" variant="secondary" onClick={markDone} disabled={pending} data-testid="activity-done">
-                  <CheckCircle2 /> Xong hoạt động này
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <p className="mt-5 font-medium">Bạn đã hoàn thành mọi hoạt động. Ghi chú và lưu buổi tập bên dưới.</p>
-          )}
-        </div>
-
-        <div className="space-y-3 rounded-2xl border bg-card p-5">
-          <h3 className="font-semibold">Kết thúc buổi tập</h3>
-          <label className="block space-y-1.5">
-            <span className="text-sm">Ghi chú (điều làm tốt, điều cần sửa)</span>
-            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={2000} rows={3} data-testid="session-notes" />
-          </label>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span>Mức tập trung:</span>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <Button key={n} size="sm" variant={focus === n ? "default" : "outline"} onClick={() => setFocus(n)} aria-pressed={focus === n}>
-                {n}
-              </Button>
+          </p>
+          <h2 id="current-activity" className="gl-title mt-1 text-3xl" data-testid="current-activity">
+            {current.title}
+          </h2>
+          <ul className="mt-3 space-y-1.5 text-lg leading-snug">
+            {guidanceFor(current.kind).map((g) => (
+              <li key={g} className="flex gap-2">
+                <span aria-hidden className="mt-3 h-px w-3 shrink-0 bg-foreground/50" />
+                <span>{g}</span>
+              </li>
             ))}
-          </div>
-          <Button className="h-11 w-full sm:w-auto" onClick={finish} disabled={pending || totalSeconds === 0} data-testid="finish-session">
-            Lưu buổi tập
-          </Button>
-          {totalSeconds === 0 && <p className="text-xs text-muted-foreground">Bấm “Bắt đầu” để tính giờ trước khi lưu.</p>}
-          {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-        </div>
-      </div>
+          </ul>
+          {(current.kind === "technical" || current.kind === "recall") && currentLesson && (
+            <Link href={`/academy/${currentLesson.slug}`} className="mt-2 inline-block text-sm underline underline-offset-4" target="_blank">
+              Mở bài: {currentLesson.title}
+            </Link>
+          )}
 
-      <aside className="space-y-4">
-        <ol className="space-y-1 rounded-2xl border bg-card p-4" aria-label="Danh sách hoạt động">
-          {activities.map((a, i) => (
-            <li key={a.id} className={cn("flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm", i === currentIndex && "bg-muted font-medium")}>
-              {a.completed_at ? (
-                <CheckCircle2 className="size-4 text-[oklch(0.55_0.15_150)]" aria-label="Xong" />
-              ) : (
-                <Circle className="size-4 text-muted-foreground" aria-label="Chưa xong" />
-              )}
-              <span className="flex-1">{a.title}</span>
-              <span className="text-xs text-muted-foreground tabular-nums">
-                {a.completed_at ? formatClock(a.actual_seconds) : `${Math.round(a.planned_seconds / 60)}′`}
-              </span>
-            </li>
-          ))}
-        </ol>
+          <p className="mt-8 flex items-baseline gap-3">
+            <span
+              className={cn("gl-num text-6xl font-semibold sm:text-7xl", elapsed >= current.planned_seconds && "text-[oklch(0.45_0.13_150)]")}
+              data-testid="activity-timer"
+            >
+              {formatClock(elapsed)}
+            </span>
+            <span className="gl-num text-lg text-muted-foreground">/ {formatClock(current.planned_seconds)}</span>
+          </p>
+          <p className="mt-1 min-h-5 text-sm text-muted-foreground" aria-live="polite">
+            {elapsed >= current.planned_seconds ? "Đủ giờ rồi. Thấy ổn thì bấm sang phần sau." : ""}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              className="h-12 px-6 text-base"
+              variant={running ? "outline" : "default"}
+              onClick={() => setRunning((r) => !r)}
+              data-testid="timer-toggle"
+            >
+              {running ? <Pause /> : <Play />} {running ? "Tạm dừng" : elapsed ? "Tập tiếp" : "Bắt đầu"}
+            </Button>
+            <Button className="h-12 px-6 text-base" variant="outline" onClick={markDone} disabled={pending} data-testid="activity-done">
+              Xong phần này
+            </Button>
+          </div>
+        </section>
+      ) : (
+        <p className="mt-8 text-lg font-medium">Bạn đã xong cả buổi. Ghi lại vài dòng rồi lưu nhé.</p>
+      )}
+
+      <section className="mt-10 border-t pt-5" aria-label="Công cụ">
         <div className="flex gap-2">
-          <Button variant={tool === "metronome" ? "default" : "outline"} className="flex-1" onClick={() => setTool(tool === "metronome" ? null : "metronome")}>
+          <Button
+            variant={tool === "metronome" ? "default" : "outline"}
+            className="h-11"
+            onClick={() => setTool(tool === "metronome" ? null : "metronome")}
+            aria-pressed={tool === "metronome"}
+          >
             Metronome
           </Button>
-          <Button variant={tool === "tuner" ? "default" : "outline"} className="flex-1" onClick={() => setTool(tool === "tuner" ? null : "tuner")}>
+          <Button
+            variant={tool === "tuner" ? "default" : "outline"}
+            className="h-11"
+            onClick={() => setTool(tool === "tuner" ? null : "tuner")}
+            aria-pressed={tool === "tuner"}
+          >
             Tuner
           </Button>
         </div>
-        {tool === "metronome" && <Metronome compact />}
-        {tool === "tuner" && <Tuner />}
-      </aside>
+        {tool === "metronome" && (
+          <div className="mt-4">
+            <Metronome compact />
+          </div>
+        )}
+        {tool === "tuner" && (
+          <div className="mt-4">
+            <Tuner />
+          </div>
+        )}
+      </section>
+
+      <section className="mt-10 space-y-4 border-t pt-5" aria-labelledby="finish">
+        <h3 id="finish" className="text-lg font-semibold">
+          Kết thúc buổi tập
+        </h3>
+        <label className="block space-y-1.5">
+          <span className="text-sm text-muted-foreground">Hôm nay phần nào ổn, phần nào cần tập thêm?</span>
+          <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={2000} rows={3} data-testid="session-notes" />
+        </label>
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Mức tập trung</span>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <Button
+              key={n}
+              variant={focus === n ? "default" : "outline"}
+              className="gl-num size-11"
+              onClick={() => setFocus(n)}
+              aria-pressed={focus === n}
+              aria-label={`Mức tập trung ${n} trên 5`}
+            >
+              {n}
+            </Button>
+          ))}
+        </div>
+        <Button
+          className="h-12 px-6 text-base"
+          variant={current ? "outline" : "default"}
+          onClick={finish}
+          disabled={pending || totalSeconds === 0}
+          data-testid="finish-session"
+        >
+          Lưu buổi tập
+        </Button>
+        {totalSeconds === 0 && <p className="text-xs text-muted-foreground">Bấm Bắt đầu để tính giờ trước khi lưu.</p>}
+        {error && (
+          <p role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
+      </section>
     </div>
   );
 }

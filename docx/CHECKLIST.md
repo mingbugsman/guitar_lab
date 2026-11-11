@@ -2,7 +2,7 @@
 
 > File này là "bản đồ" để mỗi lần quay lại biết ngay **đang ở đâu** và **làm gì tiếp theo**.
 > Quy ước: `[x]` xong & đã kiểm chứng · `[~]` làm một phần / cần xác minh thêm · `[ ]` chưa làm · 🔑 cần chủ dự án cung cấp (tài khoản, credentials).
-> Roadmap gốc: [roadmap.md](roadmap.md) · Quy ước hướng đàn: [GUITAR_VISUAL.md](GUITAR_VISUAL.md) · Cách viết cho người mới: [WRITING_GUIDE.md](WRITING_GUIDE.md) · Cách chạy: [../README.md](../README.md)
+> Roadmap gốc: [roadmap.md](roadmap.md) · Quy ước hướng đàn: [GUITAR_VISUAL.md](GUITAR_VISUAL.md) · Cách viết cho người mới: [WRITING_GUIDE.md](WRITING_GUIDE.md) · Giao diện: [DESIGN.md](DESIGN.md) · Cách chạy: [../README.md](../README.md)
 
 ## ▶ ĐANG Ở ĐÂU / LÀM GÌ TIẾP
 
@@ -135,12 +135,12 @@
 
 - [x] 1. Chữ đổi theo tay thuận: token `{fretHand}`… trong 18 bài, hình cấu tạo đàn, hình tư thế lật gương; test chặn viết cứng
 - [~] 2. Giọng văn & xưng hô: đã có quy ước (§2) · [ ] rà 18 bài
-- [~] 3. Thuật ngữ: đã có bảng từ + quy tắc "giải thích lần đầu" (§4) · [ ] rà 18 bài · [ ] menu tiếng Việt · [ ] nút "Kiểu Tab" không hiện trước khi dạy Tab
+- [~] 3. Thuật ngữ: đã có bảng từ + quy tắc "giải thích lần đầu" (§4) · [ ] rà 18 bài · [x] menu tiếng Việt · [ ] nút "Kiểu Tab" không hiện trước khi dạy Tab
 - [~] 4. Cơ thể & kỳ vọng (đau ngón tay, bao lâu, khi nào dừng): đã có quy ước (§5) · [ ] viết vào bài 3, 4, 9 và các bài hợp âm
 - [ ] 5. Hình vẽ chuyển động (hướng gảy, chuyển hợp âm) · [x] hình tư thế ghi rõ "như soi gương"
 - [~] 6. Tự biết đúng/sai: đã có quy ước (§8) · [ ] âm mẫu tiếng rè / tiếng tắt · [ ] viết lại checklist thành thứ nghe/nhìn được
 - [~] 7. Lối đi khi kẹt: đã có quy ước (§6) · [ ] thêm trường `stuck` vào mẫu bài học + viết cho 18 bài
-- [~] 8. Trình bày khi đang ôm đàn: đã có quy ước (§9) · [ ] chế độ luyện tập từng bước một màn hình
+- [x] 8. Trình bày khi đang ôm đàn: bài học chia 4 chặng, luyện từng bước một màn hình, nút "Bước tiếp" lớn ở đáy, ẩn thanh điều hướng dưới (xem DESIGN.md)
 - [~] 9. "Vì sao" & thành quả sớm: đã có quy ước (§10) · [ ] câu mở đầu "học xong làm được gì" cho 18 bài · [ ] cân nhắc đưa hợp âm Em lên sớm hơn
 - [x] 10. Ưu tiên acoustic: bài viết cho acoustic; classic và đàn điện có ghi chú riêng đầu bài
 
@@ -177,6 +177,7 @@
 ---
 
 ## Nhật ký phiên làm việc
+- **2026-11-11** — Làm lại giao diện theo hướng "sổ tập đàn" (DESIGN.md): bài học từng bước, buổi tập dạng dòng thời gian, trang Hôm nay một cột, trang chủ có cần đàn bấm được, menu tiếng Việt. ui_lint 8.0 → 1.5.
 - **2026-11-11** — Rà soát cách diễn đạt cho người mới: thêm `WRITING_GUIDE.md`, chữ đổi theo tay thuận, ưu tiên acoustic.
 - **2026-11-07** — Khởi tạo repo, Phase 0 + Phase 1 code hoàn chỉnh, Guitar Visual, 59 unit tests + 14 E2E pass trên local.
 - **2026-11-07** — Deploy: migrations lên Supabase dev/prod, cấu hình Auth, Vercel env + region sin1. E2E production phát hiện & sửa 2 vấn đề (độ trễ do server ở Mỹ; màn hình "đã lưu buổi tập" bị thay sau khi lưu). Production 14/14 pass.

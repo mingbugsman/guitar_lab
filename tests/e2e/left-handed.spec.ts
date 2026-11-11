@@ -29,6 +29,8 @@ test("left-handed learner gets mirrored words, not just mirrored pictures", asyn
   // Switching the guitar back with ⇄ flips the words together with the pictures.
   await page.goto("/academy/hand-position");
   await expect(page.getByRole("heading", { name: "Tay bấm (tay phải)" })).toBeVisible();
+  await page.getByTestId("lesson-forward").click(); // the fretboard (with the switch) is on the next screen
   await page.getByRole("button", { name: /Đàn tay trái/ }).first().click();
+  await page.getByTestId("lesson-back").click();
   await expect(page.getByRole("heading", { name: "Tay bấm (tay trái)" })).toBeVisible();
 });

@@ -49,30 +49,30 @@
 }
 
 :root {
-  --background: oklch(0.985 0.006 80);
+  --background: oklch(0.975 0.01 85);
   --foreground: oklch(0.2 0.02 50);
-  --card: oklch(1 0 0);
+  --card: oklch(0.99 0.006 85);
   --card-foreground: oklch(0.2 0.02 50);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.02 50);
   --primary: oklch(0.56 0.15 45);
   --primary-foreground: oklch(0.99 0.01 80);
-  --secondary: oklch(0.95 0.015 75);
+  --secondary: oklch(0.94 0.014 82);
   --secondary-foreground: oklch(0.28 0.03 50);
-  --muted: oklch(0.955 0.01 75);
+  --muted: oklch(0.945 0.012 82);
   --muted-foreground: oklch(0.5 0.02 55);
-  --accent: oklch(0.93 0.04 75);
+  --accent: oklch(0.93 0.025 80);
   --accent-foreground: oklch(0.3 0.05 50);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.9 0.015 75);
-  --input: oklch(0.88 0.015 75);
+  --border: oklch(0.2 0.02 50 / 14%);
+  --input: oklch(0.2 0.02 50 / 22%);
   --ring: oklch(0.56 0.15 45);
   --chart-1: oklch(0.56 0.15 45);
   --chart-2: oklch(0.6 0.1 160);
   --chart-3: oklch(0.55 0.12 250);
   --chart-4: oklch(0.7 0.13 85);
   --chart-5: oklch(0.5 0.1 20);
-  --radius: 0.75rem;
+  --radius: 0.5rem;
   --sidebar: oklch(0.97 0.01 75);
   --sidebar-foreground: oklch(0.2 0.02 50);
   --sidebar-primary: oklch(0.56 0.15 45);
@@ -157,5 +157,33 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .gl-pulse { animation: none; }
+  }
+}
+
+/* Guitar Lab layout primitives — see docx/DESIGN.md */
+@layer components {
+  /* The only raised surface: an instrument (fretboard, tuner, metronome). */
+  .gl-stage {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+  }
+  /* Small section label: quiet, not an orange uppercase eyebrow. */
+  .gl-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--muted-foreground);
+    letter-spacing: 0.01em;
+  }
+  /* Numbers always read as data. */
+  .gl-num {
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .gl-title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
   }
 }

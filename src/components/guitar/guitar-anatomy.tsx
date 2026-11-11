@@ -307,7 +307,7 @@ export function GuitarAnatomy({
         })}
       </svg>
 
-      <div aria-live="polite" className="min-h-24 rounded-xl border bg-card p-4 text-sm">
+      <div aria-live="polite" className="min-h-24 border-l-2 border-foreground/40 pl-4 text-sm">
         {part ? (
           <>
             <p className="font-semibold">

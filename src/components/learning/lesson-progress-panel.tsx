@@ -9,7 +9,7 @@ import type { Lesson } from "@/content/types";
 import { cn } from "@/lib/utils";
 import { HandText } from "./hand-text";
 
-type Initial = {
+export type LessonProgressInitial = {
   checklist: string[];
   status: "learning" | "practicing" | "mastered";
   selfRating: number | null;
@@ -18,7 +18,7 @@ type Initial = {
 
 const RATING_LABELS = ["", "Chưa làm được", "Làm được nhưng rất chậm", "Làm được, còn lỗi", "Làm tốt", "Rất chắc chắn"];
 
-export function LessonProgressPanel({ lesson, initial }: { lesson: Lesson; initial: Initial | null }) {
+export function LessonProgressPanel({ lesson, initial }: { lesson: Lesson; initial: LessonProgressInitial | null }) {
   const [checked, setChecked] = useState<string[]>(initial?.checklist ?? []);
   const [status, setStatus] = useState<"learning" | "practicing">(
     initial?.status === "practicing" ? "practicing" : "learning",
@@ -62,14 +62,14 @@ export function LessonProgressPanel({ lesson, initial }: { lesson: Lesson; initi
   }
 
   return (
-    <section className="space-y-5 rounded-2xl border bg-card p-4 sm:p-6" aria-labelledby="progress-heading" data-testid="lesson-progress">
+    <section className="space-y-5 border-t pt-6" aria-labelledby="progress-heading" data-testid="lesson-progress">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="progress-heading" className="text-lg font-semibold">
-          Tự đánh giá & hoàn thành
+          Bạn làm được chưa?
         </h2>
         <span
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-semibold",
+            "rounded-[4px] px-2 py-1 text-xs font-semibold",
             completedAt ? "bg-[var(--gl-highlight)]/20 text-foreground" : "bg-muted text-muted-foreground",
           )}
           data-testid="lesson-status"
@@ -112,7 +112,7 @@ export function LessonProgressPanel({ lesson, initial }: { lesson: Lesson; initi
               }}
               className="rounded-md p-1.5 hover:bg-muted"
             >
-              <Star className={cn("size-6", rating !== null && n <= rating ? "fill-primary text-primary" : "text-muted-foreground")} />
+              <Star className={cn("size-6", rating !== null && n <= rating ? "fill-foreground text-foreground" : "text-muted-foreground")} />
             </button>
           ))}
           <span className="ml-2 text-sm text-muted-foreground">{rating ? RATING_LABELS[rating] : "Chưa đánh giá"}</span>
@@ -130,7 +130,7 @@ export function LessonProgressPanel({ lesson, initial }: { lesson: Lesson; initi
               save({ status: s });
             }}
           >
-            {status === "practicing" ? "Đang luyện ✓" : "Chuyển sang: Đang luyện"}
+            {status === "practicing" ? "Đang luyện (bấm để bỏ)" : "Đánh dấu: tôi đang luyện bài này"}
           </Button>
         </div>
       )}
