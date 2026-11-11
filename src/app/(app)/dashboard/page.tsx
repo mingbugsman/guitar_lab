@@ -9,6 +9,8 @@ import { getLessonProgress, getPracticeSessions, getPracticeTotals } from "@/fea
 import { buildLearningState } from "@/features/progress/learning-state";
 import { routineForGoal } from "@/features/practice/routine";
 import { startPracticeSession } from "@/features/practice/actions";
+import { getDailyDrills } from "@/features/drills/queries";
+import { DailyDrills, toDailyItems } from "@/components/practice/daily-drills";
 
 export const metadata: Metadata = { title: "Hôm nay" };
 
@@ -16,6 +18,7 @@ export default async function DashboardPage() {
   const profile = await requireOnboardedProfile("/dashboard");
   const [progress, sessions, totals] = await Promise.all([getLessonProgress(), getPracticeSessions(30), getPracticeTotals()]);
   const state = buildLearningState(progress);
+  const daily = await getDailyDrills(new Set(progress.filter((p) => p.completed_at).map((p) => p.lesson_slug)));
   const todaySessions = sessions.filter((s) => isToday(s.started_at));
   const todaySeconds = todaySessions.filter((s) => s.status === "completed").reduce((t, s) => t + s.duration_seconds, 0);
   const openToday = todaySessions.find((s) => s.status === "in_progress");
@@ -75,6 +78,11 @@ export default async function DashboardPage() {
             <span key={i} className={i < state.completedCount ? "h-1.5 flex-1 rounded-[1px] bg-[var(--gl-highlight)]" : "h-1.5 flex-1 rounded-[1px] bg-foreground/15"} />
           ))}
         </div>
+      </section>
+
+      {/* three hand drills, picked for today */}
+      <section aria-label="Bài tập tay hôm nay" className="mt-10 border-t pt-6">
+        <DailyDrills items={toDailyItems(daily)} />
       </section>
 
       {/* today's practice as a timeline */}

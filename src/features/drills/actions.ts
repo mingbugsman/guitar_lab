@@ -19,6 +19,7 @@ export async function saveDrillResult(input: DrillResultInput): Promise<ActionRe
     .insert({ user_id: user.id, drill_id: drillId, kind, bpm_reached: bpmReached, rating, seconds });
   if (error) return { ok: false, error: "Không lưu được kết quả. Thử lại sau." };
   revalidatePath("/practice/drills");
+  revalidatePath("/dashboard");
   revalidatePath("/progress");
   const stats = await getDrillStats([drillId]);
   return { ok: true, data: stats[drillId] };

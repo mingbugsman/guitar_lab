@@ -32,8 +32,8 @@ export const DAILY_30: RoutineActivity[] = [
     title: "Kỹ thuật",
     minutes: 8,
     guidance: [
-      "Làm phần Luyện tập của bài học hiện tại.",
-      "Dùng metronome ở tốc độ bạn chơi sạch được; chỉ tăng 5 BPM khi đã sạch 3 lần liên tiếp.",
+      "Làm 3 bài tập tay hôm nay (danh sách ngay bên dưới). Mỗi bài tự chạy chậm rồi nhanh dần.",
+      "Còn thời gian thì làm phần Luyện tập của bài học hiện tại.",
     ],
   },
   {

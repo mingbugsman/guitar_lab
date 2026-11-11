@@ -18,6 +18,12 @@ test("a learner previews Spider 1-2-3-4, plays a round and saves a clean tempo",
   await page.getByRole("button", { name: "Bắt đầu học" }).click();
   await expect(page).toHaveURL(/\/dashboard/);
 
+  // today's three hand drills are on the dashboard; a brand-new learner gets the ones that open first
+  const daily = page.getByTestId("daily-drills");
+  await expect(daily.locator('[data-testid^="daily-"][href]')).toHaveCount(3);
+  await expect(page.getByTestId("daily-drills-count")).toHaveText("0/3 bài");
+  await expect(page.getByTestId("daily-spider-1234")).toBeVisible();
+
   await page.goto("/practice");
   await page.getByTestId("open-drills").click();
   await expect(page).toHaveURL(/\/practice\/drills$/);
@@ -50,4 +56,9 @@ test("a learner previews Spider 1-2-3-4, plays a round and saves a clean tempo",
   await expect(page.getByTestId("drill-start")).toContainText("45 BPM");
   await page.goto("/practice/drills");
   await expect(page.getByTestId("drill-spider-1234")).toContainText("40");
+
+  // back on the dashboard: the same three drills, this one ticked off
+  await page.goto("/dashboard");
+  await expect(page.getByTestId("daily-spider-1234")).toHaveAttribute("data-done", "true");
+  await expect(page.getByTestId("daily-drills-count")).toHaveText("1/3 bài");
 });
