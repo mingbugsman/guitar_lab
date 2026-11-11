@@ -19,16 +19,19 @@ test("footer credits the author and the About link is disabled", async ({ page }
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Giới thiệu");
 });
 
-test("guitar visual: player view shows string 6 on top, tab view flips it", async ({ page }) => {
+test("guitar visual: player view shows string 6 on top; Tab view stays hidden until Tab is taught", async ({ page }) => {
   await page.goto("/guitar");
   const board = page.locator('svg[data-view]').first();
   await expect(board).toHaveAttribute("data-view", "player");
   const y = async (s: number) => Number(await board.locator(`g[data-string="${s}"] line`).first().getAttribute("y1"));
   expect(await y(6)).toBeLessThan(await y(1));
 
-  await page.getByRole("radio", { name: "Kiểu Tab" }).first().click();
-  await expect(board).toHaveAttribute("data-view", "tab");
-  expect(await y(1)).toBeLessThan(await y(6));
+  // a view saved before the switch was hidden must not come back
+  await page.evaluate(() => localStorage.setItem("gl.fretboard-view", "tab"));
+  await page.reload();
+  await expect(board).toHaveAttribute("data-view", "player");
+  await expect(page.getByRole("radio", { name: "Kiểu Tab" })).toHaveCount(0);
+  await expect(page.getByText("Kiểu Tab")).toHaveCount(0);
 
   await page.getByRole("button", { name: /Đàn tay phải/ }).first().click();
   await expect(board).toHaveAttribute("data-handedness", "left");

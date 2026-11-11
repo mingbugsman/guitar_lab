@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import { CHORDS } from "@/lib/music/chords";
 import { ChordDiagram, describeChord } from "./chord-diagram";
-import { Fretboard } from "./fretboard";
+import { Fretboard, fretboardLayout } from "./fretboard";
 
 function stringY(container: HTMLElement, s: number): number {
   const line = container.querySelector(`g[data-string="${s}"] line`)!;
@@ -78,5 +78,30 @@ describe("describeChord (text generated from the same data as the picture)", () 
       "Dây 2 (B): ngón 1 (ngón trỏ) bấm phím 1.",
       "Dây 1 (E): gảy buông — dấu O, không bấm.",
     ]);
+  });
+});
+
+describe("Fretboard fits narrow screens", () => {
+  it("keeps the roomy layout when there is space, and lays out for the exact width on a phone", () => {
+    expect(fretboardLayout(5, 1200).compact).toBe(false);
+    const phone = fretboardLayout(12, 320);
+    expect(phone.compact).toBe(true);
+    expect(phone.width).toBe(320);
+    expect(phone.fretW).toBeGreaterThan(17);
+  });
+
+  it("on a phone, orientation labels stay and still mirror for left-handed players", () => {
+    const right = render(<Fretboard frets={12} fitWidth={320} />).container;
+    const svg = right.querySelector("svg")!;
+    expect(svg.getAttribute("viewBox")).toBe("0 0 320 236");
+    const head = right.querySelector('[data-edge="headstock"]')!;
+    expect(head.textContent).toContain("◀ đầu đàn");
+    expect(Number(head.getAttribute("x"))).toBeLessThan(160);
+    expect(right.querySelector('[data-fret-number="12"]')?.textContent).toBe("12");
+
+    const left = render(<Fretboard frets={12} fitWidth={320} handedness="left" />).container;
+    const headL = left.querySelector('[data-edge="headstock"]')!;
+    expect(headL.textContent).toContain("đầu đàn ▶");
+    expect(Number(headL.getAttribute("x"))).toBeGreaterThan(160);
   });
 });

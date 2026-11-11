@@ -1,6 +1,7 @@
 "use client";
 
-import { Fretboard, type FretboardProps } from "./fretboard";
+import type { FretboardProps } from "./fretboard";
+import { FittedFretboard } from "./fitted-fretboard";
 import { ViewToggle } from "./view-toggle";
 import { useGuitarView } from "./view-context";
 import { playString } from "@/lib/audio/guitar-synth";
@@ -24,10 +25,8 @@ export function InteractiveFretboard({ playable = true, showToggle = true, capti
   return (
     <figure className="min-w-0 space-y-3">
       {showToggle && <ViewToggle />}
-      <div className="gl-stage overflow-x-auto p-2">
-        <div className="min-w-[520px]">
-          <Fretboard view={view} handedness={handedness} markers={markers} onStringClick={onStringClick} {...rest} />
-        </div>
+      <div className="gl-stage p-2">
+        <FittedFretboard view={view} handedness={handedness} markers={markers} onStringClick={onStringClick} {...rest} />
       </div>
       {(caption || playable) && (
         <figcaption className="text-xs text-muted-foreground">

@@ -208,7 +208,7 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
             onClick={() => setTool(tool === "metronome" ? null : "metronome")}
             aria-pressed={tool === "metronome"}
           >
-            Metronome
+            Máy đếm nhịp
           </Button>
           <Button
             variant={tool === "tuner" ? "default" : "outline"}
@@ -216,7 +216,7 @@ export function SessionRunner({ sessionId, plannedMinutes, activities: initial, 
             onClick={() => setTool(tool === "tuner" ? null : "tuner")}
             aria-pressed={tool === "tuner"}
           >
-            Tuner
+            Máy lên dây
           </Button>
         </div>
         {tool === "metronome" && (

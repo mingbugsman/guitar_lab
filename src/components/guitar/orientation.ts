@@ -48,3 +48,13 @@ export const VIEW_LABELS: Record<FretboardView, { title: string; hint: string }>
     hint: "Quy ước của bản Tab: dây 1 mảnh nhất ở trên cùng — ngược với lúc bạn nhìn xuống.",
   },
 };
+
+/**
+ * docx/WRITING_GUIDE.md §4: nothing appears on screen before a lesson teaches it. No lesson
+ * teaches reading Tab yet, so the Tab view is not offered anywhere. When the Tab lesson ships,
+ * set this to its slug; the view then becomes available again.
+ */
+export const TAB_LESSON_SLUG: string | null = null;
+
+/** Views the learner can switch between right now. */
+export const AVAILABLE_VIEWS: FretboardView[] = TAB_LESSON_SLUG ? ["player", "tab"] : ["player"];

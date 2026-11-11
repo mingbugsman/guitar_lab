@@ -6,7 +6,7 @@ import { arpeggiateChord, strumChord } from "@/lib/audio/guitar-synth";
 import type { ChordShape } from "@/lib/music/chords";
 import { chordMarkersStatic as chordMarkers } from "./chord-markers";
 import { ChordDiagram, describeChord } from "./chord-diagram";
-import { Fretboard } from "./fretboard";
+import { FittedFretboard } from "./fitted-fretboard";
 import { useGuitarView } from "./view-context";
 import { ViewToggle } from "./view-toggle";
 
@@ -31,10 +31,8 @@ export function ChordCompare({ chord }: { chord: ChordShape }) {
         </figure>
         <figure className="min-w-0 space-y-2">
           <ViewToggle />
-          <div className="gl-stage overflow-x-auto p-2">
-            <div className="min-w-[480px]">
-              <Fretboard view={view} handedness={handedness} frets={4} markers={chordMarkers(chord)} />
-            </div>
+          <div className="gl-stage p-2">
+            <FittedFretboard view={view} handedness={handedness} frets={4} markers={chordMarkers(chord)} />
           </div>
           <figcaption className="text-xs text-muted-foreground">
             Cùng thế bấm {chord.symbol} trên cần đàn. Số trong chấm tròn là ngón tay bấm.

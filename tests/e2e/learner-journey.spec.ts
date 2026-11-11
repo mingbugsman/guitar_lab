@@ -45,7 +45,7 @@ test("a new learner can learn, practice and come back tomorrow", async ({ page }
   await expect(complete).toBeDisabled();
   for (const label of [
     "Tôi đã có đàn và một ghế không tay vịn.",
-    "Tôi đã thử cả hai góc nhìn và chỉ đúng dây 6 trên đàn thật.",
+    "Tôi chỉ đúng dây 6 và dây 1 trên đàn thật khi nhìn hình.",
     "Tôi nghe được âm thanh khi chạm vào dây trong hình.",
   ]) {
     await panel.getByText(label).click();

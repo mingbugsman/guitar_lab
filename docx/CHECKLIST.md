@@ -15,19 +15,18 @@
   2. 🔑 Thu hồi 2 token đã dùng để deploy (Supabase Access Token, Vercel Token).
   3. 🔑 Thử Tuner với đàn thật trên production (`/tools`) — mục duy nhất của Phase 1 chưa kiểm chứng bằng đàn thật.
   4. Trước khi mời nhiều người dùng: cài SMTP riêng rồi bật lại "Confirm email" (xem [DEPLOY.md](DEPLOY.md) Bước 3.2).
-  5. **Rà lại 18 bài theo WRITING_GUIDE** (mục "Diễn đạt cho người mới" bên dưới) — nên làm trước Phase 2 để bài mới viết đúng ngay từ đầu.
+  5. Phần còn lại của WRITING_GUIDE (mục "Diễn đạt cho người mới" bên dưới): lối đi khi kẹt (§6), checklist nghe/nhìn được + âm mẫu rè/tắt (§8), câu mở đầu "học xong làm được gì" (§10). Giọng văn, thuật ngữ, cơ thể đã xong.
   6. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
 
-## Kết quả kiểm thử gần nhất (2026-11-07, local)
+## Kết quả kiểm thử gần nhất (2026-11-11, local)
 
 | Kiểm tra | Kết quả |
 |---|---|
 | `npm run lint` | ✅ sạch |
 | `npm run typecheck` | ✅ sạch |
-| `npm test` (Vitest) | ✅ 59 tests |
+| `npm test` (Vitest) | ✅ 119 tests (có `src/content/writing.test.ts` kiểm quy tắc viết) |
 | `npm run build` | ✅ |
-| `npm run test:e2e` (Playwright, desktop + mobile, Supabase local) | ✅ 14 passed (4 skipped theo thiết kế: test chỉ chạy 1 project) |
-| E2E trên **production** URL (RLS chạy trên Supabase dev) | ✅ 14 passed |
+| `npm run test:e2e` (Playwright, desktop + mobile, Supabase local) | ✅ 18 passed (6 skipped theo thiết kế: test chỉ chạy 1 project) |
 
 ## Quy trình Git
 
@@ -134,9 +133,9 @@
 ## DIỄN ĐẠT CHO NGƯỜI MỚI (rà soát 11/11/2026 — chi tiết: [WRITING_GUIDE.md](WRITING_GUIDE.md))
 
 - [x] 1. Chữ đổi theo tay thuận: token `{fretHand}`… trong 18 bài, hình cấu tạo đàn, hình tư thế lật gương; test chặn viết cứng
-- [~] 2. Giọng văn & xưng hô: đã có quy ước (§2) · [ ] rà 18 bài
-- [~] 3. Thuật ngữ: đã có bảng từ + quy tắc "giải thích lần đầu" (§4) · [ ] rà 18 bài · [x] menu tiếng Việt · [ ] nút "Kiểu Tab" không hiện trước khi dạy Tab
-- [~] 4. Cơ thể & kỳ vọng (đau ngón tay, bao lâu, khi nào dừng): đã có quy ước (§5) · [ ] viết vào bài 3, 4, 9 và các bài hợp âm
+- [x] 2. Giọng văn & xưng hô: rà xong 18 bài (gọi "bạn", checklist bắt đầu "Tôi", bỏ chữ in hoa, lỗi viết theo triệu chứng → nguyên nhân → cách sửa, con số thay tính từ). Test chặn "ta/chúng ta", chữ in hoa, checklist không bắt đầu bằng "Tôi".
+- [x] 3. Thuật ngữ: 18 bài giải thích thuật ngữ ở lần đầu trong mỗi bài (test tự kiểm 23 thuật ngữ) · [x] menu tiếng Việt · [x] công cụ đổi tên "Máy lên dây (Tuner)", "Máy đếm nhịp (Metronome)" · [x] nút "Kiểu Tab" ẩn cho tới khi có bài dạy Tab (`TAB_LESSON_SLUG` trong `orientation.ts`)
+- [x] 4. Cơ thể & kỳ vọng: khung "Cảm giác khi tập" trong bài 3, 4, 9 và 5 bài hợp âm (bình thường là gì, mất mấy buổi, khi nào dừng). Test bắt buộc.
 - [ ] 5. Hình vẽ chuyển động (hướng gảy, chuyển hợp âm) · [x] hình tư thế ghi rõ "như soi gương"
 - [~] 6. Tự biết đúng/sai: đã có quy ước (§8) · [ ] âm mẫu tiếng rè / tiếng tắt · [ ] viết lại checklist thành thứ nghe/nhìn được
 - [~] 7. Lối đi khi kẹt: đã có quy ước (§6) · [ ] thêm trường `stuck` vào mẫu bài học + viết cho 18 bài
@@ -177,6 +176,7 @@
 ---
 
 ## Nhật ký phiên làm việc
+- **2026-11-11** — Cần đàn tự co theo bề ngang màn hình (hết cuộn ngang trên điện thoại). Rà 18 bài theo WRITING_GUIDE §2, §4, §5; ẩn "Kiểu Tab"; thêm `writing.test.ts`.
 - **2026-11-11** — Làm lại giao diện theo hướng "sổ tập đàn" (DESIGN.md): bài học từng bước, buổi tập dạng dòng thời gian, trang Hôm nay một cột, trang chủ có cần đàn bấm được, menu tiếng Việt. ui_lint 8.0 → 1.5.
 - **2026-11-11** — Rà soát cách diễn đạt cho người mới: thêm `WRITING_GUIDE.md`, chữ đổi theo tay thuận, ưu tiên acoustic.
 - **2026-11-07** — Khởi tạo repo, Phase 0 + Phase 1 code hoàn chỉnh, Guitar Visual, 59 unit tests + 14 E2E pass trên local.
