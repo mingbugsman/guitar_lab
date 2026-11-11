@@ -64,6 +64,18 @@ test("RLS isolates users and protects verification fields", async ({}, testInfo)
     .insert({ user_id: a.id, lesson_slug: "posture", verified_at: new Date().toISOString() });
   expect(verified).not.toBeNull();
 
+  // Chord-change results: own rows only
+  const { error: ownRun } = await a.client
+    .from("chord_change_runs")
+    .insert({ user_id: a.id, chords: "am-em", changes: 12, seconds: 60, counted_by: "mic" });
+  expect(ownRun).toBeNull();
+  const { error: forgedRun } = await b.client
+    .from("chord_change_runs")
+    .insert({ user_id: a.id, chords: "am-em", changes: 99, seconds: 60, counted_by: "mic" });
+  expect(forgedRun).not.toBeNull();
+  const { data: othersRuns } = await b.client.from("chord_change_runs").select("id").eq("user_id", a.id);
+  expect(othersRuns).toEqual([]);
+
   // Anonymous clients see nothing
   const anon = createClient(url, key, { auth: { persistSession: false } });
   const { data: anonRows } = await anon.from("practice_sessions").select("id");

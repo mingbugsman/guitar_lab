@@ -8,6 +8,7 @@ import { InteractiveFretboard } from "@/components/guitar/interactive-fretboard"
 import { useGuitarView } from "@/components/guitar/view-context";
 import { Metronome } from "@/components/audio/metronome";
 import { Tuner } from "@/components/audio/tuner";
+import { ChordChangeTimer } from "@/components/audio/chord-change-timer";
 import { Button } from "@/components/ui/button";
 import { playString } from "@/lib/audio/guitar-synth";
 import { CHORDS } from "@/lib/music/chords";
@@ -102,5 +103,7 @@ export function LessonVisual({ visual }: { visual: Visual }) {
       return <Metronome initialBpm={visual.bpm} initialBeats={visual.beats} compact />;
     case "notes":
       return <NotesRow />;
+    case "chordChange":
+      return <ChordChangeTimer chords={[...visual.chords]} />;
   }
 }

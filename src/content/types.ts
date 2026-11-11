@@ -18,7 +18,9 @@ export type Visual =
   | { kind: "strings" }
   | { kind: "tuner" }
   | { kind: "metronome"; bpm?: number; beats?: number }
-  | { kind: "notes" };
+  | { kind: "notes" }
+  /** One-minute chord changes: one chord (place, lift, replace) or a pair to switch between. */
+  | { kind: "chordChange"; chords: [ChordId] | [ChordId, ChordId] };
 
 export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }

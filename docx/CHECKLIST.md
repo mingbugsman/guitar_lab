@@ -16,7 +16,8 @@
   3. 🔑 Thử Tuner với đàn thật trên production (`/tools`) — mục duy nhất của Phase 1 chưa kiểm chứng bằng đàn thật.
   4. Trước khi mời nhiều người dùng: cài SMTP riêng rồi bật lại "Confirm email" (xem [DEPLOY.md](DEPLOY.md) Bước 3.2).
   5. Phần còn lại của WRITING_GUIDE (mục "Diễn đạt cho người mới" bên dưới): lối đi khi kẹt (§6), checklist nghe/nhìn được + âm mẫu rè/tắt (§8), câu mở đầu "học xong làm được gì" (§10). Giọng văn, thuật ngữ, cơ thể đã xong.
-  6. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
+  6. ⚠️ Áp migration `20261111000000_chord_change_runs.sql` lên Supabase dev rồi prod (`npx supabase link --project-ref <ref>` → `npx supabase db push --remote`), sau đó merge `develop` → `main`.
+  7. Bắt đầu Phase 2, nhánh `feature/level-1-complete` từ `develop`.
 
 ## Kết quả kiểm thử gần nhất (2026-11-11, local)
 
@@ -95,7 +96,7 @@
 - [x] 7 Tuner · [x] 8 Open strings · [x] 9 Fretboard · [x] 10 Notes · [x] 11 Pitch & rhythm · [x] 12 Clean sounds
 - [x] Mỗi bài: mục tiêu, điều kiện, giải thích, hình, luyện tập, lỗi thường gặp, checklist, trạng thái, tiêu chí đạt & thành thạo
 
-### E. Academy — First Chords (`src/content/level-1.ts`)
+### E. Academy — First Chords (`src/content/level-1.ts`; Em nằm ở Level 0 bài 10, dựng bằng `src/content/chord-lesson.ts`)
 - [x] Bài "Đọc sơ đồ hợp âm" (bổ sung để nối góc nhìn dựng đứng ↔ nhìn xuống)
 - [x] Em · [x] Am · [x] E · [x] A · [x] D (sơ đồ chính xác — test kiểm tra nốt — âm thanh mẫu, bài tập)
 
@@ -140,7 +141,7 @@
 - [~] 6. Tự biết đúng/sai: đã có quy ước (§8) · [ ] âm mẫu tiếng rè / tiếng tắt · [ ] viết lại checklist thành thứ nghe/nhìn được
 - [~] 7. Lối đi khi kẹt: đã có quy ước (§6) · [ ] thêm trường `stuck` vào mẫu bài học + viết cho 18 bài
 - [x] 8. Trình bày khi đang ôm đàn: bài học chia 4 chặng, luyện từng bước một màn hình, nút "Bước tiếp" lớn ở đáy, ẩn thanh điều hướng dưới (xem DESIGN.md)
-- [~] 9. "Vì sao" & thành quả sớm: đã có quy ước (§10) · [ ] câu mở đầu "học xong làm được gì" cho 18 bài · [ ] cân nhắc đưa hợp âm Em lên sớm hơn
+- [~] 9. "Vì sao" & thành quả sớm: đã có quy ước (§10) · [ ] câu mở đầu "học xong làm được gì" cho 18 bài · [x] Em thành bài 10 của Level 0 (trước là bài 14); bài 12, 13 và bài Đọc sơ đồ dùng lại Em
 - [x] 10. Ưu tiên acoustic: bài viết cho acoustic; classic và đàn điện có ghi chú riêng đầu bài
 
 ---
@@ -176,6 +177,8 @@
 ---
 
 ## Nhật ký phiên làm việc
+- **2026-11-11** — Công cụ "Đổi hợp âm 1 phút": micro tự đếm tiếng gảy (`src/lib/audio/strum-detector.ts`), có chế độ tự đếm bằng tay, giữ màn hình sáng khi đang đo, lưu kết quả theo hợp âm/cặp hợp âm (bảng `chord_change_runs`, RLS). Có trong mọi bài hợp âm (Em: 1 hợp âm; Am: Em–Am; E: E–Am; A: A–E; D: D–A), trang Công cụ và buổi tập. ⚠️ Migration `20261111000000_chord_change_runs.sql` mới áp ở local — cần áp lên dev + prod trước khi merge vào `main`.
+- **2026-11-11** — Đưa Em lên làm bài 10 của Level 0 (hợp âm đầu tiên sớm hơn 4 bài). Bài Em đọc từ hình cần đàn, không cần sơ đồ; bài Đọc sơ đồ dùng Em làm ví dụ.
 - **2026-11-11** — Cần đàn tự co theo bề ngang màn hình (hết cuộn ngang trên điện thoại). Rà 18 bài theo WRITING_GUIDE §2, §4, §5; ẩn "Kiểu Tab"; thêm `writing.test.ts`.
 - **2026-11-11** — Làm lại giao diện theo hướng "sổ tập đàn" (DESIGN.md): bài học từng bước, buổi tập dạng dòng thời gian, trang Hôm nay một cột, trang chủ có cần đàn bấm được, menu tiếng Việt. ui_lint 8.0 → 1.5.
 - **2026-11-11** — Rà soát cách diễn đạt cho người mới: thêm `WRITING_GUIDE.md`, chữ đổi theo tay thuận, ưu tiên acoustic.

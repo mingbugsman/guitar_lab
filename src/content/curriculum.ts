@@ -8,7 +8,7 @@ export const LEVELS: Level[] = [
     number: 0,
     title: "Absolute Beginner",
     subtitle: "Làm quen cây đàn",
-    outcome: "Nhận biết cây đàn, tự lên dây và gảy từng dây sạch tiếng.",
+    outcome: "Nhận biết cây đàn, tự lên dây, gảy từng dây sạch tiếng và bấm được hợp âm đầu tiên (Em).",
   },
   {
     id: "level-1",
@@ -16,7 +16,7 @@ export const LEVELS: Level[] = [
     title: "First Chords",
     subtitle: "Những hợp âm đầu tiên",
     outcome: "Bấm hợp âm mở và chuyển đổi giữa các hợp âm cơ bản.",
-    note: "Bản MVP 0.1 gồm: đọc sơ đồ hợp âm, Em, Am, E, A, D. Dm, C, G, A7, D7, E7 sẽ có ở bản 0.2.",
+    note: "Bản MVP 0.1 gồm: đọc sơ đồ hợp âm, Am, E, A, D (Em đã học ở cuối Level 0). Dm, C, G, A7, D7, E7 sẽ có ở bản 0.2.",
   },
 ];
 

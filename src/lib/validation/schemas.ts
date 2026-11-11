@@ -52,3 +52,11 @@ export const finishSessionSchema = z.object({
 });
 
 export type ActionResult<T = undefined> = { ok: true; data?: T } | { ok: false; error: string };
+
+export const chordChangeRunSchema = z.object({
+  chords: z.array(z.string().regex(/^[a-z0-9]{1,8}$/)).min(1).max(2),
+  changes: z.number().int().min(0).max(400),
+  seconds: z.number().int().min(10).max(600),
+  countedBy: z.enum(["mic", "manual"]),
+});
+export type ChordChangeRunInput = z.infer<typeof chordChangeRunSchema>;

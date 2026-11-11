@@ -19,8 +19,8 @@ describe("lesson player scenes", () => {
     expect(scene.blocks.some((b) => b.type === "callout" && b.tone === "compare")).toBe(true);
   });
 
-  it("pins the chord and the metronome while practising", () => {
-    expect(practiceVisuals(getLesson("chord-am")!.blocks).map((v) => v.kind)).toEqual(["chord"]);
+  it("pins the chord with its 1-minute drill, and the metronome, while practising", () => {
+    expect(practiceVisuals(getLesson("chord-am")!.blocks).map((v) => v.kind)).toEqual(["chord", "chordChange"]);
     expect(practiceVisuals(getLesson("open-strings")!.blocks).map((v) => v.kind)).toEqual(["fretboard", "metronome"]);
   });
 });

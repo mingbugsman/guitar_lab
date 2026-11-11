@@ -1,7 +1,8 @@
+import { AT_60, chordLesson } from "./chord-lesson";
 import type { Lesson } from "./types";
 
 /**
- * LEVEL 0 — ABSOLUTE BEGINNER
+ * LEVEL 0 — ABSOLUTE BEGINNER (13 lessons; lesson 10 is the first chord, Em)
  * Writing rules: docx/WRITING_GUIDE.md (voice, glossary, body notes) and docx/GUITAR_VISUAL.md
  * (always name strings by NUMBER + NOTE, and describe positions with anchors that are true on
  * the learner's real guitar: "phía mặt bạn", "phía sàn nhà", "phía đầu đàn", "phía thùng đàn").
@@ -653,10 +654,39 @@ export const LEVEL_0_LESSONS: Lesson[] = [
     assessment: ["Bấm rõ tiếng 5 nốt liên tiếp trên dây 6, từ phím 1 đến phím 5."],
     mastery: ["Bấm rõ tiếng phím 1 đến 5 trên cả 6 dây."],
   },
+  chordLesson("em", { levelId: "level-0", order: 10, prerequisites: ["fretboard-basics"] }, {
+    readFrom: "fretboard",
+    drill: ["em"],
+    summary: "Hợp âm đầu tiên: hai ngón, cả sáu dây đều gảy.",
+    intro: [
+      "Hợp âm là nhiều nốt vang cùng lúc. Em (Mi thứ) chỉ cần hai ngón và gảy cả 6 dây, nên là hợp âm dễ nhất để bắt đầu.",
+      "Bạn đã biết bấm một nốt rõ tiếng. Em chỉ là bấm hai nốt cùng lúc, ở cùng phím 2, rồi gảy cả 6 dây.",
+      "Em nghe trầm và hơi buồn. Đó là màu của hợp âm thứ.",
+      "Bên cạnh hình cần đàn có thêm một hình nhỏ: sơ đồ hợp âm (hình vẽ đàn dựng đứng, chỉ chỗ đặt từng ngón). Bạn sẽ học đọc nó ở đầu Level 1. Bây giờ chỉ cần nhìn hình cần đàn: nó vẽ đúng như khi bạn cúi nhìn xuống.",
+    ],
+    compare:
+      "Trên hình cần đàn, hai chấm nằm ở hàng thứ hai và thứ ba tính từ trên (dây 5 và dây 4), cùng ở phím 2. Trên đàn thật: dây thứ hai và thứ ba tính từ phía mặt bạn.",
+    tip: "Đặt ngón 2 và ngón 3 cạnh nhau trong cùng ô phím 2. Ngón 2 ở dây to hơn, gần mặt bạn hơn.",
+    sessions: "2 đến 3",
+    practice: [
+      "Đặt Em và gảy từng dây, từ dây 6 đến dây 1.",
+      `Gảy xuống cả hợp âm 4 lần ${AT_60}.`,
+    ],
+    mistakes: [
+      {
+        mistake: "Dây 3 bị tắt tiếng.",
+        fix: "Ngón 3 đang chạm vào dây 3. Cong ngón 3 hơn để đầu ngón đứng thẳng trên dây 4.",
+      },
+      {
+        mistake: "Dây 5 hoặc dây 4 bị rè.",
+        fix: "Ngón đó chưa sát thanh kim loại phía thùng đàn. Dịch đầu ngón sát hơn, giống cách bấm một nốt ở bài trước.",
+      },
+    ],
+  }),
   {
     slug: "musical-notes",
     levelId: "level-0",
-    order: 10,
+    order: 11,
     title: "Bảy nốt nhạc",
     summary: "C D E F G A B, nửa cung và một cung, và cách chúng nằm trên cần đàn.",
     minutes: 12,
@@ -665,7 +695,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       "Biết E với F và B với C chỉ cách nhau nửa cung (1 phím). Các cặp khác cách nhau một cung (2 phím).",
       "Tìm 7 nốt này trên dây 6 và dây 5, đến phím 12.",
     ],
-    prerequisites: ["fretboard-basics"],
+    prerequisites: ["chord-em"],
     blocks: [
       { type: "visual", visual: { kind: "notes" } },
       {
@@ -684,7 +714,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       {
         type: "callout",
         tone: "compare",
-        text: "Trên hình, dây 6 và dây 5 là hai hàng trên cùng. Trên đàn của bạn: hai dây to nhất, gần mặt bạn nhất. Nốt trầm nhất của hầu hết các hợp âm (nhiều nốt vang cùng lúc) bạn sắp học nằm trên hai dây này.",
+        text: "Trên hình, dây 6 và dây 5 là hai hàng trên cùng. Trên đàn của bạn: hai dây to nhất, gần mặt bạn nhất. Nốt trầm nhất của Em và của hầu hết các hợp âm (nhiều nốt vang cùng lúc) bạn sắp học nằm trên hai dây này.",
       },
     ],
     practice: {
@@ -712,7 +742,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
   {
     slug: "pitch-and-rhythm",
     levelId: "level-0",
-    order: 11,
+    order: 12,
     title: "Cao độ và nhịp cơ bản",
     summary: "Nghe cao, thấp, cảm nhận phách đều và đếm 1-2-3-4 theo máy đếm nhịp.",
     minutes: 12,
@@ -755,7 +785,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       minutes: 8,
       steps: [
         "Bật máy đếm nhịp ở 60 BPM (60 tiếng tích mỗi phút). Vỗ tay theo tiếng tích và đếm to '1, 2, 3, 4' trong 2 ô nhịp.",
-        "Gảy xuống dây 6 buông, mỗi phách một lần, trong 4 ô nhịp.",
+        "Bấm Em (hợp âm bạn đã học) và gảy xuống cả 6 dây, mỗi phách một lần, trong 4 ô nhịp.",
         "Gảy xuống, lên trên dây 4 buông, mỗi phách hai lần, trong 4 ô nhịp. Đếm '1 và 2 và…'.",
         "Gảy dây 5 buông rồi dây 5 phím 7. Nói to nốt nào cao hơn.",
       ],
@@ -777,7 +807,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
   {
     slug: "clean-sounds",
     levelId: "level-0",
-    order: 12,
+    order: 13,
     title: "Tạo âm thanh sạch",
     summary: "Kết hợp mọi thứ: tư thế, bấm sát phím, gảy chính xác, và tự sửa tiếng rè, tiếng tắt.",
     minutes: 15,
@@ -832,6 +862,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         "Chơi chuỗi B, C, D, E, F, G theo hình, mỗi nốt một tiếng tích ở 60 BPM. Dùng ngón 1 cho phím 1, ngón 3 cho phím 3.",
         "Chơi ngược lại từ G về B.",
         "Gặp nốt rè hoặc tắt: dừng, sửa theo bảng triệu chứng, rồi chơi lại nốt đó 3 lần.",
+        "Bấm Em và gảy từng dây từ dây 6 đến dây 1. Dây nào rè hoặc tắt, sửa theo bảng triệu chứng.",
       ],
     },
     mistakes: [
@@ -844,6 +875,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       { id: "diagnose", label: "Tôi phân biệt được tiếng rè và tiếng tắt, và biết cách sửa." },
       { id: "sequence", label: "Tôi chơi sạch chuỗi B đến G ở 60 BPM." },
       { id: "reverse", label: "Tôi chơi sạch chuỗi ngược từ G về B." },
+      { id: "em-clean", label: "Tôi gảy Em từng dây và cả 6 dây đều ngân rõ." },
     ],
     assessment: ["Chơi chuỗi B lên G rồi về B (11 nốt) ở 60 BPM, mọi nốt ngân rõ, không rè."],
     mastery: ["Chơi chuỗi trên ở 80 BPM, hai nốt mỗi tiếng tích, sạch hoàn toàn."],

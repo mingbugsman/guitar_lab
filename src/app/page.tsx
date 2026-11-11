@@ -116,7 +116,7 @@ export default async function LandingPage() {
             Vẫn đang làm tiếp
           </h2>
           <p className="text-muted-foreground">
-            Hiện tại có 12 bài nhập môn và 5 hợp âm đầu tiên: Em, Am, E, A, D. Mình đang làm tiếp các hợp âm còn lại, phần tập
+            Hiện tại có 13 bài nhập môn (bài 10 đã là hợp âm đầu tiên, Em) và thêm 4 hợp âm: Am, E, A, D. Mình đang làm tiếp các hợp âm còn lại, phần tập
             gảy theo nhịp, luyện tai và vài bài hát để tập. Phần nào làm xong và chạy ổn thì mình mới đưa lên.
           </p>
         </section>
