@@ -21,6 +21,16 @@ async function getVoices() {
   return { Tone, voices };
 }
 
+/** For schedulers (the practice engine): pluck `string` at `fret` exactly at audio time `time`. */
+export async function getGuitar() {
+  const { Tone, voices } = await getVoices();
+  return {
+    Tone,
+    pluck: (string: StringNumber, fret: number, time: number) =>
+      voices.get(string)!.triggerAttack(midiToFrequency(midiAt(string, fret)), time),
+  };
+}
+
 export async function playString(string: StringNumber, fret = 0) {
   const { Tone, voices } = await getVoices();
   voices.get(string)!.triggerAttack(midiToFrequency(midiAt(string, fret)), Tone.now());

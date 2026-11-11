@@ -54,6 +54,38 @@ export default async function PracticePage() {
         </form>
       )}
 
+      <section className="mt-12" aria-labelledby="extra">
+        <h2 id="extra" className="border-b border-foreground pb-2 text-lg font-semibold">
+          Tập riêng
+        </h2>
+        <ul className="divide-y">
+          <li>
+            <Link
+              href="/practice/drills"
+              className="flex items-center justify-between gap-4 py-3 hover:bg-muted/50"
+              data-testid="open-drills"
+            >
+              <span>
+                <span className="block font-medium">Bài tập ngón</span>
+                <span className="block text-sm text-muted-foreground">
+                  12 bài: spider, tách ngón, dời thế tay, nhảy dây… Có xem mẫu, nhanh dần.
+                </span>
+              </span>
+              <ArrowRight className="size-4 shrink-0" />
+            </Link>
+          </li>
+          <li>
+            <Link href="/tools" className="flex items-center justify-between gap-4 py-3 hover:bg-muted/50">
+              <span>
+                <span className="block font-medium">Đổi hợp âm 1 phút</span>
+                <span className="block text-sm text-muted-foreground">Máy đếm số lần bạn đổi hợp âm, lưu kỷ lục từng cặp.</span>
+              </span>
+              <ArrowRight className="size-4 shrink-0" />
+            </Link>
+          </li>
+        </ul>
+      </section>
+
       <section className="mt-12" aria-labelledby="history">
         <div className="flex items-baseline justify-between border-b border-foreground pb-2">
           <h2 id="history" className="text-lg font-semibold">

@@ -105,3 +105,37 @@ describe("Fretboard fits narrow screens", () => {
     expect(Number(headL.getAttribute("x"))).toBeGreaterThan(160);
   });
 });
+
+describe("Fretboard cells can be played", () => {
+  it("reports the string and fret of the cell that was pressed, including the open string", async () => {
+    const { fireEvent } = await import("@testing-library/react");
+    const pressed: string[] = [];
+    const { container } = render(<Fretboard frets={5} onCellPress={(c) => pressed.push(`${c.string}-${c.fret}`)} />);
+    expect(container.querySelectorAll("[data-cell]")).toHaveLength(6 * 6);
+    fireEvent.pointerDown(container.querySelector('[data-cell="6-3"]')!);
+    fireEvent.pointerDown(container.querySelector('[data-cell="1-0"]')!);
+    expect(pressed).toEqual(["6-3", "1-0"]);
+  });
+
+  it("puts fret 1 next to the nut on both sides when mirrored for left-handed players", () => {
+    const x = (handedness: "right" | "left", cell: string) => {
+      const { container } = render(<Fretboard frets={5} handedness={handedness} onCellPress={() => {}} />);
+      const r = container.querySelector(`[data-cell="${cell}"]`)!;
+      return Number(r.getAttribute("x"));
+    };
+    expect(x("right", "6-1")).toBeLessThan(x("right", "6-5"));
+    expect(x("left", "6-1")).toBeGreaterThan(x("left", "6-5"));
+    // the open-string zone is on the headstock side
+    expect(x("right", "6-0")).toBeLessThan(x("right", "6-1"));
+    expect(x("left", "6-0")).toBeGreaterThan(x("left", "6-1"));
+  });
+
+  it("draws drill overlays on the right cell", () => {
+    const { container } = render(
+      <Fretboard frets={5} overlays={[{ string: 4, fret: 2, kind: "active", label: "2" }, { string: 4, fret: 3, kind: "next" }]} />,
+    );
+    expect(container.querySelector('[data-overlay="active"]')?.getAttribute("data-fret")).toBe("2");
+    expect(container.querySelector('[data-overlay="active"]')?.textContent).toBe("2");
+    expect(container.querySelector('[data-overlay="next"]')?.getAttribute("data-string")).toBe("4");
+  });
+});

@@ -17,6 +17,18 @@ export type FretMarker = {
   tone?: "default" | "root" | "highlight";
 };
 
+/** A cell is one string at one fret; fret 0 is the open string (the zone before the nut). */
+export type FretCell = { string: StringNumber; fret: number };
+
+/**
+ * Temporary marks drawn on top of everything (practice drills, taps):
+ * - active: play this now (filled, finger number inside)
+ * - next: coming up (dashed ring)
+ * - held: a finger that stays down (pale fill)
+ * - pressed: the cell the learner just tapped (ring + note name)
+ */
+export type FretOverlay = FretCell & { kind: "active" | "next" | "held" | "pressed"; label?: string };
+
 export type FretboardProps = {
   view?: View;
   handedness?: Handedness;
@@ -28,6 +40,11 @@ export type FretboardProps = {
   showAllNotes?: boolean;
   showOrientation?: boolean;
   onStringClick?: (string: StringNumber) => void;
+  /** Makes every cell tappable: open strings (fret 0) and every fret on every string. */
+  onCellPress?: (cell: FretCell) => void;
+  /** Keyboard focus position, drawn as an outline. */
+  focusCell?: FretCell | null;
+  overlays?: FretOverlay[];
   className?: string;
   title?: string;
   /**
@@ -65,6 +82,9 @@ export function Fretboard({
   showAllNotes = false,
   showOrientation = true,
   onStringClick,
+  onCellPress,
+  focusCell,
+  overlays = [],
   className,
   title,
   fitWidth,
@@ -86,6 +106,10 @@ export function Fretboard({
   const fretLineX = (f: number) => boardX0 + NUT_W + f * FRET_W; // f = 0 → nut edge
   const fretCenterX = (f: number) => boardX0 + NUT_W + (f - 0.5) * FRET_W;
   const rowY = (s: StringNumber) => TOP + rows.indexOf(s) * STRING_GAP;
+  const OPEN_X = boardX0 - 12; // where open-string marks sit, just before the nut
+  const cellX = (f: number) => (f === 0 ? OPEN_X : fretCenterX(f));
+  /** Hit box of a cell in right-handed space: [x0, x1). Fret 0 spans the labels too. */
+  const cellSpan = (f: number): [number, number] => (f === 0 ? [4, boardX0 + NUT_W] : [fretLineX(f - 1), fretLineX(f)]);
   const edges = viewEdgeLabels(view);
   const anchor = (a: "start" | "end") => (left ? (a === "start" ? "end" : "start") : a);
 
@@ -353,6 +377,87 @@ export function Fretboard({
           </text>
         </g>
       )}
+
+      {/* overlays: drills and taps, above the static markers */}
+      {overlays.map((o, i) => {
+        const cx = X(cellX(o.fret));
+        const cy = rowY(o.string);
+        const r = o.fret === 0 ? 8 : dotR;
+        const common = { "data-overlay": o.kind, "data-string": o.string, "data-fret": o.fret } as const;
+        if (o.kind === "next")
+          return (
+            <circle key={i} {...common} cx={cx} cy={cy} r={r} fill="none" stroke="var(--gl-finger)" strokeWidth={2} strokeDasharray="3 3" />
+          );
+        if (o.kind === "held")
+          return (
+            <g key={i} {...common}>
+              <circle cx={cx} cy={cy} r={r} fill="var(--gl-finger)" opacity={0.35} />
+              {o.label && (
+                <text x={cx} y={cy + 4.5} textAnchor="middle" className="fill-foreground text-[12px] font-bold" opacity={0.7}>
+                  {o.label}
+                </text>
+              )}
+            </g>
+          );
+        if (o.kind === "pressed")
+          return (
+            <g key={i} {...common} className="pointer-events-none">
+              <circle cx={cx} cy={cy} r={r + 3} fill="none" stroke="var(--gl-highlight)" strokeWidth={3} />
+              <text x={cx} y={cy - r - 6} textAnchor="middle" className="fill-foreground text-[12px] font-bold">
+                {o.label ?? noteAt(o.string, o.fret)}
+              </text>
+            </g>
+          );
+        return (
+          <g key={i} {...common}>
+            <circle cx={cx} cy={cy} r={r + 1} fill="var(--gl-finger)" stroke="var(--card)" strokeWidth={2} />
+            {o.label && (
+              <text x={cx} y={cy + 4.5} textAnchor="middle" className="text-[12px] font-bold" fill="var(--gl-finger-text)">
+                {o.label}
+              </text>
+            )}
+          </g>
+        );
+      })}
+
+      {focusCell && (
+        <rect
+          data-focus-cell={`${focusCell.string}-${focusCell.fret}`}
+          x={Math.min(X(cellSpan(focusCell.fret)[0]), X(cellSpan(focusCell.fret)[1])) + 1}
+          y={rowY(focusCell.string) - STRING_GAP / 2 + 1}
+          width={cellSpan(focusCell.fret)[1] - cellSpan(focusCell.fret)[0] - 2}
+          height={STRING_GAP - 2}
+          rx={4}
+          fill="none"
+          stroke="var(--foreground)"
+          strokeWidth={2}
+          className="pointer-events-none"
+        />
+      )}
+
+      {/* tap layer: one transparent box per cell, topmost so every cell is reachable */}
+      {onCellPress &&
+        rows.flatMap((s) =>
+          Array.from({ length: frets + 1 }, (_, f) => {
+            const [x0, x1] = cellSpan(f);
+            return (
+              <rect
+                key={`${s}-${f}`}
+                data-cell={`${s}-${f}`}
+                x={Math.min(X(x0), X(x1))}
+                y={rowY(s) - STRING_GAP / 2}
+                width={x1 - x0}
+                height={STRING_GAP}
+                fill="transparent"
+                className="cursor-pointer"
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  onCellPress({ string: s, fret: f });
+                }}
+              />
+            );
+          }),
+        )}
     </svg>
   );
 }

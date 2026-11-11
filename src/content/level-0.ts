@@ -42,7 +42,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       {
         type: "callout",
         tone: "compare",
-        text: "Ôm đàn và cúi nhìn xuống. Dây to nhất có nằm gần mặt bạn giống hình không? Chạm vào dây 6 trong hình để nghe, rồi gảy dây to nhất trên đàn thật: hai tiếng phải cùng trầm.",
+        text: "Ôm đàn và cúi nhìn xuống. Dây to nhất có nằm gần mặt bạn giống hình không? Chạm vào chữ 'Dây 6' trong hình để nghe dây 6 buông, rồi gảy dây to nhất trên đàn thật: hai tiếng phải cùng trầm.",
       },
       {
         type: "callout",
@@ -54,7 +54,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       minutes: 5,
       steps: [
         "Đặt đàn cạnh màn hình, mở hình cần đàn.",
-        "Chạm dây 6 trong hình, rồi gảy nhẹ dây 6 trên đàn thật.",
+        "Chạm chữ 'Dây 6' trong hình, rồi gảy nhẹ dây 6 trên đàn thật.",
         "Làm tiếp như vậy với dây 5, 4, 3, 2, 1.",
       ],
     },
@@ -324,7 +324,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         ],
       },
       { type: "visual", visual: { kind: "strings" } },
-      { type: "visual", visual: { kind: "fretboard", frets: 3 }, caption: "Chạm vào từng dây để nghe." },
+      { type: "visual", visual: { kind: "fretboard", frets: 3 }, caption: "Chạm vào chữ 'Dây 6' đến 'Dây 1' để nghe từng dây buông (dây không bấm). Chạm vào một ô phím để nghe nốt bấm ở đó." },
       {
         type: "callout",
         tone: "compare",
@@ -763,7 +763,7 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       {
         type: "visual",
         visual: { kind: "fretboard", frets: 7, markers: [{ string: 5, fret: 0 }, { string: 5, fret: 7, label: "E" }], highlightStrings: [5] },
-        caption: "Chạm dây 5: so tiếng dây buông (A) với tiếng bấm ở phím 7 (E) trên đàn thật.",
+        caption: "Chạm chữ 'Dây 5' để nghe dây buông (A), rồi chạm ô phím 7 trên dây 5 để nghe E. Nốt bấm cao hơn.",
       },
       {
         type: "callout",
