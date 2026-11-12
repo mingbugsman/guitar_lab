@@ -80,3 +80,15 @@ test("clean sounds: four example sounds to compare against", async ({ page }, te
   await expect(samples.getByTestId("sample-buzz")).toHaveAttribute("data-played", "true");
   if (process.env.SHOTS) await samples.screenshot({ path: `${process.env.SHOTS}/samples.png` });
 });
+
+test("stuck: the fix-it stage offers a smaller step, an earlier lesson and a rest", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "runs once");
+  await register(page, "Stuck");
+  await page.goto("/academy/chord-e");
+  await page.getByTestId("lesson-stage-mistakes").click();
+  const stuck = page.getByTestId("lesson-stuck");
+  await expect(stuck).toContainText("E chính là Em thêm một ngón");
+  await expect(stuck).toContainText("Nghỉ cũng là tập");
+  await stuck.getByTestId("stuck-back-chord-em").click();
+  await expect(page).toHaveURL(/\/academy\/chord-em$/);
+});

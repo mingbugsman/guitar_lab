@@ -26,7 +26,7 @@ const partner = (drill: [ChordId] | [ChordId, ChordId], id: ChordId): ChordId =>
 export function chordLesson(
   id: ChordId,
   placement: { levelId: LevelId; order: number; prerequisites: string[] },
-  extra: Pick<Lesson, "summary" | "mistakes"> & {
+  extra: Pick<Lesson, "summary" | "mistakes" | "stuck"> & {
     intro: string[];
     compare: string;
     practice: string[];
@@ -107,6 +107,7 @@ export function chordLesson(
       steps: [...extra.practice, `Đo 1 phút ${drillLabel}: bấm 'Bắt đầu, máy tự đếm' và làm 2 lượt.`],
     },
     mistakes: extra.mistakes,
+    stuck: extra.stuck,
     checklist: [
       { id: "shape", label: `Tôi đặt đúng ${chord.symbol}, đúng ngón như ${fromDiagram ? "sơ đồ" : "hình"}.` },
       { id: "compare", label: "Tôi so tay mình với hình cần đàn: mỗi ngón nằm đúng dây, đúng phím như chấm có số." },

@@ -69,6 +69,10 @@ export const LEVEL_1_LESSONS: Lesson[] = [
         fix: "Bạn đang đọc sơ đồ như thể dây 1 nằm bên {fretSide}. Đọc hàng số dưới sơ đồ: dây 6 bên {fretSide}, dây 1 bên {pickSide}.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ tìm một cột: dây 6 trên sơ đồ. Chỉ nó trên đàn dựng đứng, rồi trên đàn khi ôm. Xong cột đó mới đọc chấm và ký hiệu.",
+      back: [{ slug: "chord-em", why: "so sơ đồ Em với hình cần đàn bạn đã quen" }],
+    },
     checklist: [
       { id: "symbols", label: "Tôi chỉ vào chấm có số, dấu O và dấu X trên một sơ đồ và nói to mỗi ký hiệu bảo tôi làm gì." },
       { id: "orientation", label: "Tôi dựng đàn đứng cạnh sơ đồ và chỉ đúng dây 6 trên cả hai: cùng nằm bên {fretSide}." },
@@ -88,6 +92,10 @@ export const LEVEL_1_LESSONS: Lesson[] = [
     compare:
       "Trên hình cần đàn, dây 6 (hàng trên cùng) có dấu X: không gảy. Ngón 1 ở dây 2 (hàng thứ hai từ dưới lên, phía sàn nhà), phím 1, sát lược đàn (thanh trắng có 6 rãnh ở đầu cần đàn) nhất.",
     sessions: "3 đến 5",
+    stuck: {
+      smaller: "Bỏ ngón 1 ra trước. Đặt ngón 2 và 3 (hình Em dịch một dây về phía sàn nhà), gảy cho sạch, rồi mới thêm ngón 1 ở dây 2 phím 1.",
+      back: [{ slug: "chord-em", why: "Am dùng lại hình hai ngón của Em" }],
+    },
     practice: [
       "Đặt Am và gảy từng dây, từ dây 5 đến dây 1.",
       `Gảy xuống Am 4 lần ${AT_60}, bắt đầu cú gảy từ dây 5.`,
@@ -115,6 +123,10 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       "Trên hình cần đàn, ba chấm nằm ở hàng 2, 3, 4 tính từ trên (dây 5, 4, 3). Ngón 1 ở dây 3, phím 1. So với Am, cả hình dạng dịch về phía mặt bạn một dây.",
     tip: "Đặt E, rồi nhấc riêng ngón 1 lên: bạn đang bấm Em. Đặt lại ngón 1: lại là E. Nghe sự khác nhau giữa trưởng và thứ.",
     sessions: "3 đến 5",
+    stuck: {
+      smaller: "Đặt Em trước và giữ nguyên. Thêm ngón 1 ở dây 3 phím 1: E chính là Em thêm một ngón.",
+      back: [{ slug: "chord-em", why: "đặt Em sạch tiếng trước khi thêm ngón 1" }],
+    },
     practice: [
       "Đặt E và gảy từng dây, từ dây 6 đến dây 1.",
       "Đổi từ E sang Am bằng cách giữ nguyên hình bàn tay, chỉ dời cả khối một dây.",
@@ -137,6 +149,10 @@ export const LEVEL_1_LESSONS: Lesson[] = [
     compare:
       "Trên hình cần đàn, ba chấm thẳng hàng dọc ở phím 2, trên hàng thứ 3, 4, 5 tính từ trên (dây 4, 3, 2). Dây 1 (hàng dưới cùng, phía sàn nhà) gảy buông: đừng để ngón 3 chạm vào nó.",
     sessions: "4 đến 6",
+    stuck: {
+      smaller: "Đặt từng ngón một, bắt đầu từ ngón 1. Đặt xong ngón nào gảy dây đó, sạch rồi mới thêm ngón kế tiếp.",
+      back: [{ slug: "clean-sounds", why: "ôn cách sửa tiếng rè, tiếng tắt theo triệu chứng" }],
+    },
     practice: [
       "Đặt A và gảy từng dây, từ dây 5 đến dây 1. Nghe kỹ dây 1.",
       `Gảy xuống A 4 lần ${AT_60}, bắt đầu từ dây 5.`,
@@ -164,6 +180,10 @@ export const LEVEL_1_LESSONS: Lesson[] = [
     compare:
       "Trên hình cần đàn, dây 6 và dây 5 (hai hàng trên cùng, gần mặt bạn) có dấu X. Tam giác nằm trên ba hàng dưới cùng (dây 3, 2, 1, phía sàn nhà). Đỉnh tam giác là ngón 3 ở phím 3, dây 2.",
     sessions: "4 đến 6",
+    stuck: {
+      smaller: "Chỉ gảy dây 3 và dây 2 với ngón 1 và ngón 3 trước. Khi hai dây sạch, thêm ngón 2 ở dây 1 phím 2.",
+      back: [{ slug: "reading-chord-diagrams", why: "ôn dấu X: dây 6 và dây 5 không gảy" }],
+    },
     practice: [
       "Đặt D và gảy từng dây, từ dây 4 đến dây 1.",
       `Gảy xuống D 4 lần ${AT_60}, chỉ gảy 4 dây, bắt đầu từ dây 4.`,

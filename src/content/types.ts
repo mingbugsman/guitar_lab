@@ -51,6 +51,11 @@ export type Lesson = {
   blocks: Block[];
   practice: { minutes: number; steps: string[] };
   mistakes: { mistake: string; fix: string }[];
+  /**
+   * When it still does not work after several tries (docx/WRITING_GUIDE.md §6): a smaller step
+   * to do first, earlier lessons worth going back to, and permission to stop for today.
+   */
+  stuck: { smaller: string; back: { slug: string; why: string }[]; rest?: string };
   checklist: { id: string; label: string }[];
   assessment: string[];
   mastery: string[];

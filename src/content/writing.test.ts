@@ -18,6 +18,7 @@ function readingOrder(l: Lesson): string[] {
   }
   out.push(...l.practice.steps);
   for (const m of l.mistakes) out.push(m.mistake, m.fix);
+  out.push(l.stuck.smaller, ...l.stuck.back.map((b) => b.why), l.stuck.rest ?? "");
   out.push(...l.checklist.map((c) => c.label), ...l.assessment, ...l.mastery);
   return out;
 }
@@ -135,6 +136,21 @@ describe("writing guide §8 — the learner can check it by eye or ear", () => {
   it("no checklist item is a feeling of having understood", () => {
     const hits = LESSONS.flatMap((l) => l.checklist.filter((c) => VAGUE.test(c.label)).map((c) => `${l.slug}: ${c.label}`));
     expect(hits).toEqual([]);
+  });
+});
+
+describe("writing guide §6 — a way out when stuck", () => {
+  const order = new Map(LESSONS.map((l, i) => [l.slug, i]));
+
+  it("every lesson offers a smaller step", () => {
+    expect(LESSONS.filter((l) => l.stuck.smaller.trim().length < 20).map((l) => l.slug)).toEqual([]);
+  });
+
+  it("every lesson after the first points back to an earlier lesson that exists", () => {
+    const bad = LESSONS.slice(1).filter(
+      (l) => l.stuck.back.length === 0 || l.stuck.back.some((b) => !order.has(b.slug) || order.get(b.slug)! >= order.get(l.slug)!),
+    );
+    expect(bad.map((l) => l.slug)).toEqual([]);
   });
 });
 
