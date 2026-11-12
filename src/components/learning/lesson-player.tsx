@@ -72,10 +72,12 @@ export type LessonPlayerProps = {
   initialProgress: LessonProgressInitial | null;
   prerequisites: { slug: string; title: string }[];
   next: { slug: string; title: string } | null;
+  /** §6 way out when stuck, with lesson titles resolved on the server. */
+  stuck: { smaller: string; back: { slug: string; title: string; why: string }[]; rest: string };
   typeNote: { title: string; points: string[] } | null;
 };
 
-export function LessonPlayer({ lesson, levelLabel, initialProgress, prerequisites, next, typeNote }: LessonPlayerProps) {
+export function LessonPlayer({ lesson, levelLabel, initialProgress, prerequisites, next, stuck, typeNote }: LessonPlayerProps) {
   const screens = useMemo<Screen[]>(() => {
     const learn = toScenes(lesson.blocks).map((scene, index) => ({ stage: "learn" as const, scene, index }));
     return [...learn, { stage: "practice" }, { stage: "mistakes" }, { stage: "evaluate" }];
@@ -292,6 +294,50 @@ export function LessonPlayer({ lesson, levelLabel, initialProgress, prerequisite
                 </div>
               ))}
             </dl>
+
+            <section className="mt-8" aria-labelledby="stuck-heading" data-testid="lesson-stuck">
+              <h2 id="stuck-heading" className="gl-label">
+                Thử nhiều lần vẫn chưa được?
+              </h2>
+              <ol className="mt-3 space-y-4">
+                <li className="flex gap-3">
+                  <span className="gl-num w-5 shrink-0 text-sm text-muted-foreground">1</span>
+                  <div>
+                    <p className="font-medium">Làm một bước nhỏ hơn</p>
+                    <p className="mt-0.5 text-muted-foreground">
+                      <HandText text={stuck.smaller} />
+                    </p>
+                  </div>
+                </li>
+                {stuck.back.length > 0 && (
+                  <li className="flex gap-3">
+                    <span className="gl-num w-5 shrink-0 text-sm text-muted-foreground">2</span>
+                    <div>
+                      <p className="font-medium">Bước nhỏ vẫn khó? Quay lại bài cũ</p>
+                      <ul className="mt-0.5 space-y-1">
+                        {stuck.back.map((b) => (
+                          <li key={b.slug} className="text-muted-foreground">
+                            <Link href={`/academy/${b.slug}`} className="font-medium text-foreground underline underline-offset-4" data-testid={`stuck-back-${b.slug}`}>
+                              {b.title}
+                            </Link>
+                            : <HandText text={b.why} />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                )}
+                <li className="flex gap-3">
+                  <span className="gl-num w-5 shrink-0 text-sm text-muted-foreground">{stuck.back.length > 0 ? 3 : 2}</span>
+                  <div>
+                    <p className="font-medium">Nghỉ cũng là tập</p>
+                    <p className="mt-0.5 text-muted-foreground">
+                      <HandText text={stuck.rest} />
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </section>
           </div>
         )}
 

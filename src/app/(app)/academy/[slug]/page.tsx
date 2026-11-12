@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LessonPlayer } from "@/components/learning/lesson-player";
-import { getLesson, getLevel, nextLesson } from "@/content/curriculum";
+import { getLesson, getLevel, nextLesson, REST_DEFAULT } from "@/content/curriculum";
 import { GUITAR_TYPE_NOTES } from "@/content/guitar-type";
 import { requireOnboardedProfile } from "@/lib/auth";
 import { getLessonProgressFor } from "@/features/progress/queries";
@@ -41,6 +41,14 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         const pre = getLesson(p);
         return pre ? [{ slug: pre.slug, title: pre.title }] : [];
       })}
+      stuck={{
+        smaller: lesson.stuck.smaller,
+        back: lesson.stuck.back.flatMap((b) => {
+          const old = getLesson(b.slug);
+          return old ? [{ slug: old.slug, title: old.title, why: b.why }] : [];
+        }),
+        rest: lesson.stuck.rest ?? REST_DEFAULT,
+      }}
       next={next ? { slug: next.slug, title: next.title } : null}
       typeNote={typeNote}
     />

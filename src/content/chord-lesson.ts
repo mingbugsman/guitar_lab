@@ -20,10 +20,13 @@ export function chordBodyNote(symbol: string, sessions: string): string {
 export const AT_60 =
   "theo máy đếm nhịp (Metronome: công cụ phát tiếng tích tắc đều) ở 60 BPM (60 tiếng tích mỗi phút)";
 
+/** The other chord of a two-chord drill. */
+const partner = (drill: [ChordId] | [ChordId, ChordId], id: ChordId): ChordId => drill.find((c) => c !== id) ?? id;
+
 export function chordLesson(
   id: ChordId,
   placement: { levelId: LevelId; order: number; prerequisites: string[] },
-  extra: Pick<Lesson, "summary" | "mistakes"> & {
+  extra: Pick<Lesson, "summary" | "mistakes" | "stuck"> & {
     intro: string[];
     compare: string;
     practice: string[];
@@ -80,6 +83,15 @@ export function chordLesson(
         ],
       },
       { type: "callout", tone: "body", text: chordBodyNote(chord.symbol, extra.sessions) },
+      ...(extra.drill.length === 2
+        ? [
+            {
+              type: "visual" as const,
+              visual: { kind: "chordMove" as const, from: partner(extra.drill, id), to: id },
+              caption: `Bấm 'Xem tay chuyển' để thấy từng ngón đi đâu khi đổi từ ${CHORDS[partner(extra.drill, id)].symbol} sang ${chord.symbol} và ngược lại.`,
+            },
+          ]
+        : []),
       { type: "visual", visual: { kind: "chordChange", chords: extra.drill } },
       {
         type: "text",
@@ -95,10 +107,11 @@ export function chordLesson(
       steps: [...extra.practice, `Đo 1 phút ${drillLabel}: bấm 'Bắt đầu, máy tự đếm' và làm 2 lượt.`],
     },
     mistakes: extra.mistakes,
+    stuck: extra.stuck,
     checklist: [
       { id: "shape", label: `Tôi đặt đúng ${chord.symbol}, đúng ngón như ${fromDiagram ? "sơ đồ" : "hình"}.` },
-      { id: "compare", label: "Tôi đã đối chiếu tay mình với hình cần đàn." },
-      { id: "clean", label: "Tôi gảy từng dây và mọi dây cần gảy đều ngân rõ." },
+      { id: "compare", label: "Tôi so tay mình với hình cần đàn: mỗi ngón nằm đúng dây, đúng phím như chấm có số." },
+      { id: "clean", label: "Tôi gảy từng dây, mỗi dây cần gảy ngân ít nhất 2 giây và không rè." },
       { id: "reset", label: `Tôi nhấc tay ra và đặt lại ${chord.symbol} 10 lần liên tiếp.` },
     ],
     assessment: [`Đặt ${chord.symbol} trong 3 giây và mọi dây ngân rõ, 5 lần liên tiếp.`],
