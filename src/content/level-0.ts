@@ -627,6 +627,11 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         ],
       },
       {
+        type: "visual",
+        visual: { kind: "soundSamples", string: 6, fret: 3 },
+        caption: "Nghe mẫu nốt G (dây 6, phím 3) khi sạch, khi rè và khi tắt. Rồi bấm nốt đó trên đàn của bạn và so xem giống mẫu nào.",
+      },
+      {
         type: "callout",
         tone: "body",
         text: "Đây là bài đầu tiên bạn ấn dây xuống nhiều lần. Đầu ngón tay bấm hơi đau và có vết hằn dây là bình thường với dây sắt, da sẽ dày lên sau 1 đến 2 tuần tập đều. Thường mất 3 đến 5 buổi tập để bấm sạch tiếng phím 1 đến 5 trên dây 6. Tập 2 đến 3 lần mỗi ngày, mỗi lần 10 phút, tốt hơn một lần 30 phút. Dừng ngay nếu đau nhói ở cổ tay hoặc tê ngón. Nghỉ một ngày nếu đầu ngón bị phồng.",
@@ -847,6 +852,11 @@ export const LEVEL_0_LESSONS: Lesson[] = [
           "Tiếng tắt (nốt tịt ngay, không ngân): ngón đè lên thanh kim loại, hoặc phần thịt ngón chạm vào dây bên cạnh. Cong ngón hơn.",
           "Có thêm tiếng lạ: tay gảy chạm nhầm dây. Thu nhỏ chuyển động gảy.",
         ],
+      },
+      {
+        type: "visual",
+        visual: { kind: "soundSamples", string: 2, fret: 1 },
+        caption: "Bốn mẫu của cùng nốt C (dây 2, phím 1). Nghe từng mẫu, rồi chơi nốt C trên đàn của bạn và nói to nó giống mẫu nào.",
       },
       {
         type: "visual",

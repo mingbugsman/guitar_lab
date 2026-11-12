@@ -24,7 +24,9 @@ export type Visual =
   /** Strumming direction in motion: the pick sweeps down/up across the strings, with the count. */
   | { kind: "strum"; pattern: ("D" | "U")[]; perBeat?: 1 | 2; strings?: StringNumber[]; chord?: ChordId; bpm?: number }
   /** A chord change in motion: finger dots glide from one chord to the other. */
-  | { kind: "chordMove"; from: ChordId; to: ChordId };
+  | { kind: "chordMove"; from: ChordId; to: ChordId }
+  /** Example sounds: clean, buzzing, muted, neighbour string touched (one note to compare). */
+  | { kind: "soundSamples"; string?: StringNumber; fret?: number };
 
 export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }

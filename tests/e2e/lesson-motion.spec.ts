@@ -67,3 +67,16 @@ test("chord change: finger dots glide from Em to Am with one line per finger", a
   await expect(move).toHaveAttribute("data-at", "to", { timeout: 5_000 });
   await move.getByTestId("chord-move-play").click();
 });
+
+test("clean sounds: four example sounds to compare against", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "runs once");
+  test.setTimeout(90_000);
+  await register(page, "Samples");
+  await page.goto("/academy/clean-sounds");
+  const samples = await forwardUntil(page, "sound-samples");
+  await expect(samples.locator('[data-testid^="sample-"]')).toHaveCount(4);
+  await expect(samples.getByTestId("sample-extra")).toContainText("dây 2 và thêm dây 1");
+  await samples.getByTestId("sample-buzz").click();
+  await expect(samples.getByTestId("sample-buzz")).toHaveAttribute("data-played", "true");
+  if (process.env.SHOTS) await samples.screenshot({ path: `${process.env.SHOTS}/samples.png` });
+});
