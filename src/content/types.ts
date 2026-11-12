@@ -20,7 +20,11 @@ export type Visual =
   | { kind: "metronome"; bpm?: number; beats?: number }
   | { kind: "notes" }
   /** One-minute chord changes: one chord (place, lift, replace) or a pair to switch between. */
-  | { kind: "chordChange"; chords: [ChordId] | [ChordId, ChordId] };
+  | { kind: "chordChange"; chords: [ChordId] | [ChordId, ChordId] }
+  /** Strumming direction in motion: the pick sweeps down/up across the strings, with the count. */
+  | { kind: "strum"; pattern: ("D" | "U")[]; perBeat?: 1 | 2; strings?: StringNumber[]; chord?: ChordId; bpm?: number }
+  /** A chord change in motion: finger dots glide from one chord to the other. */
+  | { kind: "chordMove"; from: ChordId; to: ChordId };
 
 export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }

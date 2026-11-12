@@ -524,6 +524,11 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       },
       {
         type: "visual",
+        visual: { kind: "strum", pattern: ["D", "U", "D", "U", "D", "U", "D", "U"], perBeat: 2, strings: [3], bpm: 50 },
+        caption: "Phím gảy đi qua dây 3: mũi tên ↓ là gảy xuống (về phía sàn nhà), ↑ là gảy lên (về phía mặt bạn). Bấm 'Xem và nghe', rồi làm theo trên đàn thật.",
+      },
+      {
+        type: "visual",
         visual: {
           kind: "fretboard",
           frets: 3,
@@ -778,6 +783,16 @@ export const LEVEL_0_LESSONS: Lesson[] = [
           "Phần lớn bài hát đếm theo nhóm 4 phách: '1, 2, 3, 4', rồi lại '1, 2, 3, 4'. Mỗi nhóm như vậy gọi là một ô nhịp (một nhóm phách lặp lại). Phách 1 được nhấn mạnh hơn. Cách đếm này gọi là nhịp 4/4.",
           "Gảy 1 lần mỗi phách gọi là nốt đen (một tiếng cho mỗi phách). Gảy 2 lần mỗi phách gọi là móc đơn (hai tiếng cho mỗi phách): gảy xuống đúng tiếng tích, gảy lên ở giữa hai tiếng tích, đếm '1 và 2 và 3 và 4 và'.",
         ],
+      },
+      {
+        type: "visual",
+        visual: { kind: "strum", pattern: ["D", "D", "D", "D"], perBeat: 1, chord: "em", bpm: 60 },
+        caption: "Nốt đen: một lần gảy xuống mỗi phách. Giữa hai lần gảy, tay quay lên trong không khí, không chạm dây (phím gảy mờ đi).",
+      },
+      {
+        type: "visual",
+        visual: { kind: "strum", pattern: ["D", "U", "D", "U", "D", "U", "D", "U"], perBeat: 2, strings: [4], bpm: 60 },
+        caption: "Móc đơn: xuống đúng tiếng tích, lên ở chữ 'và'. Tay đi xuống, lên đều như con lắc.",
       },
       { type: "visual", visual: { kind: "metronome", bpm: 60, beats: 4 } },
     ],

@@ -20,6 +20,9 @@ export function chordBodyNote(symbol: string, sessions: string): string {
 export const AT_60 =
   "theo máy đếm nhịp (Metronome: công cụ phát tiếng tích tắc đều) ở 60 BPM (60 tiếng tích mỗi phút)";
 
+/** The other chord of a two-chord drill. */
+const partner = (drill: [ChordId] | [ChordId, ChordId], id: ChordId): ChordId => drill.find((c) => c !== id) ?? id;
+
 export function chordLesson(
   id: ChordId,
   placement: { levelId: LevelId; order: number; prerequisites: string[] },
@@ -80,6 +83,15 @@ export function chordLesson(
         ],
       },
       { type: "callout", tone: "body", text: chordBodyNote(chord.symbol, extra.sessions) },
+      ...(extra.drill.length === 2
+        ? [
+            {
+              type: "visual" as const,
+              visual: { kind: "chordMove" as const, from: partner(extra.drill, id), to: id },
+              caption: `Bấm 'Xem tay chuyển' để thấy từng ngón đi đâu khi đổi từ ${CHORDS[partner(extra.drill, id)].symbol} sang ${chord.symbol} và ngược lại.`,
+            },
+          ]
+        : []),
       { type: "visual", visual: { kind: "chordChange", chords: extra.drill } },
       {
         type: "text",
