@@ -20,7 +20,13 @@ export type Visual =
   | { kind: "metronome"; bpm?: number; beats?: number }
   | { kind: "notes" }
   /** One-minute chord changes: one chord (place, lift, replace) or a pair to switch between. */
-  | { kind: "chordChange"; chords: [ChordId] | [ChordId, ChordId] };
+  | { kind: "chordChange"; chords: [ChordId] | [ChordId, ChordId] }
+  /** Strumming direction in motion: the pick sweeps down/up across the strings, with the count. */
+  | { kind: "strum"; pattern: ("D" | "U")[]; perBeat?: 1 | 2; strings?: StringNumber[]; chord?: ChordId; bpm?: number }
+  /** A chord change in motion: finger dots glide from one chord to the other. */
+  | { kind: "chordMove"; from: ChordId; to: ChordId }
+  /** Example sounds: clean, buzzing, muted, neighbour string touched (one note to compare). */
+  | { kind: "soundSamples"; string?: StringNumber; fret?: number };
 
 export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }
@@ -45,6 +51,11 @@ export type Lesson = {
   blocks: Block[];
   practice: { minutes: number; steps: string[] };
   mistakes: { mistake: string; fix: string }[];
+  /**
+   * When it still does not work after several tries (docx/WRITING_GUIDE.md §6): a smaller step
+   * to do first, earlier lessons worth going back to, and permission to stop for today.
+   */
+  stuck: { smaller: string; back: { slug: string; why: string }[]; rest?: string };
   checklist: { id: string; label: string }[];
   assessment: string[];
   mastery: string[];

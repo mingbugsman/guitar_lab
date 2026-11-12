@@ -20,6 +20,10 @@ export const LEVELS: Level[] = [
   },
 ];
 
+/** Permission to stop (writing guide §6) for lessons that do not say something more specific. */
+export const REST_DEFAULT =
+  "Nếu tay đã mỏi hoặc đầu ngón rát, dừng ở đây. Ngủ một giấc rồi mai tập lại, tay sẽ làm dễ hơn hôm nay.";
+
 /** Every lesson in learning order. */
 export const LESSONS: Lesson[] = [...LEVEL_0_LESSONS, ...LEVEL_1_LESSONS];
 

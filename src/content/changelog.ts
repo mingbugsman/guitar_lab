@@ -15,6 +15,18 @@ export type UpdateEntry = {
 
 export const UPDATES: UpdateEntry[] = [
   {
+    id: "2026-11-12-lesson-clarity",
+    publishedAt: "2026-11-12T13:25:00+07:00",
+    title: "Bài học dễ theo hơn",
+    items: [
+      "Hình động hướng gảy: phím gảy quét qua dây theo tiếng đàn, kèm đếm '1 và 2 và' (bài Gảy dây buông, Cao độ và nhịp).",
+      "Hình động chuyển hợp âm: chấm ngón trượt từ hợp âm cũ sang mới, mỗi ngón một câu nói đi đâu (bài Am, E, A, D).",
+      "Nghe mẫu tiếng sạch, tiếng rè, tiếng tắt và tiếng chạm dây bên cạnh để so với tiếng đàn của bạn.",
+      "Mỗi bài có mục 'Thử nhiều lần vẫn chưa được?': một bước nhỏ hơn, bài cũ nên quay lại, và lúc nên nghỉ.",
+    ],
+    href: "/academy/chord-am",
+  },
+  {
     id: "2026-11-11-chord-challenge",
     publishedAt: "2026-11-11T22:30:00+07:00",
     title: "Thử thách hợp âm",

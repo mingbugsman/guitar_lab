@@ -9,6 +9,9 @@ import { useGuitarView } from "@/components/guitar/view-context";
 import { Metronome } from "@/components/audio/metronome";
 import { Tuner } from "@/components/audio/tuner";
 import { ChordChangeTimer } from "@/components/audio/chord-change-timer";
+import { SoundSamples } from "@/components/audio/sound-samples";
+import { ChordMove } from "@/components/guitar/chord-move";
+import { StrumMotion } from "@/components/guitar/strum-motion";
 import { Button } from "@/components/ui/button";
 import { playString } from "@/lib/audio/guitar-synth";
 import { CHORDS } from "@/lib/music/chords";
@@ -105,5 +108,13 @@ export function LessonVisual({ visual }: { visual: Visual }) {
       return <NotesRow />;
     case "chordChange":
       return <ChordChangeTimer chords={[...visual.chords]} />;
+    case "strum":
+      return (
+        <StrumMotion pattern={visual.pattern} perBeat={visual.perBeat} strings={visual.strings} chord={visual.chord} bpm={visual.bpm} />
+      );
+    case "chordMove":
+      return <ChordMove from={visual.from} to={visual.to} />;
+    case "soundSamples":
+      return <SoundSamples string={visual.string} fret={visual.fret} />;
   }
 }

@@ -46,6 +46,11 @@ export type FretboardProps = {
   /** Keyboard focus position, drawn as an outline. */
   focusCell?: FretCell | null;
   overlays?: FretOverlay[];
+  /**
+   * Fingers drawn as dots that glide: when a finger's cell changes, its dot slides there
+   * (chord changes). `hidden` fades the dot out where it is (finger lifted).
+   */
+  fingers?: (FretCell & { finger: number; hidden?: boolean })[];
   className?: string;
   title?: string;
   /**
@@ -86,6 +91,7 @@ export function Fretboard({
   onCellPress,
   focusCell,
   overlays = [],
+  fingers = [],
   className,
   title,
   fitWidth,
@@ -315,6 +321,24 @@ export function Fretboard({
           </g>
         );
       })}
+
+      {/* gliding fingers (chord changes): CSS transform so the move animates */}
+      {fingers.map((f) => (
+        <g
+          key={`finger-${f.finger}`}
+          data-finger={f.finger}
+          data-string={f.string}
+          data-fret={f.fret}
+          data-hidden={f.hidden || undefined}
+          style={{ transform: `translate(${X(cellX(f.fret))}px, ${rowY(f.string)}px)`, opacity: f.hidden ? 0 : 1 }}
+          className="transition-[transform,opacity] duration-700 ease-in-out motion-reduce:transition-none"
+        >
+          <circle r={dotR + 1} fill="var(--gl-finger)" stroke="var(--card)" strokeWidth={2} />
+          <text y={4.5} textAnchor="middle" className="text-[12px] font-bold" fill="var(--gl-finger-text)">
+            {f.finger}
+          </text>
+        </g>
+      ))}
 
       {/* fret numbers */}
       {Array.from({ length: frets }, (_, i) => i + 1).map((f) => (

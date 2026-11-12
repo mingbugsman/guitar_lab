@@ -64,6 +64,10 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn đang gảy nhầm dây. Đọc nhãn 'Dây 6', 'Dây 1' trên hình: dây 6 là dây to nhất, gần mặt bạn.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ làm một việc: chạm chữ 'Dây 6' trên hình để nghe, rồi chạm vào dây to nhất trên đàn thật.",
+      back: [],
+    },
     checklist: [
       { id: "tools", label: "Tôi đã có đàn và một ghế không tay vịn." },
       { id: "views", label: "Tôi chỉ đúng dây 6 và dây 1 trên đàn thật khi nhìn hình." },
@@ -131,10 +135,14 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn đang đếm thanh kim loại. Phím 1 là ô ngay sát lược đàn: phía đầu đàn của ô đó chưa có thanh kim loại nào.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ tìm 4 bộ phận trước: đầu đàn, cần đàn, thùng đàn, lỗ thoát âm. Hôm sau thêm các bộ phận còn lại.",
+      back: [{ slug: "introduction", why: "xem lại dây 6 và dây 1 nằm ở đâu trên hình" }],
+    },
     checklist: [
       { id: "parts", label: "Tôi chỉ đúng 11 bộ phận trên đàn thật." },
       { id: "frets", label: "Tôi tìm được phím 5 và phím 12 nhờ chấm định vị." },
-      { id: "type", label: "Tôi biết đàn của mình là acoustic, classic hay đàn điện." },
+      { id: "type", label: "Tôi nói được đàn của mình là acoustic (dây sắt), classic (dây nylon) hay đàn điện." },
     ],
     assessment: ["Gọi đúng tên ít nhất 9 trên 11 bộ phận khi được chỉ vào."],
     mastery: ["Tìm phím bất kỳ từ 1 đến 12 trong 3 giây nhờ chấm định vị."],
@@ -200,10 +208,15 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn đang gù lưng để nhìn cần đàn. Ngồi thẳng lưng, chỉ nghiêng đầu nhẹ để liếc.",
       },
     ],
+    stuck: {
+      smaller: "Chưa cần tay gảy. Chỉ đặt đàn lên đùi, buông {fretHand} và đếm đến 5. Được 5 rồi mới đếm đến 20.",
+      back: [{ slug: "guitar-anatomy", why: "tìm lại chỗ thắt eo của thùng đàn, chỗ đặt lên đùi" }],
+      rest: "Nếu lưng hoặc vai đã mỏi, đứng dậy đi lại vài phút. Mai ngồi lại sẽ dễ vào tư thế hơn hôm nay.",
+    },
     checklist: [
-      { id: "seat", label: "Tôi ngồi lưng thẳng, hai chân đặt phẳng." },
+      { id: "seat", label: "Tôi ngồi lưng thẳng, hai bàn chân đặt phẳng trên sàn." },
       { id: "stable", label: "Tôi buông tay bấm 20 giây mà đàn vẫn đứng yên." },
-      { id: "photo", label: "Tôi đã đối chiếu tư thế của mình với hình minh họa." },
+      { id: "photo", label: "Tôi soi gương (hoặc chụp ảnh) và thấy giống hình: đàn trên đùi {pickSide}, cần đàn chếch lên, lưng thẳng." },
     ],
     assessment: ["Vào tư thế đúng trong dưới 10 giây, 3 lần liên tiếp."],
     mastery: ["Ngồi tập 10 phút mà không mỏi vai và đàn không trượt."],
@@ -293,10 +306,14 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn đang bấm bằng bụng ngón. Cong ngón, bấm bằng đầu ngón và cắt ngắn móng tay bấm.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ đặt ngón 1 và ngón 2 lên dây 4, phím 1 và phím 2. Khi hai ngón đứng vững mới thêm ngón 3, rồi ngón 4.",
+      back: [{ slug: "posture", why: "nếu {fretHand} còn phải đỡ đàn thì các ngón không tự do được" }],
+    },
     checklist: [
       { id: "numbers", label: "Tôi nói đúng số của từng ngón tay bấm." },
       { id: "thumb", label: "Tôi để ngón cái ở mặt sau cần đàn, lòng bàn tay không áp sát." },
-      { id: "spider", label: "Tôi đặt được 4 ngón lên phím 1 đến 4 trên dây 4." },
+      { id: "spider", label: "Tôi đặt 4 ngón lên phím 1 đến 4 trên dây 4, mỗi ngón một phím, đầu ngón đứng trên dây." },
       { id: "pick", label: "Tôi cầm phím gảy (hoặc dùng ngón cái) và gảy được dây 4." },
     ],
     assessment: ["Khi nghe gọi 'ngón 3', đặt đúng ngón áp út mà không nhìn tay."],
@@ -351,10 +368,14 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Cả hai đều tên E nên dễ nhầm. Nhìn độ dày, không nhìn tên: dây 1 mảnh và cao, dây 6 to và trầm.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ học hai dây trước: dây 6 (to nhất, gần mặt bạn) và dây 1 (mảnh nhất). Khi chạm đúng ngay mới thêm dây 5 và dây 2.",
+      back: [{ slug: "introduction", why: "xem lại hình và đàn thật khớp nhau thế nào" }],
+    },
     checklist: [
-      { id: "names", label: "Tôi đọc thuộc E A D G B E từ dây 6 đến dây 1." },
+      { id: "names", label: "Tôi nói to E A D G B E từ dây 6 đến dây 1 mà không nhìn hình." },
       { id: "find", label: "Tôi gảy đúng dây khi được gọi số ngẫu nhiên." },
-      { id: "compare", label: "Tôi đã đối chiếu thứ tự dây trên đàn thật với hình." },
+      { id: "compare", label: "Tôi nhìn hình rồi chạm đúng dây 3 và dây 5 trên đàn thật, không phải đếm lại từ dây 6." },
     ],
     assessment: ["Gảy đúng 6 trên 6 dây được gọi ngẫu nhiên."],
     mastery: ["Nghe số dây là nói ngay tên nốt, và ngược lại."],
@@ -425,10 +446,15 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn đang vặn khóa của dây khác. Lần theo dây từ lược đàn lên khóa.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ làm với dây 6: lần theo dây tìm khóa, vặn một phần tư vòng, nghe nốt cao lên hay thấp xuống. Các dây khác để hôm sau.",
+      back: [{ slug: "six-strings", why: "ôn tên nốt của từng dây trước khi vặn" }],
+      rest: "Nếu đã thử 10 phút mà tai không còn nghe ra cao hay thấp, nghỉ 5 phút. Tai cũng mỏi như tay.",
+    },
     checklist: [
       { id: "pegs", label: "Tôi tìm đúng khóa của cả 6 dây bằng cách lần theo dây." },
-      { id: "direction", label: "Tôi biết chiều vặn làm nốt cao lên với từng khóa." },
-      { id: "frequencies", label: "Tôi biết chuẩn E A D G B E từ dây 6 đến dây 1." },
+      { id: "direction", label: "Tôi vặn khóa từng dây một phần tư vòng và nói đúng nốt cao lên hay thấp xuống." },
+      { id: "frequencies", label: "Tôi bấm 'Nghe' của dây 5 và nói được dây 5 trên đàn tôi đang cao hơn hay thấp hơn." },
     ],
     assessment: ["Chỉ đúng khóa của dây được gọi ngẫu nhiên và nói đúng chiều căng."],
     mastery: ["Vặn đúng chiều ngay lần đầu cho cả 6 dây."],
@@ -492,8 +518,13 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Dây đang ở sai quãng tám (cùng tên nốt nhưng cao hơn 12 phím), ví dụ E3 thay vì E2. Đọc cả con số: dây 6 phải là E2, dây 1 là E4.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ lên một dây: dây 5. Đặt máy cách đàn khoảng 20 cm, gảy một lần vừa phải và chờ kim đứng yên. Kim nằm giữa được một lần rồi mới sang dây khác.",
+      back: [{ slug: "standard-tuning", why: "ôn chiều vặn khóa: căng là cao lên, nới là thấp xuống" }],
+      rest: "Nếu đã thử 10 phút vẫn chưa xong, nghỉ tai 5 phút rồi làm tiếp. Lên dây nhanh dần sau vài buổi.",
+    },
     checklist: [
-      { id: "mic", label: "Tôi thấy máy lên dây nghe được tiếng đàn của mình." },
+      { id: "mic", label: "Tôi gảy dây 6 và màn hình máy lên dây hiện E2." },
       { id: "all6", label: "Tôi đã lên chuẩn cả 6 dây, lệch không quá 5 cent." },
       { id: "retune", label: "Tôi tự lên lại được một dây đã bị nới." },
     ],
@@ -521,6 +552,11 @@ export const LEVEL_0_LESSONS: Lesson[] = [
           "Gảy xuống: đầu phím gảy (miếng nhựa nhỏ, hoặc ngón cái) đi về phía sàn nhà, từ dây 6 về phía dây 1. Gảy lên: ngược lại, về phía mặt bạn.",
           "Mỗi tiếng tích của máy đếm nhịp là một phách (nhịp đập đều của bài nhạc). Gảy đúng lúc tiếng tích vang lên.",
         ],
+      },
+      {
+        type: "visual",
+        visual: { kind: "strum", pattern: ["D", "U", "D", "U", "D", "U", "D", "U"], perBeat: 2, strings: [3], bpm: 50 },
+        caption: "Phím gảy đi qua dây 3: mũi tên ↓ là gảy xuống (về phía sàn nhà), ↑ là gảy lên (về phía mặt bạn). Bấm 'Xem và nghe', rồi làm theo trên đàn thật.",
       },
       {
         type: "visual",
@@ -563,10 +599,14 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn tìm dây mới quá muộn. Nhìn trước dây kế tiếp trong 2 phách cuối.",
       },
     ],
+    stuck: {
+      smaller: "Tắt máy đếm nhịp. Gảy dây 6 chậm theo ý bạn, chỉ để ý một điều: không chạm dây bên cạnh. Khi được 8 lần sạch, bật máy lại ở 50 BPM.",
+      back: [{ slug: "hand-position", why: "ôn cách cầm phím gảy và chỗ đặt tay gảy" }],
+    },
     checklist: [
       { id: "single", label: "Tôi gảy đúng một dây, không chạm dây bên cạnh." },
       { id: "metronome", label: "Tôi gảy 6 dây, mỗi dây 8 lần, theo máy đếm nhịp 60 BPM không dừng." },
-      { id: "updown", label: "Tôi gảy xuống, lên xen kẽ được trên một dây." },
+      { id: "updown", label: "Tôi gảy xuống, lên xen kẽ 8 cặp trên dây 3, tiếng gảy lên rơi đúng giữa hai tiếng tích." },
     ],
     assessment: ["Gảy 48 nốt liên tục (6 dây, mỗi dây 8 lần) ở 60 BPM, sai dây không quá 2 lần."],
     mastery: ["Làm được bài trên ở 80 BPM, gảy xuống và lên xen kẽ."],
@@ -622,6 +662,11 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         ],
       },
       {
+        type: "visual",
+        visual: { kind: "soundSamples", string: 6, fret: 3 },
+        caption: "Nghe mẫu nốt G (dây 6, phím 3) khi sạch, khi rè và khi tắt. Rồi bấm nốt đó trên đàn của bạn và so xem giống mẫu nào.",
+      },
+      {
         type: "callout",
         tone: "body",
         text: "Đây là bài đầu tiên bạn ấn dây xuống nhiều lần. Đầu ngón tay bấm hơi đau và có vết hằn dây là bình thường với dây sắt, da sẽ dày lên sau 1 đến 2 tuần tập đều. Thường mất 3 đến 5 buổi tập để bấm sạch tiếng phím 1 đến 5 trên dây 6. Tập 2 đến 3 lần mỗi ngày, mỗi lần 10 phút, tốt hơn một lần 30 phút. Dừng ngay nếu đau nhói ở cổ tay hoặc tê ngón. Nghỉ một ngày nếu đầu ngón bị phồng.",
@@ -646,9 +691,13 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn ấn quá mạnh. Giảm lực từ từ đến khi tiếng bắt đầu rè, rồi tăng lại một chút: đó là lực vừa đủ.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ bấm một nốt: dây 6 phím 3 bằng ngón 1. Khi nốt ngân sạch 3 lần liền mới sang phím khác.",
+      back: [{ slug: "hand-position", why: "ôn ngón cái sau cần đàn và đầu ngón đứng trên dây" }],
+    },
     checklist: [
-      { id: "clear", label: "Tôi bấm được một nốt rõ tiếng, không rè." },
-      { id: "octave", label: "Tôi nghe được dây buông và phím 12 cùng tên nốt." },
+      { id: "clear", label: "Tôi bấm dây 6 phím 3 và nốt ngân ít nhất 2 giây, không rè, giống mẫu 'Sạch'." },
+      { id: "octave", label: "Tôi gảy dây 6 buông rồi phím 12 và nghe ra cùng một nốt, phím 12 cao hơn." },
       { id: "find", label: "Tôi tìm được G (phím 3) và A (phím 5) trên dây 6." },
     ],
     assessment: ["Bấm rõ tiếng 5 nốt liên tiếp trên dây 6, từ phím 1 đến phím 5."],
@@ -668,6 +717,10 @@ export const LEVEL_0_LESSONS: Lesson[] = [
       "Trên hình cần đàn, hai chấm nằm ở hàng thứ hai và thứ ba tính từ trên (dây 5 và dây 4), cùng ở phím 2. Trên đàn thật: dây thứ hai và thứ ba tính từ phía mặt bạn.",
     tip: "Đặt ngón 2 và ngón 3 cạnh nhau trong cùng ô phím 2. Ngón 2 ở dây to hơn, gần mặt bạn hơn.",
     sessions: "2 đến 3",
+    stuck: {
+      smaller: "Đặt một ngón trước: ngón 2 ở dây 5 phím 2, gảy dây 5 cho sạch. Rồi thêm ngón 3 ở dây 4 và gảy lại.",
+      back: [{ slug: "fretboard-basics", why: "ôn cách bấm một nốt sạch tiếng" }],
+    },
     practice: [
       "Đặt Em và gảy từng dây, từ dây 6 đến dây 1.",
       `Gảy xuống cả hợp âm 4 lần ${AT_60}.`,
@@ -731,9 +784,13 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "E và F liền nhau, chỉ cách 1 phím. B và C cũng vậy. Các cặp khác mới cách 2 phím.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ học 3 nốt trên dây 6: E (buông), G (phím 3), A (phím 5). Thêm nốt khác vào hôm sau.",
+      back: [{ slug: "fretboard-basics", why: "ôn: mỗi phím cao hơn nửa cung, phím 12 lặp lại tên nốt" }],
+    },
     checklist: [
-      { id: "seven", label: "Tôi đọc thuộc C D E F G A B và tên Việt Đô Rê Mi Fa Sol La Si." },
-      { id: "half", label: "Tôi nhớ E với F và B với C chỉ cách nhau một phím." },
+      { id: "seven", label: "Tôi nói to C D E F G A B và Đô Rê Mi Fa Sol La Si mà không nhìn hình." },
+      { id: "half", label: "Tôi chỉ ra trên dây 6 hai cặp nốt chỉ cách nhau 1 phím: E–F (buông và phím 1), B–C (phím 7 và phím 8)." },
       { id: "string6", label: "Tôi chơi được 7 nốt trên dây 6 đến phím 12." },
     ],
     assessment: ["Tìm đúng nốt được gọi ngẫu nhiên trên dây 6 hoặc dây 5 trong 5 giây."],
@@ -779,6 +836,16 @@ export const LEVEL_0_LESSONS: Lesson[] = [
           "Gảy 1 lần mỗi phách gọi là nốt đen (một tiếng cho mỗi phách). Gảy 2 lần mỗi phách gọi là móc đơn (hai tiếng cho mỗi phách): gảy xuống đúng tiếng tích, gảy lên ở giữa hai tiếng tích, đếm '1 và 2 và 3 và 4 và'.",
         ],
       },
+      {
+        type: "visual",
+        visual: { kind: "strum", pattern: ["D", "D", "D", "D"], perBeat: 1, chord: "em", bpm: 60 },
+        caption: "Nốt đen: một lần gảy xuống mỗi phách. Giữa hai lần gảy, tay quay lên trong không khí, không chạm dây (phím gảy mờ đi).",
+      },
+      {
+        type: "visual",
+        visual: { kind: "strum", pattern: ["D", "U", "D", "U", "D", "U", "D", "U"], perBeat: 2, strings: [4], bpm: 60 },
+        caption: "Móc đơn: xuống đúng tiếng tích, lên ở chữ 'và'. Tay đi xuống, lên đều như con lắc.",
+      },
       { type: "visual", visual: { kind: "metronome", bpm: 60, beats: 4 } },
     ],
     practice: {
@@ -796,10 +863,14 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Bạn đang nhanh dần. Để tiếng tích dẫn đường: gảy cùng lúc với tiếng tích, không gảy trước.",
       },
     ],
+    stuck: {
+      smaller: "Chưa cầm đàn. Vỗ tay theo máy đếm nhịp và đếm to. Khi vỗ trùng tiếng tích 2 ô nhịp liền mới cầm đàn gảy.",
+      back: [{ slug: "open-strings", why: "ôn gảy xuống, lên trên một dây" }],
+    },
     checklist: [
-      { id: "pitch", label: "Tôi nói đúng nốt nào cao hơn khi nghe hai nốt." },
+      { id: "pitch", label: "Tôi gảy dây 5 buông rồi phím 7 và nói đúng nốt nào cao hơn, 3 lần liền." },
       { id: "count", label: "Tôi đếm và vỗ tay đúng theo máy đếm nhịp, 4 phách mỗi ô nhịp." },
-      { id: "eighths", label: "Tôi gảy xuống, lên đều, hai tiếng mỗi phách, ở 60 BPM." },
+      { id: "eighths", label: "Tôi gảy xuống, lên ở 60 BPM trong 4 ô nhịp, tiếng gảy xuống trùng tiếng tích." },
     ],
     assessment: ["Gảy 4 ô nhịp, hai tiếng mỗi phách, ở 60 BPM mà tiếng gảy không lệch khỏi tiếng tích."],
     mastery: ["Gảy hai tiếng mỗi phách đều ở 80 BPM trong 8 ô nhịp."],
@@ -832,6 +903,11 @@ export const LEVEL_0_LESSONS: Lesson[] = [
           "Tiếng tắt (nốt tịt ngay, không ngân): ngón đè lên thanh kim loại, hoặc phần thịt ngón chạm vào dây bên cạnh. Cong ngón hơn.",
           "Có thêm tiếng lạ: tay gảy chạm nhầm dây. Thu nhỏ chuyển động gảy.",
         ],
+      },
+      {
+        type: "visual",
+        visual: { kind: "soundSamples", string: 2, fret: 1 },
+        caption: "Bốn mẫu của cùng nốt C (dây 2, phím 1). Nghe từng mẫu, rồi chơi nốt C trên đàn của bạn và nói to nó giống mẫu nào.",
       },
       {
         type: "visual",
@@ -871,11 +947,15 @@ export const LEVEL_0_LESSONS: Lesson[] = [
         fix: "Sửa ngay từ bây giờ: dịch ngón sát thanh kim loại hơn. Thói quen này quyết định hợp âm của bạn sau này sạch hay rè.",
       },
     ],
+    stuck: {
+      smaller: "Chỉ chơi 2 nốt: B (dây 2 buông) và C (dây 2 phím 1). Khi cả hai ngân sạch mới thêm D.",
+      back: [{ slug: "fretboard-basics", why: "ôn cách bấm sát thanh kim loại cho một nốt" }],
+    },
     checklist: [
-      { id: "diagnose", label: "Tôi phân biệt được tiếng rè và tiếng tắt, và biết cách sửa." },
-      { id: "sequence", label: "Tôi chơi sạch chuỗi B đến G ở 60 BPM." },
-      { id: "reverse", label: "Tôi chơi sạch chuỗi ngược từ G về B." },
-      { id: "em-clean", label: "Tôi gảy Em từng dây và cả 6 dây đều ngân rõ." },
+      { id: "diagnose", label: "Tôi cố ý làm rè một nốt (ngón xa thanh kim loại), làm tắt một nốt (đè lên thanh kim loại), rồi sửa cả hai cho sạch." },
+      { id: "sequence", label: "Tôi chơi chuỗi B đến G ở 60 BPM, nốt nào cũng ngân tới tiếng tích kế tiếp." },
+      { id: "reverse", label: "Tôi chơi ngược từ G về B ở 60 BPM, không nốt nào rè hay tắt." },
+      { id: "em-clean", label: "Tôi gảy Em từng dây, cả 6 dây đều ngân ít nhất 2 giây." },
     ],
     assessment: ["Chơi chuỗi B lên G rồi về B (11 nốt) ở 60 BPM, mọi nốt ngân rõ, không rè."],
     mastery: ["Chơi chuỗi trên ở 80 BPM, hai nốt mỗi tiếng tích, sạch hoàn toàn."],
