@@ -109,8 +109,8 @@ export function chordLesson(
     mistakes: extra.mistakes,
     checklist: [
       { id: "shape", label: `Tôi đặt đúng ${chord.symbol}, đúng ngón như ${fromDiagram ? "sơ đồ" : "hình"}.` },
-      { id: "compare", label: "Tôi đã đối chiếu tay mình với hình cần đàn." },
-      { id: "clean", label: "Tôi gảy từng dây và mọi dây cần gảy đều ngân rõ." },
+      { id: "compare", label: "Tôi so tay mình với hình cần đàn: mỗi ngón nằm đúng dây, đúng phím như chấm có số." },
+      { id: "clean", label: "Tôi gảy từng dây, mỗi dây cần gảy ngân ít nhất 2 giây và không rè." },
       { id: "reset", label: `Tôi nhấc tay ra và đặt lại ${chord.symbol} 10 lần liên tiếp.` },
     ],
     assessment: [`Đặt ${chord.symbol} trong 3 giây và mọi dây ngân rõ, 5 lần liên tiếp.`],

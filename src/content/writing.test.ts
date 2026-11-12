@@ -127,6 +127,17 @@ describe("writing guide §2 and §4 — wording", () => {
   });
 });
 
+describe("writing guide §8 — the learner can check it by eye or ear", () => {
+  // "I understand / know / remember" cannot be checked on the guitar; say what the learner does,
+  // sees or hears instead.
+  const VAGUE = /^Tôi (hiểu|biết|nhớ|thấy|nắm được|đã đối chiếu)|đọc thuộc|ngân rõ|cho chuẩn|đúng cách/;
+
+  it("no checklist item is a feeling of having understood", () => {
+    const hits = LESSONS.flatMap((l) => l.checklist.filter((c) => VAGUE.test(c.label)).map((c) => `${l.slug}: ${c.label}`));
+    expect(hits).toEqual([]);
+  });
+});
+
 describe("writing guide §5 — body and expectations", () => {
   const needsBodyNote = LESSONS.filter(
     (l) => ["posture", "hand-position", "fretboard-basics"].includes(l.slug) || l.slug.startsWith("chord-"),

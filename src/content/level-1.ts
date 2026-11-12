@@ -70,8 +70,8 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       },
     ],
     checklist: [
-      { id: "symbols", label: "Tôi hiểu ý nghĩa của chấm có số, dấu O và dấu X." },
-      { id: "orientation", label: "Tôi dựng đàn đứng và thấy nó giống sơ đồ." },
+      { id: "symbols", label: "Tôi chỉ vào chấm có số, dấu O và dấu X trên một sơ đồ và nói to mỗi ký hiệu bảo tôi làm gì." },
+      { id: "orientation", label: "Tôi dựng đàn đứng cạnh sơ đồ và chỉ đúng dây 6 trên cả hai: cùng nằm bên {fretSide}." },
       { id: "transfer", label: "Tôi tìm đúng ô 'dây 5 phím 2' khi ôm đàn nhìn xuống." },
     ],
     assessment: ["Đọc to đúng một sơ đồ bất kỳ: dây nào, phím nào, ngón nào, dây nào không gảy."],
