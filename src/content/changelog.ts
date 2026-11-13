@@ -15,6 +15,18 @@ export type UpdateEntry = {
 
 export const UPDATES: UpdateEntry[] = [
   {
+    id: "2026-11-13-acoustic-voice",
+    publishedAt: "2026-11-13T23:45:00+07:00",
+    title: "Tiếng đàn giống đàn thật hơn",
+    items: [
+      "Tiếng đàn trong app được làm lại theo số đo trên đàn guitar thật: ấm hơn, có tiếng thùng đàn, bớt chói như tiếng điện tử.",
+      "Mọi nốt giờ đúng cao độ. Trước đây nhiều nốt bị thấp hơn chuẩn một chút, nhất là trên dây mảnh.",
+      "Dây mảnh ngân lâu như đàn thật, không còn tắt sau nửa giây.",
+      "Bài Tiếng sạch: mẫu tiếng rè có tiếng lạo xạo rõ ràng, mẫu tiếng tắt là tiếng 'bụp' rồi im.",
+    ],
+    href: "/academy/clean-sounds",
+  },
+  {
     id: "2026-11-12-lesson-clarity",
     publishedAt: "2026-11-12T13:25:00+07:00",
     title: "Bài học dễ theo hơn",
