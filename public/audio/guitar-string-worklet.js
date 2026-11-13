@@ -1,0 +1,288 @@
+/**
+ * Six steel strings, synthesised with the extended Karplus-Strong model (Jaffe & Smith; loop
+ * filter after Välimäki et al.), tuned against measurements of real guitar tones:
+ *
+ *  - The loss filter sits INSIDE the feedback loop, so high partials die faster than low ones.
+ *    Jansson (KTH, "Acoustics for violin and guitar makers", ch. 6) measured E3 on string 6:
+ *    partials 1-5 fall ~3 dB in 0.2 s, partials 6-10 ~10 dB, partials 11-14 ~15 dB.
+ *  - The loop length is fractional (4-point Lagrange + the loss filter's phase delay), so every
+ *    note is in tune to well under 1 cent.
+ *  - The pluck point is ~1/5.5 of the string from the bridge (the same measurement shows the
+ *    6th and 11th partials missing), applied as a comb on the excitation.
+ *  - Two polarisations per string: the one across the top plate drains into the body fast (the
+ *    loud start), the one along the plate rings long (the tail). Jansson ch. 6, fig. 6.2.
+ *
+ * Plain JavaScript because it runs in the AudioWorklet scope. Outside a worklet (unit tests) it
+ * exposes the DSP class on globalThis instead of registering a processor.
+ */
+
+const SIZE = 4096;
+const PLUCK_POINT = 0.18;
+const HI_FREQ = 2000;
+const BUZZ_GAIN = 3;
+
+/** Magnitude of the normalised one-pole loss filter (1+a)/(1+a z^-1) at angular frequency w. */
+function lossMag(a, w) {
+  return (1 + a) / Math.sqrt(1 + 2 * a * Math.cos(w) + a * a);
+}
+
+/** Phase delay (samples) of the loss filter at w. */
+function lossDelay(a, w) {
+  return -Math.atan2(a * Math.sin(w), 1 + a * Math.cos(w)) / w;
+}
+
+/**
+ * Loss filter that gives T60 = t0 seconds at the fundamental and tHi seconds at HI_FREQ.
+ * A partial circulates f0 times per second, so its gain per trip is 10^(-3 / (f0 * T60)).
+ */
+function designLoss(f0, fs, t0, tHi) {
+  const w0 = (2 * Math.PI * f0) / fs;
+  const wHi = (2 * Math.PI * Math.min(HI_FREQ, fs * 0.45)) / fs;
+  const want = Math.pow(10, (-3 / f0) * (1 / tHi - 1 / t0));
+  let lo = -0.999;
+  let hi = 0;
+  for (let i = 0; i < 50; i++) {
+    const mid = (lo + hi) / 2;
+    if (lossMag(mid, wHi) / lossMag(mid, w0) > want) hi = mid;
+    else lo = mid;
+  }
+  const a = (lo + hi) / 2;
+  // the loop gain is largest at DC (= g): above 1 the string would ring louder forever
+  const g = Math.min(0.9999, Math.pow(10, -3 / (f0 * t0)) / lossMag(a, w0));
+  return { a, b: g * (1 + a), delay: lossDelay(a, w0) };
+}
+
+/** One polarisation of one string: a fractional delay line closed through the loss filter. */
+class Loop {
+  constructor() {
+    this.buf = new Float32Array(SIZE);
+    this.w = 0;
+    this.d = 100;
+    this.a = 0;
+    this.b = 0;
+    this.y = 0;
+  }
+
+  tune(f0, fs, t0, tHi, detune) {
+    const loss = designLoss(f0, fs, t0, tHi);
+    this.a = loss.a;
+    this.b = loss.b;
+    this.d = Math.min(SIZE - 4, Math.max(2, (fs / f0) * detune - loss.delay));
+  }
+
+  step(input) {
+    const i = Math.floor(this.d);
+    const t = this.d - i;
+    const buf = this.buf;
+    // x(n - i + 1), x(n - i), x(n - i - 1), x(n - i - 2); the newest sample sits at w
+    const at = (k) => buf[(this.w - k + 1 + SIZE) % SIZE];
+    const p0 = at(i - 1);
+    const p1 = at(i);
+    const p2 = at(i + 1);
+    const p3 = at(i + 2);
+    const v =
+      (-t * (t - 1) * (t - 2) * p0) / 6 +
+      ((t + 1) * (t - 1) * (t - 2) * p1) / 2 -
+      ((t + 1) * t * (t - 2) * p2) / 2 +
+      ((t + 1) * t * (t - 1) * p3) / 6;
+    this.y = this.b * v - this.a * this.y;
+    this.w = (this.w + 1) % SIZE;
+    buf[this.w] = input + this.y;
+    return this.y;
+  }
+
+  damp(k) {
+    for (let i = 0; i < SIZE; i++) this.buf[i] *= k;
+    this.y *= k;
+  }
+}
+
+class GuitarString {
+  constructor() {
+    this.across = new Loop();
+    this.along = new Loop();
+    this.excite = null;
+    this.pos = 0;
+    this.thump = null;
+    this.thumpPos = 0;
+    this.hpIn = 0;
+    this.hpOut = 0;
+    this.hpR = 0.75;
+    this.lpOut = 0;
+    this.lpOut2 = 0;
+    this.lpK = 0.5;
+    this.buzz = 0;
+    this.period = 1;
+    this.phase = 0;
+    this.env = 0;
+    this.envFall = 0.999;
+    this.threshold = -1;
+    this.click = 0;
+    this.clickLeft = 0;
+    this.clickLen = 1;
+  }
+
+  /**
+   * f0 in Hz; velocity 0..1 (louder is also brighter); `fretted` notes lose a little energy to
+   * the fingertip. The two beginner faults:
+   *  - `mute`: flesh lies on the string. It barely rings and all brightness is gone at once,
+   *    leaving the dull knock of the pick and the body: "bụp".
+   *  - `buzz` (0..1): the string slaps a fret on every swing while it is wide, adding a metallic
+   *    rattle that fades as the note gets quieter, while the note itself keeps ringing.
+   */
+  pluck(fs, f0, velocity, fretted, opts = {}) {
+    const mute = !!opts.mute;
+    // T60 at the fundamental: ~4 s around E3 (Jansson: partials 1-5 fall ~15 dB/s), longer on
+    // the bass strings, shorter up the neck.
+    const base = mute ? 0.15 : 4 * Math.pow(165 / f0, 0.3) * (fretted ? 0.9 : 1);
+    const tHi = mute ? 0.03 : 1.1;
+    this.across.tune(f0, fs, base * 0.5, tHi * 0.7, 0.9996);
+    this.along.tune(f0, fs, base * 1.25, tHi, 1);
+    // a new pluck stops most of the old vibration: the pick (or finger) lands on the string
+    this.across.damp(0.25);
+    this.along.damp(0.25);
+
+    // One period of the force a plucked string puts on the bridge. A string pulled aside at
+    // fraction beta of its length and let go has partial k with amplitude sin(k*pi*beta)/k^p:
+    // partials with a node at the pluck point are missing (Jansson fig. 6.1), and a harder pick
+    // (smaller p) is brighter. Deterministic, so every pluck of a note sounds the same, with a
+    // little noise on top for the scrape of the pick.
+    const n = Math.max(4, Math.round(fs / f0));
+    const beta = PLUCK_POINT + (Math.random() - 0.5) * 0.02;
+    const p = mute ? 2.6 : 1.5 - 0.5 * velocity;
+    const top = Math.max(1, Math.floor(Math.min(9000, fs * 0.45) / f0));
+    const e = new Float32Array(n);
+    for (let k = 1; k <= top; k++) {
+      const amp = Math.sin(k * Math.PI * beta) / Math.pow(k, p);
+      const step = (2 * Math.PI * k) / n;
+      for (let i = 0; i < n; i++) e[i] += amp * Math.cos(step * i);
+    }
+    let peak = 1e-9;
+    for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(e[i]));
+    const scrape = mute ? 0 : 0.04 * velocity;
+    for (let i = 0; i < n; i++) e[i] = e[i] / peak + (Math.random() * 2 - 1) * scrape;
+    const gain = 0.25 + 0.75 * velocity;
+    for (let i = 0; i < n; i++) e[i] *= gain;
+    this.excite = e;
+    this.pos = 0;
+
+    // a muted pluck is mostly a knock: a soft pulse of a few milliseconds, all low frequency
+    this.thump = null;
+    if (mute) {
+      const len = Math.round(fs * 0.012);
+      this.thump = new Float32Array(len);
+      for (let i = 0; i < len; i++) this.thump[i] = 1.2 * gain * Math.sin((Math.PI * i) / len) ** 2;
+      this.thumpPos = 0;
+    }
+
+    // buzz: the fret sits just under the string's swing, so only the wide, loud start reaches it
+    this.buzz = mute ? 0 : opts.buzz ?? 0;
+    this.period = n;
+    this.phase = 0;
+    this.env = 0;
+    this.envFall = Math.exp(-1 / (0.02 * fs));
+    this.threshold = -1;
+    this.clickLeft = 0;
+    this.clickLen = Math.round(0.0025 * fs);
+    this.hpR = Math.exp((-2 * Math.PI * 1500) / fs);
+    this.lpK = 1 - Math.exp((-2 * Math.PI * 6000) / fs);
+  }
+
+  /**
+   * Fret buzz. The note itself rings on; once per swing, while the swing is wider than the gap
+   * to the fret, the string slaps the metal: a short grainy click, louder the harder it hits,
+   * band-limited to ~1.5-6 kHz. Clicks at the note's own rate give the "rè rè" rasp, strongest
+   * just after the pluck and gone once the note has quietened.
+   */
+  rattle(y) {
+    this.env = Math.max(Math.abs(y), this.env * this.envFall);
+    if (++this.phase >= this.period) {
+      this.phase = 0;
+      // the gap is set from the first full swing
+      if (this.threshold < 0) this.threshold = this.env * (0.6 - 0.35 * this.buzz);
+      else if (this.env > this.threshold) {
+        this.click = (this.env - this.threshold) * (0.6 + Math.random() * 0.8);
+        this.clickLeft = this.clickLen;
+      }
+    }
+    let grit = 0;
+    if (this.clickLeft > 0) {
+      const k = this.clickLeft-- / this.clickLen;
+      grit = this.click * k * k * (Math.random() * 2 - 1);
+    }
+    this.hpOut = this.hpR * (this.hpOut + grit - this.hpIn);
+    this.hpIn = grit;
+    // two gentle low-pass stages: a paper-like rattle, not a hiss
+    this.lpOut += this.lpK * (this.hpOut - this.lpOut);
+    this.lpOut2 += this.lpK * (this.lpOut - this.lpOut2);
+    return BUZZ_GAIN * this.lpOut2;
+  }
+
+  step() {
+    let x = 0;
+    if (this.excite) {
+      x = this.excite[this.pos++];
+      if (this.pos >= this.excite.length) this.excite = null;
+    }
+    let y = 0.4 * this.across.step(x) + 0.6 * this.along.step(x);
+    if (this.buzz > 0) y += this.rattle(y);
+    if (this.thump) {
+      y += this.thump[this.thumpPos++];
+      if (this.thumpPos >= this.thump.length) this.thump = null;
+    }
+    return y;
+  }
+}
+
+class GuitarStrings {
+  constructor(fs) {
+    this.fs = fs;
+    this.strings = [1, 2, 3, 4, 5, 6].map(() => new GuitarString());
+    /** @type {{frame:number,string:number,freq:number,velocity?:number,fretted?:boolean,mute?:boolean,buzz?:number}[]} */
+    this.queue = [];
+  }
+
+  /** Schedule a pluck at absolute sample frame `frame`. */
+  add(ev) {
+    this.queue.push(ev);
+    this.queue.sort((p, q) => p.frame - q.frame);
+  }
+
+  /** Render `out.length` samples starting at absolute frame `start`. */
+  render(out, start) {
+    for (let i = 0; i < out.length; i++) {
+      while (this.queue.length && this.queue[0].frame <= start + i) {
+        const ev = this.queue.shift();
+        const s = this.strings[ev.string - 1];
+        if (s) s.pluck(this.fs, ev.freq, ev.velocity ?? 0.8, !!ev.fretted, { mute: ev.mute, buzz: ev.buzz });
+      }
+      let sum = 0;
+      for (let s = 0; s < 6; s++) sum += this.strings[s].step();
+      out[i] = Math.tanh(sum * 0.35);
+    }
+    return out;
+  }
+}
+
+if (typeof registerProcessor === "function") {
+  class GuitarProcessor extends AudioWorkletProcessor {
+    constructor() {
+      super();
+      this.guitar = new GuitarStrings(sampleRate);
+      this.port.onmessage = (m) => {
+        const ev = m.data;
+        if (ev && ev.type === "pluck") this.guitar.add({ ...ev, frame: Math.round(ev.time * sampleRate) });
+      };
+    }
+
+    process(_inputs, outputs) {
+      const out = outputs[0];
+      this.guitar.render(out[0], currentFrame);
+      for (let c = 1; c < out.length; c++) out[c].set(out[0]);
+      return true;
+    }
+  }
+  registerProcessor("gl-guitar", GuitarProcessor);
+} else {
+  globalThis.GLGuitarStrings = GuitarStrings;
+}
