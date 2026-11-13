@@ -19,6 +19,7 @@
 const SIZE = 4096;
 const PLUCK_POINT = 0.18;
 const HI_FREQ = 2000;
+const BUZZ_GAIN = 3;
 
 /** Magnitude of the normalised one-pole loss filter (1+a)/(1+a z^-1) at angular frequency w. */
 function lossMag(a, w) {
@@ -46,7 +47,8 @@ function designLoss(f0, fs, t0, tHi) {
     else lo = mid;
   }
   const a = (lo + hi) / 2;
-  const g = Math.pow(10, -3 / (f0 * t0)) / lossMag(a, w0);
+  // the loop gain is largest at DC (= g): above 1 the string would ring louder forever
+  const g = Math.min(0.9999, Math.pow(10, -3 / (f0 * t0)) / lossMag(a, w0));
   return { a, b: g * (1 + a), delay: lossDelay(a, w0) };
 }
 
@@ -101,17 +103,39 @@ class GuitarString {
     this.along = new Loop();
     this.excite = null;
     this.pos = 0;
+    this.thump = null;
+    this.thumpPos = 0;
+    this.hpIn = 0;
+    this.hpOut = 0;
+    this.hpR = 0.75;
+    this.lpOut = 0;
+    this.lpOut2 = 0;
+    this.lpK = 0.5;
+    this.buzz = 0;
+    this.period = 1;
+    this.phase = 0;
+    this.env = 0;
+    this.envFall = 0.999;
+    this.threshold = -1;
+    this.click = 0;
+    this.clickLeft = 0;
+    this.clickLen = 1;
   }
 
   /**
    * f0 in Hz; velocity 0..1 (louder is also brighter); `fretted` notes lose a little energy to
-   * the fingertip; `t0` overrides the decay (a muted note).
+   * the fingertip. The two beginner faults:
+   *  - `mute`: flesh lies on the string. It barely rings and all brightness is gone at once,
+   *    leaving the dull knock of the pick and the body: "bụp".
+   *  - `buzz` (0..1): the string slaps a fret on every swing while it is wide, adding a metallic
+   *    rattle that fades as the note gets quieter, while the note itself keeps ringing.
    */
-  pluck(fs, f0, velocity, fretted, t0Override) {
+  pluck(fs, f0, velocity, fretted, opts = {}) {
+    const mute = !!opts.mute;
     // T60 at the fundamental: ~4 s around E3 (Jansson: partials 1-5 fall ~15 dB/s), longer on
     // the bass strings, shorter up the neck.
-    const base = (t0Override ?? 4 * Math.pow(165 / f0, 0.3)) * (fretted && !t0Override ? 0.9 : 1);
-    const tHi = Math.min(base * 0.6, t0Override ? base * 0.4 : 1.1);
+    const base = mute ? 0.15 : 4 * Math.pow(165 / f0, 0.3) * (fretted ? 0.9 : 1);
+    const tHi = mute ? 0.03 : 1.1;
     this.across.tune(f0, fs, base * 0.5, tHi * 0.7, 0.9996);
     this.along.tune(f0, fs, base * 1.25, tHi, 1);
     // a new pluck stops most of the old vibration: the pick (or finger) lands on the string
@@ -125,7 +149,7 @@ class GuitarString {
     // little noise on top for the scrape of the pick.
     const n = Math.max(4, Math.round(fs / f0));
     const beta = PLUCK_POINT + (Math.random() - 0.5) * 0.02;
-    const p = 1.5 - 0.5 * velocity;
+    const p = mute ? 2.6 : 1.5 - 0.5 * velocity;
     const top = Math.max(1, Math.floor(Math.min(9000, fs * 0.45) / f0));
     const e = new Float32Array(n);
     for (let k = 1; k <= top; k++) {
@@ -135,11 +159,63 @@ class GuitarString {
     }
     let peak = 1e-9;
     for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(e[i]));
-    for (let i = 0; i < n; i++) e[i] = e[i] / peak + (Math.random() * 2 - 1) * 0.04 * velocity;
+    const scrape = mute ? 0 : 0.04 * velocity;
+    for (let i = 0; i < n; i++) e[i] = e[i] / peak + (Math.random() * 2 - 1) * scrape;
     const gain = 0.25 + 0.75 * velocity;
     for (let i = 0; i < n; i++) e[i] *= gain;
     this.excite = e;
     this.pos = 0;
+
+    // a muted pluck is mostly a knock: a soft pulse of a few milliseconds, all low frequency
+    this.thump = null;
+    if (mute) {
+      const len = Math.round(fs * 0.012);
+      this.thump = new Float32Array(len);
+      for (let i = 0; i < len; i++) this.thump[i] = 1.2 * gain * Math.sin((Math.PI * i) / len) ** 2;
+      this.thumpPos = 0;
+    }
+
+    // buzz: the fret sits just under the string's swing, so only the wide, loud start reaches it
+    this.buzz = mute ? 0 : opts.buzz ?? 0;
+    this.period = n;
+    this.phase = 0;
+    this.env = 0;
+    this.envFall = Math.exp(-1 / (0.02 * fs));
+    this.threshold = -1;
+    this.clickLeft = 0;
+    this.clickLen = Math.round(0.0025 * fs);
+    this.hpR = Math.exp((-2 * Math.PI * 1500) / fs);
+    this.lpK = 1 - Math.exp((-2 * Math.PI * 6000) / fs);
+  }
+
+  /**
+   * Fret buzz. The note itself rings on; once per swing, while the swing is wider than the gap
+   * to the fret, the string slaps the metal: a short grainy click, louder the harder it hits,
+   * band-limited to ~1.5-6 kHz. Clicks at the note's own rate give the "rè rè" rasp, strongest
+   * just after the pluck and gone once the note has quietened.
+   */
+  rattle(y) {
+    this.env = Math.max(Math.abs(y), this.env * this.envFall);
+    if (++this.phase >= this.period) {
+      this.phase = 0;
+      // the gap is set from the first full swing
+      if (this.threshold < 0) this.threshold = this.env * (0.6 - 0.35 * this.buzz);
+      else if (this.env > this.threshold) {
+        this.click = (this.env - this.threshold) * (0.6 + Math.random() * 0.8);
+        this.clickLeft = this.clickLen;
+      }
+    }
+    let grit = 0;
+    if (this.clickLeft > 0) {
+      const k = this.clickLeft-- / this.clickLen;
+      grit = this.click * k * k * (Math.random() * 2 - 1);
+    }
+    this.hpOut = this.hpR * (this.hpOut + grit - this.hpIn);
+    this.hpIn = grit;
+    // two gentle low-pass stages: a paper-like rattle, not a hiss
+    this.lpOut += this.lpK * (this.hpOut - this.lpOut);
+    this.lpOut2 += this.lpK * (this.lpOut - this.lpOut2);
+    return BUZZ_GAIN * this.lpOut2;
   }
 
   step() {
@@ -148,7 +224,13 @@ class GuitarString {
       x = this.excite[this.pos++];
       if (this.pos >= this.excite.length) this.excite = null;
     }
-    return 0.4 * this.across.step(x) + 0.6 * this.along.step(x);
+    let y = 0.4 * this.across.step(x) + 0.6 * this.along.step(x);
+    if (this.buzz > 0) y += this.rattle(y);
+    if (this.thump) {
+      y += this.thump[this.thumpPos++];
+      if (this.thumpPos >= this.thump.length) this.thump = null;
+    }
+    return y;
   }
 }
 
@@ -156,7 +238,7 @@ class GuitarStrings {
   constructor(fs) {
     this.fs = fs;
     this.strings = [1, 2, 3, 4, 5, 6].map(() => new GuitarString());
-    /** @type {{frame:number,string:number,freq:number,velocity:number,fretted:boolean,t0?:number}[]} */
+    /** @type {{frame:number,string:number,freq:number,velocity?:number,fretted?:boolean,mute?:boolean,buzz?:number}[]} */
     this.queue = [];
   }
 
@@ -172,7 +254,7 @@ class GuitarStrings {
       while (this.queue.length && this.queue[0].frame <= start + i) {
         const ev = this.queue.shift();
         const s = this.strings[ev.string - 1];
-        if (s) s.pluck(this.fs, ev.freq, ev.velocity ?? 0.8, !!ev.fretted, ev.t0);
+        if (s) s.pluck(this.fs, ev.freq, ev.velocity ?? 0.8, !!ev.fretted, { mute: ev.mute, buzz: ev.buzz });
       }
       let sum = 0;
       for (let s = 0; s < 6; s++) sum += this.strings[s].step();

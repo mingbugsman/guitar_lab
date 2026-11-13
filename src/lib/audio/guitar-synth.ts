@@ -13,8 +13,10 @@ const WORKLET_URL = "/audio/guitar-string-worklet.js";
 export type PluckOptions = {
   /** 0..1: louder is also brighter. */
   velocity?: number;
-  /** Override the ring time at the fundamental (seconds): a short value is a muted note. */
-  ringSeconds?: number;
+  /** Flesh lies on the string: a dull "bụp" that stops at once. */
+  mute?: boolean;
+  /** 0..1: the string slaps a fret while it swings wide, a rattle over the ringing note. */
+  buzz?: number;
 };
 
 type Pluck = (string: StringNumber, fret: number, time: number, opts?: PluckOptions) => void;
@@ -56,7 +58,8 @@ async function buildWorklet(Tone: ToneNS): Promise<Pluck> {
       time,
       velocity: opts.velocity ?? 0.8,
       fretted: fret > 0,
-      t0: opts.ringSeconds,
+      mute: opts.mute,
+      buzz: opts.buzz,
     });
 }
 

@@ -9,7 +9,7 @@ import { midiToFrequency } from "@/lib/music/notes";
  * measurement of E3 on string 6 (KTH, "Acoustics for violin and guitar makers", ch. 6).
  */
 type Strings = {
-  add(ev: { frame: number; string: number; freq: number; velocity?: number; fretted?: boolean; t0?: number }): void;
+  add(ev: { frame: number; string: number; freq: number; velocity?: number; fretted?: boolean; mute?: boolean; buzz?: number }): void;
   render(out: Float32Array, start: number): Float32Array;
 };
 let GuitarStrings: new (fs: number) => Strings;
@@ -20,9 +20,9 @@ beforeAll(async () => {
   GuitarStrings = (globalThis as unknown as { GLGuitarStrings: typeof GuitarStrings }).GLGuitarStrings;
 });
 
-function pluck(fs: number, string: StringNumber, fret: number, seconds: number, t0?: number) {
+function pluck(fs: number, string: StringNumber, fret: number, seconds: number, opts: { mute?: boolean; buzz?: number } = {}) {
   const g = new GuitarStrings(fs);
-  g.add({ frame: 0, string, freq: midiToFrequency(midiAt(string, fret)), velocity: 0.8, fretted: fret > 0, t0 });
+  g.add({ frame: 0, string, freq: midiToFrequency(midiAt(string, fret)), velocity: 0.8, fretted: fret > 0, ...opts });
   return g.render(new Float32Array(Math.round(fs * seconds)), 0);
 }
 
@@ -63,6 +63,28 @@ function level(x: Float32Array, fs: number, t: number) {
   let e = 0;
   for (let i = a; i < a + n; i++) e += x[i] * x[i];
   return db(Math.sqrt(e / n));
+}
+
+/** Spectral centroid (Hz) of the first 46 ms. */
+function centroid(x: Float32Array, fs: number) {
+  const n = 2048;
+  let num = 0;
+  let den = 0;
+  for (let k = 1; k < n / 2; k += 2) {
+    const m = amp(x, fs, (k * fs) / n, 0, n);
+    num += m * ((k * fs) / n);
+    den += m;
+  }
+  return num / den;
+}
+
+/** Energy (dB) in the 2.5-6 kHz rattle band over 0.1 s starting at t. */
+function rattle(x: Float32Array, fs: number, t: number) {
+  const from = Math.round(t * fs);
+  const len = Math.round(0.1 * fs);
+  let e = 0;
+  for (let f = 2500; f <= 6000; f += 50) e += amp(x, fs, f, from, len) ** 2;
+  return 10 * Math.log10(e + 1e-20);
 }
 
 describe("guitar string voice", { timeout: 60_000 }, () => {
@@ -110,10 +132,25 @@ describe("guitar string voice", { timeout: 60_000 }, () => {
     expect(level(x, fs, 2) - level(x, fs, 0.02)).toBeGreaterThan(-40);
   });
 
-  it("a muted note is gone within a third of a second", () => {
+  it("a muted note is a dull 'bụp': loud enough to hear, dark, and gone within a fifth of a second", () => {
     const fs = 44100;
-    const x = pluck(fs, 2, 1, 0.4, 0.08);
-    expect(level(x, fs, 0.3) - level(x, fs, 0.02)).toBeLessThan(-40);
+    const clean = pluck(fs, 2, 1, 0.4);
+    const muted = pluck(fs, 2, 1, 0.4, { mute: true });
+    expect(level(muted, fs, 0.005)).toBeGreaterThan(level(clean, fs, 0.005) - 12);
+    expect(level(muted, fs, 0.2) - level(muted, fs, 0.005)).toBeLessThan(-40);
+    expect(centroid(muted, fs)).toBeLessThan(centroid(clean, fs) / 3);
+  });
+
+  it("a buzzing note keeps ringing, with a rattle on top that fades as the note quietens", () => {
+    const fs = 44100;
+    const clean = pluck(fs, 2, 1, 1.3);
+    const buzz = pluck(fs, 2, 1, 1.3, { buzz: 0.7 });
+    // the note: same loudness a second later
+    expect(Math.abs(level(buzz, fs, 1) - level(clean, fs, 1))).toBeLessThan(3);
+    // the rattle: far more 2.5-6 kHz just after the pluck than a clean note has
+    expect(rattle(buzz, fs, 0.05) - rattle(clean, fs, 0.05)).toBeGreaterThan(10);
+    // and it fades: much weaker a second later than at the start
+    expect(rattle(buzz, fs, 1) - rattle(buzz, fs, 0.05)).toBeLessThan(-20);
   });
 
   it("plucks land on the scheduled sample frame", () => {
