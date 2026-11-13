@@ -27,16 +27,10 @@ export async function playSample(kind: SampleKind, string: StringNumber, fret: n
     setTimeout(() => void playString(neighbourString(string), 0), 40);
     return;
   }
+  // a dead "thup": the same string, but a finger stops it within a tenth of a second
+  if (kind === "muted") return playString(string, fret, { ringSeconds: 0.08, velocity: 0.6 });
   const Tone = await getTone();
   const now = Tone.now();
-  if (kind === "muted") {
-    // a dead "thup": almost no resonance, the string stops at once
-    const out = new Tone.Volume(-4).toDestination();
-    const p = new Tone.PluckSynth({ attackNoise: 2, dampening: 900, resonance: 0.55 }).connect(out);
-    p.triggerAttack(freq, now);
-    setTimeout(() => (p.dispose(), out.dispose()), 1500);
-    return;
-  }
   // buzz: the note rings, with a rattle from the string slapping the fret mixed in
   await playString(string, fret);
   const out = new Tone.Volume(-20).toDestination();
