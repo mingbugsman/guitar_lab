@@ -158,6 +158,11 @@
   @media (prefers-reduced-motion: reduce) {
     .gl-pulse { animation: none; }
   }
+  /* navigation-progress.tsx: races ahead, then crawls, never reaching the end on its own */
+  @keyframes nav-progress {
+    from { transform: scaleX(0.05); }
+    to { transform: scaleX(1); }
+  }
 }
 
 /* Guitar Lab layout primitives — see docx/DESIGN.md */
