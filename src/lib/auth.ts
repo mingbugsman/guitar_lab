@@ -17,12 +17,21 @@ export type Profile = {
   updates_seen_at: string | null;
 };
 
-/** Current user, verified with Supabase Auth (cached per request). */
-export const getUser = cache(async () => {
+export type SessionUser = { id: string; email: string | null };
+
+/**
+ * Current user (cached per request). getClaims() checks the session token's signature against
+ * the project's public key (ES256, fetched once per server process) instead of asking the Auth
+ * server on every page, so a click costs one round trip less. If the project ever goes back to
+ * a shared-secret key, getClaims() falls back to asking the Auth server by itself.
+ */
+export const getUser = cache(async (): Promise<SessionUser | null> => {
   if (!isSupabaseConfigured()) return null;
   const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-  return data.user ?? null;
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  if (error || !claims?.sub) return null;
+  return { id: claims.sub, email: typeof claims.email === "string" ? claims.email : null };
 });
 
 export const getProfile = cache(async (): Promise<Profile | null> => {
