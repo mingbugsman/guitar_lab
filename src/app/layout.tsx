@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
+import { NavigationProgress } from "@/components/layout/navigation-progress";
 import "./globals.css";
 
 const sans = Be_Vietnam_Pro({
@@ -30,7 +31,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="vi" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-dvh antialiased">{children}</body>
+      <body className="min-h-dvh antialiased">
+        <NavigationProgress />
+        {children}
+      </body>
     </html>
   );
 }
