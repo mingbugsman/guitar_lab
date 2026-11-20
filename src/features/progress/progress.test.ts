@@ -62,4 +62,16 @@ describe("earnedMilestones", () => {
     expect(m).not.toContain("level-0-complete");
     expect(m).not.toContain("first-chords-complete");
   });
+
+  it("Level 1 is complete only with C, G and Dm too, not just the first five chords", () => {
+    const level1 = LESSONS.filter((l) => l.levelId === "level-1").map((l) => l.slug);
+    const firstFive = ["chord-em", "chord-am", "chord-e", "chord-a", "chord-d"];
+    const without = earnedMilestones({ completedLessonSlugs: [...firstFive, ...level1.filter((s) => s !== "chord-dm")], completedSessions: 0, totalPracticeSeconds: 0 });
+    expect(without).toContain("first-chords-complete");
+    expect(without).not.toContain("level-1-complete");
+    const all = earnedMilestones({ completedLessonSlugs: [...firstFive, ...level1], completedSessions: 0, totalPracticeSeconds: 0 });
+    expect(all).toContain("level-1-complete");
+    // a learner who skipped ahead to G still gets "first chord"
+    expect(earnedMilestones({ completedLessonSlugs: ["chord-g"], completedSessions: 0, totalPracticeSeconds: 0 })).toContain("first-chord");
+  });
 });

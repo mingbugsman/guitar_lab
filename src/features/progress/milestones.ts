@@ -14,11 +14,14 @@ export const MILESTONES = [
   { key: "level-0-complete", title: "Hoàn thành Level 0", description: `Hoàn thành toàn bộ ${LESSONS.filter((l) => l.levelId === "level-0").length} bài Level 0.` },
   { key: "first-chord", title: "Hợp âm đầu tiên", description: "Hoàn thành bài hợp âm đầu tiên." },
   { key: "first-chords-complete", title: "5 hợp âm đầu tiên", description: "Hoàn thành Em, Am, E, A và D." },
+  { key: "level-1-complete", title: "Hoàn thành Level 1", description: `Hoàn thành toàn bộ ${LESSONS.filter((l) => l.levelId === "level-1").length} bài Level 1.` },
 ] as const;
 
 export type MilestoneKey = (typeof MILESTONES)[number]["key"];
 
-const CHORD_LESSONS = ["chord-em", "chord-am", "chord-e", "chord-a", "chord-d"];
+/** The first five chords: their own milestone. Any chord lesson counts for "first chord". */
+const FIRST_CHORDS = ["chord-em", "chord-am", "chord-e", "chord-a", "chord-d"];
+const CHORD_LESSONS = LESSONS.filter((l) => l.slug.startsWith("chord-")).map((l) => l.slug);
 
 /** Pure rule set: which milestones the evidence supports. */
 export function earnedMilestones(input: MilestoneInput): MilestoneKey[] {
@@ -31,6 +34,7 @@ export function earnedMilestones(input: MilestoneInput): MilestoneKey[] {
   if (input.totalPracticeSeconds >= 3600) earned.push("practice-60-minutes");
   if (level0.every((l) => done.has(l.slug))) earned.push("level-0-complete");
   if (CHORD_LESSONS.some((c) => done.has(c))) earned.push("first-chord");
-  if (CHORD_LESSONS.every((c) => done.has(c))) earned.push("first-chords-complete");
+  if (FIRST_CHORDS.every((c) => done.has(c))) earned.push("first-chords-complete");
+  if (LESSONS.filter((l) => l.levelId === "level-1").every((l) => done.has(l.slug))) earned.push("level-1-complete");
   return earned;
 }

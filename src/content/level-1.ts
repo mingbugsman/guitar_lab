@@ -200,4 +200,104 @@ export const LEVEL_1_LESSONS: Lesson[] = [
       },
     ],
   }),
+  chordLesson("c", { levelId: "level-1", order: 6, prerequisites: ["chord-d"] }, {
+    summary: "Giữ nguyên hai ngón của Am, chỉ dời ngón 3.",
+    drill: ["c", "am"],
+    intro: [
+      "Hợp âm là nhiều nốt vang cùng lúc. C (Đô trưởng) dùng ba ngón và không gảy dây 6.",
+      "Ngón 3 ở dây 5 phím 3 cho nốt C. Đó là nốt gốc (nốt mà hợp âm mang tên) và là nốt trầm nhất của hợp âm này.",
+      "C rất gần Am: ngón 1 và ngón 2 nằm y như khi bấm Am. Chỉ có ngón 3 rời dây 3 để sang dây 5, phím 3.",
+    ],
+    compare:
+      "Trên hình cần đàn, dây 6 (hàng trên cùng, gần mặt bạn) có dấu X: không gảy. Ba chấm xếp thành đường chéo: ngón 3 ở hàng thứ hai từ trên (dây 5) phím 3, ngón 2 ở dây 4 phím 2, ngón 1 ở dây 2 (hàng thứ hai từ dưới lên, phía sàn nhà) phím 1.",
+    tip: "Đặt Am, giữ yên ngón 1 và ngón 2, rồi nhấc ngón 3 sang dây 5 phím 3: bạn đang bấm C. Hai ngón đứng yên làm điểm tựa cho bàn tay khi đổi qua lại.",
+    sessions: "4 đến 6",
+    stuck: {
+      smaller: "Đặt Am và giữ nguyên ngón 1, ngón 2. Chỉ tập nhấc ngón 3 từ dây 3 sang dây 5 phím 3 rồi về lại, 10 lần, chưa cần gảy.",
+      back: [{ slug: "chord-am", why: "C dùng lại ngón 1 và ngón 2 của Am" }],
+    },
+    practice: [
+      "Đặt C và gảy từng dây, từ dây 5 đến dây 1. Nghe kỹ dây 3 và dây 1.",
+      `Gảy xuống C 4 lần ${AT_60}, bắt đầu cú gảy từ dây 5.`,
+      "Đổi giữa Am và C, mỗi hợp âm 4 tiếng tích. Ngón 1 và ngón 2 không rời dây.",
+    ],
+    mistakes: [
+      {
+        mistake: "Dây 3 bị tắt tiếng.",
+        fix: "Phần thịt ngón 2 đang chạm dây 3. Cong ngón 2 để đầu ngón đứng thẳng trên dây 4.",
+      },
+      {
+        mistake: "Dây 1 bị tắt tiếng.",
+        fix: "Ngón 1 đang nằm rạp và chạm dây 1. Cong ngón 1, bấm bằng đầu ngón.",
+      },
+      {
+        mistake: "Dây 5 bị rè.",
+        fix: "Ngón 3 phải vươn xa nhất. Hạ ngón cái sau cần đàn thấp hơn một chút để ngón 3 tới được sát thanh kim loại của phím 3.",
+      },
+    ],
+  }),
+  chordLesson("g", { levelId: "level-1", order: 7, prerequisites: ["chord-c"] }, {
+    summary: "Gảy cả 6 dây: hai ngón ở dây to, một ngón ở tận dây 1.",
+    drill: ["g", "c"],
+    intro: [
+      "Hợp âm là nhiều nốt vang cùng lúc. G (Son trưởng) gảy cả 6 dây. Ba dây ở giữa (dây 4, 3, 2) không bấm.",
+      "Ngón 2 ở dây 6 phím 3 cho nốt G. Đó là nốt gốc (nốt mà hợp âm mang tên) và là nốt trầm nhất của hợp âm này.",
+      "Bàn tay bấm cần mở rộng: hai ngón ở phía dây to, một ngón ở tận dây 1. Đây là lần đầu bàn tay trải ngang cả cần đàn, nên đặt G chậm hơn các hợp âm trước là bình thường.",
+    ],
+    compare:
+      "Trên hình cần đàn, hai chấm nằm ở hai hàng trên cùng (dây 6 và dây 5, gần mặt bạn): ngón 2 ở phím 3, ngón 1 ở phím 2. Chấm thứ ba ở hàng dưới cùng (dây 1, phía sàn nhà), phím 3, là ngón 3. Ba hàng ở giữa không có chấm.",
+    tip: "Đặt ngón 2 ở dây 6 trước: đó là nốt trầm nhất, cũng là ngón khó vào chỗ nhất. Rồi mới thả ngón 1 và ngón 3 xuống.",
+    sessions: "5 đến 8",
+    stuck: {
+      smaller: "Tập G nhỏ trước: chỉ đặt ngón 3 ở dây 1 phím 3 và gảy 4 dây, từ dây 4 đến dây 1. Khi dây 1 sạch tiếng, thêm ngón 1 ở dây 5 và ngón 2 ở dây 6.",
+      back: [{ slug: "hand-position", why: "ôn chỗ đặt ngón cái sau cần đàn để bàn tay mở rộng được" }],
+    },
+    practice: [
+      "Đặt G và gảy từng dây, từ dây 6 đến dây 1. Nghe kỹ dây 5 và dây 2.",
+      `Gảy xuống G 4 lần ${AT_60}, gảy cả 6 dây.`,
+      "Đổi giữa C và G, mỗi hợp âm 4 tiếng tích.",
+    ],
+    mistakes: [
+      {
+        mistake: "Dây 5 bị tắt tiếng.",
+        fix: "Ngón 2 ở dây 6 đang nằm rạp lên dây 5. Cong ngón 2 để đầu ngón đứng trên dây 6.",
+      },
+      {
+        mistake: "Dây 2 bị tắt tiếng.",
+        fix: "Ngón 3 ở dây 1 đang chạm dây 2. Dựng đầu ngón 3 thẳng hơn, chỉ chạm dây 1.",
+      },
+    ],
+  }),
+  chordLesson("dm", { levelId: "level-1", order: 8, prerequisites: ["chord-g"] }, {
+    summary: "Như D nhưng buồn hơn: ngón 3 đứng yên, hai ngón kia đổi chỗ.",
+    drill: ["dm", "d"],
+    intro: [
+      "Hợp âm là nhiều nốt vang cùng lúc. Dm (Rê thứ) chỉ gảy 4 dây, giống D: dây 4 không bấm, dây 3, 2, 1 có bấm.",
+      "Dây 4 không bấm cho nốt D. Đó là nốt gốc (nốt mà hợp âm mang tên) và là nốt trầm nhất của hợp âm này.",
+      "Nghe D rồi nghe Dm: chỉ khác nốt trên dây 1. D bấm phím 2 (nốt F#, F thăng), Dm bấm phím 1 (nốt F), thấp hơn nửa cung (khoảng cách giữa hai phím liền nhau). Giống E với Em, một nốt thấp xuống nửa cung là tiếng đàn đổi từ sáng sang buồn.",
+    ],
+    compare:
+      "Trên hình cần đàn, dây 6 và dây 5 (hai hàng trên cùng, gần mặt bạn) có dấu X. Ba chấm nằm ở ba hàng dưới cùng: ngón 2 ở dây 3 phím 2, ngón 3 ở dây 2 phím 3, ngón 1 ở dây 1 (hàng dưới cùng, phía sàn nhà) phím 1.",
+    tip: "Từ D sang Dm, ngón 3 giữ nguyên ở dây 2 phím 3. Chỉ ngón 1 và ngón 2 đổi chỗ: ngón 2 sang dây 3 phím 2, ngón 1 sang dây 1 phím 1.",
+    sessions: "4 đến 6",
+    stuck: {
+      smaller: "Đặt ngón 3 ở dây 2 phím 3 và ngón 1 ở dây 1 phím 1, gảy hai dây đó cho sạch. Rồi mới thêm ngón 2 ở dây 3 phím 2.",
+      back: [{ slug: "chord-d", why: "Dm giữ nguyên ngón 3 của D" }],
+    },
+    practice: [
+      "Đặt Dm và gảy từng dây, từ dây 4 đến dây 1. Nghe kỹ dây 1.",
+      `Gảy xuống Dm 4 lần ${AT_60}, chỉ gảy 4 dây, bắt đầu từ dây 4.`,
+      "Đổi giữa D và Dm, mỗi hợp âm 4 tiếng tích. Ngón 3 không rời dây 2.",
+    ],
+    mistakes: [
+      {
+        mistake: "Dây 1 bị rè.",
+        fix: "Ngón 1 nằm xa thanh kim loại. Đặt đầu ngón 1 sát thanh kim loại thứ nhất, phía thùng đàn, và bấm chặt hơn.",
+      },
+      {
+        mistake: "Tiếng hợp âm bị đục.",
+        fix: "Bạn đang gảy cả dây 5 và dây 6. Bắt đầu cú gảy từ dây 4: nốt D là nốt trầm nhất.",
+      },
+    ],
+  }),
 ];
