@@ -14,6 +14,17 @@ describe("curriculum integrity", () => {
     for (const id of ["em", "am", "e", "a", "d"]) expect(slugs).toContain(`chord-${id}`);
   });
 
+  it("Phase 2 adds C, G and Dm to Level 1, each changed against a chord learned before it", () => {
+    const level1 = lessonsForLevel("level-1").map((l) => l.slug);
+    expect(level1.slice(-3)).toEqual(["chord-c", "chord-g", "chord-dm"]);
+    for (const slug of ["chord-c", "chord-g", "chord-dm"]) {
+      const lesson = getLesson(slug)!;
+      const from = lesson.blocks.flatMap((b) => (b.type === "visual" && b.visual.kind === "chordMove" ? [b.visual.from] : []))[0];
+      expect(from, slug).toBeDefined();
+      expect(LESSONS.findIndex((l) => l.slug === `chord-${from}`), slug).toBeLessThan(LESSONS.indexOf(lesson));
+    }
+  });
+
   it("numbers lessons 1, 2, 3… inside each level, in learning order", () => {
     for (const level of LEVELS) {
       expect(lessonsForLevel(level.id).map((l) => l.order)).toEqual(lessonsForLevel(level.id).map((_, i) => i + 1));
