@@ -15,6 +15,18 @@ export type UpdateEntry = {
 
 export const UPDATES: UpdateEntry[] = [
   {
+    id: "2026-11-20-chords-c-g-dm",
+    publishedAt: "2026-11-20T05:20:00+07:00",
+    title: "3 hợp âm mới: C, G, Dm",
+    items: [
+      "Level 1 có thêm bài C (Đô trưởng), G (Son trưởng) và Dm (Rê thứ), mỗi bài có hình chuyển tay và đo 1 phút đổi hợp âm.",
+      "Mỗi bài dựa vào hợp âm bạn đã biết: C giữ hai ngón của Am, Dm giữ ngón 3 của D.",
+      "Học xong cả 8 bài Level 1 sẽ nhận mốc 'Hoàn thành Level 1'.",
+      "Chuyển giữa các trang nhanh hơn, và có vạch mảnh chạy trên đầu trang khi đang tải.",
+    ],
+    href: "/academy/chord-c",
+  },
+  {
     id: "2026-11-13-acoustic-voice",
     publishedAt: "2026-11-13T23:45:00+07:00",
     title: "Tiếng đàn giống đàn thật hơn",
