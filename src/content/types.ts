@@ -26,7 +26,9 @@ export type Visual =
   /** A chord change in motion: finger dots glide from one chord to the other. */
   | { kind: "chordMove"; from: ChordId; to: ChordId }
   /** Example sounds: clean, buzzing, muted, neighbour string touched (one note to compare). */
-  | { kind: "soundSamples"; string?: StringNumber; fret?: number };
+  | { kind: "soundSamples"; string?: StringNumber; fret?: number }
+  /** Ear training: hear the major/minor pairs, then ten questions "Trưởng hay thứ?". */
+  | { kind: "majorMinor" };
 
 export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }

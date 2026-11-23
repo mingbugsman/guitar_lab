@@ -15,6 +15,17 @@ export type UpdateEntry = {
 
 export const UPDATES: UpdateEntry[] = [
   {
+    id: "2026-11-23-level-1-complete",
+    publishedAt: "2026-11-23T14:27:00+07:00",
+    title: "Level 1 đủ 12 bài: A7, D7, E7 và bài nghe trưởng, thứ",
+    items: [
+      "Bài mới 'Trưởng và thứ': nghe ba cặp E–Em, A–Am, D–Dm rồi làm 10 câu 'Trưởng hay thứ?', đáp án hiện ngay sau mỗi câu.",
+      "Ba hợp âm bảy A7, D7, E7: mỗi cái chỉ cần thêm hoặc bớt một ngón từ hợp âm bạn đã biết, và tập đổi sang hợp âm nó hay dẫn tới (A7 → D, D7 → G, E7 → Am).",
+      "Học xong 12 bài là có mốc 'Hoàn thành Level 1'.",
+    ],
+    href: "/academy/major-minor",
+  },
+  {
     id: "2026-11-20-chords-c-g-dm",
     publishedAt: "2026-11-20T05:20:00+07:00",
     title: "3 hợp âm mới: C, G, Dm",
