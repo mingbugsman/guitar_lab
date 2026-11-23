@@ -15,8 +15,7 @@ export const LEVELS: Level[] = [
     number: 1,
     title: "First Chords",
     subtitle: "Những hợp âm đầu tiên",
-    outcome: "Bấm hợp âm mở và chuyển đổi giữa các hợp âm cơ bản.",
-    note: "Bản MVP 0.1 gồm: đọc sơ đồ hợp âm, Am, E, A, D (Em đã học ở cuối Level 0). Dm, C, G, A7, D7, E7 sẽ có ở bản 0.2.",
+    outcome: "Bấm 11 hợp âm mở, chuyển đổi giữa chúng và nghe ra hợp âm trưởng hay thứ.",
   },
 ];
 

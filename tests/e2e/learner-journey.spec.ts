@@ -31,7 +31,7 @@ test("a new learner can learn, practice and come back tomorrow", async ({ page }
   // the new page starts at the top, greeting visible
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(page.getByTestId("today-lesson")).toHaveText("Làm quen với Guitar Lab và cây đàn");
-  await expect(page.getByTestId("progress-count")).toContainText("0/21");
+  await expect(page.getByTestId("progress-count")).toContainText("0/25");
 
   // Complete lesson 1
   await page.goto("/academy/introduction");
@@ -74,7 +74,7 @@ test("a new learner can learn, practice and come back tomorrow", async ({ page }
 
   // Dashboard + progress reflect saved data
   await page.goto("/dashboard");
-  await expect(page.getByTestId("progress-count")).toContainText("1/21");
+  await expect(page.getByTestId("progress-count")).toContainText("1/25");
   await expect(page.getByTestId("today-lesson")).toHaveText("Cấu tạo cây đàn guitar");
   await page.goto("/progress");
   await expect(page.locator('[data-milestone="first-lesson"]')).toHaveAttribute("data-achieved", "true");
