@@ -156,12 +156,12 @@ describe("writing guide §6 — a way out when stuck", () => {
 
 describe("writing guide §5 — body and expectations", () => {
   const needsBodyNote = LESSONS.filter(
-    (l) => ["posture", "hand-position", "fretboard-basics"].includes(l.slug) || l.slug.startsWith("chord-"),
+    (l) => ["posture", "hand-position", "fretboard-basics"].includes(l.slug) || l.slug.startsWith("chord-") || l.slug.startsWith("strum-"),
   );
 
   it("covers posture, hand position, fretting notes and every chord lesson", () => {
     expect(needsBodyNote.map((l) => l.slug)).toEqual(
-      expect.arrayContaining(["posture", "hand-position", "fretboard-basics", "chord-em", "chord-am", "chord-e", "chord-a", "chord-d", "chord-c", "chord-g", "chord-dm", "chord-a7", "chord-d7", "chord-e7"]),
+      expect.arrayContaining(["posture", "hand-position", "fretboard-basics", "chord-em", "chord-am", "chord-e", "chord-a", "chord-d", "chord-c", "chord-g", "chord-dm", "chord-a7", "chord-d7", "chord-e7", "strum-down-up", "strum-first-progression"]),
     );
   });
 

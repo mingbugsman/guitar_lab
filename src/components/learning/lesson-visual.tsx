@@ -11,6 +11,7 @@ import { Tuner } from "@/components/audio/tuner";
 import { ChordChangeTimer } from "@/components/audio/chord-change-timer";
 import { SoundSamples } from "@/components/audio/sound-samples";
 import { MajorMinorQuiz } from "@/components/audio/major-minor-quiz";
+import { StrumPattern } from "@/components/audio/strum-pattern";
 import { ChordMove } from "@/components/guitar/chord-move";
 import { StrumMotion } from "@/components/guitar/strum-motion";
 import { Button } from "@/components/ui/button";
@@ -119,5 +120,7 @@ export function LessonVisual({ visual }: { visual: Visual }) {
       return <SoundSamples string={visual.string} fret={visual.fret} />;
     case "majorMinor":
       return <MajorMinorQuiz />;
+    case "strumPattern":
+      return <StrumPattern strokes={visual.strokes} chords={visual.chords} bpm={visual.bpm} />;
   }
 }

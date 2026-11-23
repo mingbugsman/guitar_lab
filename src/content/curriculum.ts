@@ -1,5 +1,6 @@
 import { LEVEL_0_LESSONS } from "./level-0";
 import { LEVEL_1_LESSONS } from "./level-1";
+import { LEVEL_2_LESSONS } from "./level-2";
 import type { Lesson, Level, LevelId } from "./types";
 
 export const LEVELS: Level[] = [
@@ -17,6 +18,14 @@ export const LEVELS: Level[] = [
     subtitle: "Những hợp âm đầu tiên",
     outcome: "Bấm 11 hợp âm mở, chuyển đổi giữa chúng và nghe ra hợp âm trưởng hay thứ.",
   },
+  {
+    id: "level-2",
+    number: 2,
+    title: "Rhythm & Strumming",
+    subtitle: "Nhịp và gảy",
+    outcome: "Gảy xuống, lên đều tay theo máy đếm nhịp, chơi mẫu gảy ↓ ↓↑ ↑↓↑ và đổi hợp âm mỗi ô nhịp.",
+    note: "Bản 0.2 gồm nhịp 4/4 và mẫu gảy đầu tiên. Nhịp 3/4, 6/8, rải hợp âm và capo sẽ có ở các bản sau.",
+  },
 ];
 
 /** Permission to stop (writing guide §6) for lessons that do not say something more specific. */
@@ -24,7 +33,7 @@ export const REST_DEFAULT =
   "Nếu tay đã mỏi hoặc đầu ngón rát, dừng ở đây. Ngủ một giấc rồi mai tập lại, tay sẽ làm dễ hơn hôm nay.";
 
 /** Every lesson in learning order. */
-export const LESSONS: Lesson[] = [...LEVEL_0_LESSONS, ...LEVEL_1_LESSONS];
+export const LESSONS: Lesson[] = [...LEVEL_0_LESSONS, ...LEVEL_1_LESSONS, ...LEVEL_2_LESSONS];
 
 const bySlug = new Map(LESSONS.map((l) => [l.slug, l]));
 
