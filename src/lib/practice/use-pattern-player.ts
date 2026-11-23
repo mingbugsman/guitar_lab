@@ -28,10 +28,13 @@ export function usePatternPlayer(sequence: Sequence, tempo: Tempo) {
   const muted = useRef(false);
   const cleanup = useRef<(() => void) | null>(null);
   const startedAt = useRef<number | null>(null);
+  /** Picture updates are queued ahead of the sound; ones from an earlier run are dropped. */
+  const run = useRef(0);
   const [isHeld, setIsHeld] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
   const stop = useCallback(() => {
+    run.current += 1;
     cleanup.current?.();
     cleanup.current = null;
     setStatus("idle");
@@ -44,11 +47,15 @@ export function usePatternPlayer(sequence: Sequence, tempo: Tempo) {
   const play = useCallback(
     async (mode: "preview" | "run") => {
       cleanup.current?.();
+      const id = ++run.current;
+      const live = () => run.current === id;
       setError(null);
       setStatus("loading");
       try {
         const { Tone, pluck } = await getGuitar();
+        if (!live()) return; // stopped while the sound was loading
         claimTransport(OWNER, () => {
+          run.current += 1;
           cleanup.current?.();
           cleanup.current = null;
           setStatus("idle");
@@ -75,12 +82,13 @@ export function usePatternPlayer(sequence: Sequence, tempo: Tempo) {
               (e.accent ? hi : lo).triggerAttackRelease(e.accent ? 1600 : 1000, 0.03, time);
               const b = Math.round(e.beat - (e.countIn ? 0 : countIn)) % 4;
               draw.schedule(() => {
+                if (!live()) return;
                 setBeat(b);
                 if (e.countIn) setStatus("countin");
               }, time);
             } else {
               if (!muted.current) for (const h of sequence.steps[e.index].hits) pluck(h.string, h.fret, time);
-              draw.schedule(() => setStepIndex(e.index), time);
+              draw.schedule(() => live() && setStepIndex(e.index), time);
             }
           }, ticks(e.beat));
         }
@@ -88,7 +96,7 @@ export function usePatternPlayer(sequence: Sequence, tempo: Tempo) {
         if (mode === "preview") {
           t.bpm.value = PREVIEW_BPM;
           setBpm(PREVIEW_BPM);
-          t.schedule((time) => draw.schedule(() => stop(), time), ticks(sequence.beats + 0.5));
+          t.schedule((time) => draw.schedule(() => live() && stop(), time), ticks(sequence.beats + 0.5));
           setStatus("preview");
         } else {
           let r = -1;
@@ -101,6 +109,7 @@ export function usePatternPlayer(sequence: Sequence, tempo: Tempo) {
             const next = tempoForRound(tempo, r, held.current);
             t.bpm.setValueAtTime(next, time);
             draw.schedule(() => {
+              if (!live()) return;
               setRound(r);
               setBpm(next);
               setStatus("running");
