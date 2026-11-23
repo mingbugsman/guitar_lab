@@ -15,6 +15,19 @@ export type UpdateEntry = {
 
 export const UPDATES: UpdateEntry[] = [
   {
+    id: "2026-11-23-level-2-strumming",
+    publishedAt: "2026-11-23T14:47:00+07:00",
+    title: "Level 2: nhịp và gảy",
+    items: [
+      "4 bài mới: gảy xuống và lên cả hợp âm, giữ tay đi đều như con lắc, mẫu gảy đầu tiên ↓ ↓↑ ↑↓↑, và vòng hợp âm G – Em – C – D.",
+      "Hình mẫu gảy mới: các ô ↓ ↑ sáng lên đúng lúc theo máy đếm nhịp, có tiếng đàn mẫu. Tắt tiếng mẫu đi để tự gảy theo tiếng tích, chỉnh tốc độ bằng nút + và −.",
+      "Mũi tên mờ, viền đứt là lúc tay vẫn đi nhưng không chạm dây, để tay gảy không bao giờ dừng.",
+      "Trang Công cụ có thêm 'Tập mẫu gảy': chọn mẫu gảy và vòng hợp âm để tập riêng.",
+      "Sửa lỗi: bấm Dừng ở bài tập ngón hoặc thử thách hợp âm đôi khi màn hình vẫn báo đang chạy.",
+    ],
+    href: "/academy/strum-down-up",
+  },
+  {
     id: "2026-11-23-level-1-complete",
     publishedAt: "2026-11-23T14:27:00+07:00",
     title: "Level 1 đủ 12 bài: A7, D7, E7 và bài nghe trưởng, thứ",

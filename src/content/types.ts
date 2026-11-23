@@ -2,6 +2,7 @@ import type { FretMarker } from "@/components/guitar/fretboard";
 import type { PartId } from "@/components/guitar/guitar-anatomy";
 import type { ChordId } from "@/lib/music/chords";
 import type { StringNumber } from "@/lib/music/guitar";
+import type { Stroke } from "@/lib/practice/strum-pattern";
 
 export type Visual =
   | { kind: "anatomy"; initialPart?: PartId }
@@ -28,7 +29,12 @@ export type Visual =
   /** Example sounds: clean, buzzing, muted, neighbour string touched (one note to compare). */
   | { kind: "soundSamples"; string?: StringNumber; fret?: number }
   /** Ear training: hear the major/minor pairs, then ten questions "Trưởng hay thứ?". */
-  | { kind: "majorMinor" };
+  | { kind: "majorMinor" }
+  /**
+   * A strumming pattern (8 slots per 4/4 bar, see lib/practice/strum-pattern) played with the
+   * metronome; one bar per chord, looping.
+   */
+  | { kind: "strumPattern"; strokes: Stroke[]; chords: ChordId[]; bpm?: number };
 
 export type Block =
   | { type: "text"; heading?: string; paragraphs: string[] }
@@ -63,7 +69,7 @@ export type Lesson = {
   mastery: string[];
 };
 
-export type LevelId = "level-0" | "level-1";
+export type LevelId = "level-0" | "level-1" | "level-2";
 
 export type Level = {
   id: LevelId;

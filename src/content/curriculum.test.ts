@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CHORDS } from "@/lib/music/chords";
+import { patternProblems } from "@/lib/practice/strum-pattern";
 import { LESSONS, LEVELS, getLesson, lessonsForLevel, nextLesson } from "./curriculum";
 
 describe("curriculum integrity", () => {
@@ -29,6 +30,19 @@ describe("curriculum integrity", () => {
       "chord-d7",
       "chord-e7",
     ]);
+  });
+
+  it("Level 2 teaches strumming in order and only uses chords from Level 0 and 1", () => {
+    const level2 = lessonsForLevel("level-2");
+    expect(level2.map((l) => l.slug)).toEqual(["strum-down-up", "strum-steady-hand", "strum-first-pattern", "strum-first-progression"]);
+    const known = new Set(LESSONS.filter((l) => l.levelId !== "level-2" && l.slug.startsWith("chord-")).map((l) => l.slug.slice(6)));
+    for (const l of level2) {
+      for (const b of l.blocks) {
+        if (b.type !== "visual" || b.visual.kind !== "strumPattern") continue;
+        expect(patternProblems(b.visual.strokes), l.slug).toEqual([]);
+        for (const c of b.visual.chords) expect(known.has(c), `${l.slug}: ${c}`).toBe(true);
+      }
+    }
   });
 
   it("every Phase 2 chord is changed against a chord learned before it", () => {
@@ -114,6 +128,6 @@ describe("curriculum integrity", () => {
     expect(nextLesson("introduction")?.slug).toBe("guitar-anatomy");
     expect(nextLesson("clean-sounds")?.slug).toBe("reading-chord-diagrams");
     expect(nextLesson(LESSONS.at(-1)!.slug)).toBeUndefined();
-    expect(LEVELS.map((l) => l.id)).toEqual(["level-0", "level-1"]);
+    expect(LEVELS.map((l) => l.id)).toEqual(["level-0", "level-1", "level-2"]);
   });
 });
