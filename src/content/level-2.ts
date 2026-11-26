@@ -3,13 +3,13 @@ import { AT_60 } from "./chord-lesson";
 import type { Lesson } from "./types";
 
 /**
- * LEVEL 2 — RHYTHM & STRUMMING (MVP 0.2, first part: 4/4 only).
+ * LEVEL 2 — RHYTHM & STRUMMING (MVP 0.2): 4/4, then 3/4.
  * Level 0 taught down/up on one string and counting "1 và 2 và". Here the pick crosses a whole
  * chord, the hand learns to keep moving when it does not touch the strings, and the learner
  * ends by changing chords every bar under one strumming pattern: enough to accompany a song.
  * Arrows: ↓ = toward the floor (string 6 → 1), ↑ = toward the face, as on the fretboard picture.
  */
-const { quarters, eighths, downDownUp, folk } = STRUM_PRESETS;
+const { quarters, eighths, downDownUp, folk, waltzDowns, waltz } = STRUM_PRESETS;
 
 export const LEVEL_2_LESSONS: Lesson[] = [
   {
@@ -300,5 +300,80 @@ export const LEVEL_2_LESSONS: Lesson[] = [
     ],
     assessment: ["Chơi vòng G, Em, C, D với mẫu ↓ ↓↑ ↑↓↑ 4 vòng liền ở 60 BPM, đổi hợp âm đúng số 1."],
     mastery: ["Chơi vòng này ở 80 BPM và hát nhẩm theo một bài quen dùng cùng vòng hợp âm."],
+  },
+  {
+    slug: "strum-three-four",
+    levelId: "level-2",
+    order: 5,
+    title: "Nhịp 3/4: đếm 1 2 3",
+    summary: "Mỗi ô nhịp ba phách, phách 1 mạnh: nhịp của điệu valse và nhiều bài hát ru.",
+    minutes: 12,
+    objectives: [
+      `Đếm đều '1 2 3' ${AT_60}, gảy mạnh hơn ở phách (nhịp đập đều của bài nhạc) thứ nhất.`,
+      "Chơi ba cú xuống ↓ ↓ ↓, rồi mẫu ↓ ↓↑ ↓↑, trong nhịp 3/4.",
+      "Đổi hợp âm (nhiều nốt vang cùng lúc) mỗi ô nhịp (một nhóm 3 phách) trên vòng G, C, D, G.",
+    ],
+    prerequisites: ["strum-first-progression"],
+    blocks: [
+      {
+        type: "text",
+        heading: "Ba phách một ô nhịp",
+        paragraphs: [
+          "Nhịp 4/4 bạn đã chơi có 4 phách mỗi ô nhịp. Nhịp 3/4 chỉ có 3: đếm '1 2 3, 1 2 3'. Đây là nhịp của điệu valse (nhạc khiêu vũ xoay vòng) và của nhiều bài hát ru.",
+          "Phách 1 là phách mạnh: gảy chắc tay hơn một chút. Phách 2 và 3 là phách nhẹ. Máy đếm nhịp cũng gõ phách 1 to hơn để bạn nghe ra đầu ô nhịp.",
+          "Tay gảy vẫn như con lắc: xuống ở số, lên ở chữ 'và'. Chỉ khác là cứ sau số 3 lại quay về số 1.",
+        ],
+      },
+      {
+        type: "visual",
+        visual: { kind: "strumPattern", strokes: waltzDowns.strokes, chords: ["g"], bpm: 60 },
+        caption: "Ba cú xuống: cú ở số 1 to hơn. Nghe 3 tiếng tích chuẩn bị rồi gảy cùng.",
+      },
+      {
+        type: "visual",
+        visual: { kind: "strumPattern", strokes: waltz.strokes, chords: ["g", "c", "d", "g"], bpm: 60 },
+        caption: "Mẫu ↓ ↓↑ ↓↑ trên vòng G, C, D, G: mỗi hợp âm một ô nhịp 3 phách.",
+      },
+      {
+        type: "callout",
+        tone: "tip",
+        text: "Đếm to '1 2 3' và nhún nhẹ đầu gối ở số 1. Cơ thể cảm được phách mạnh thì tay gảy tự nhấn theo.",
+      },
+      {
+        type: "callout",
+        tone: "body",
+        text: "Lúc đầu tay quen 4 phách nên hay gảy thừa một phách; chơi lệch vài ô nhịp là bình thường. Thường mất 2 đến 4 buổi tập để cảm nhịp 3/4 tự nhiên. Dừng lại khi cổ tay mỏi, nghỉ vài phút rồi tập tiếp chậm hơn.",
+      },
+    ],
+    practice: {
+      minutes: 8,
+      steps: [
+        "Vỗ tay theo máy đếm nhịp, vỗ mạnh ở số 1, đếm to '1 2 3' trong 4 ô nhịp.",
+        "Bấm G, chơi ba cú xuống, cú ở số 1 mạnh hơn, 4 ô nhịp.",
+        "Chơi mẫu ↓ ↓↑ ↓↑ trên vòng G, C, D, G cùng tiếng đàn mẫu, 2 vòng.",
+        "Tắt tiếng đàn mẫu, chơi 2 vòng chỉ với tiếng tích.",
+      ],
+    },
+    mistakes: [
+      {
+        mistake: "Gảy thêm một phách như nhịp 4/4, bị lệch ô nhịp.",
+        fix: "Đếm to '1 2 3' khi chơi. Số 1 luôn trùng tiếng tích to của máy; cú gảy mạnh không rơi vào tiếng tích to là đã thừa phách.",
+      },
+      {
+        mistake: "Phách nào cũng to như nhau.",
+        fix: "Ở số 1 cho phím gảy (miếng nhựa nhỏ để gảy) đi sâu hơn một chút; ở số 2 và 3 gảy nông và nhẹ.",
+      },
+    ],
+    stuck: {
+      smaller: "Chưa cần đổi hợp âm. Giữ G, chỉ gảy một cú ở số 1 rồi để đàn ngân hết số 2 và 3. Khi cảm được vòng '1 2 3' rồi mới gảy đủ ba cú.",
+      back: [{ slug: "strum-first-progression", why: "ôn đổi hợp âm mỗi ô nhịp khi tay gảy không dừng" }],
+    },
+    checklist: [
+      { id: "clap", label: "Tôi vỗ tay theo máy đếm nhịp, vỗ mạnh ở số 1, 4 ô nhịp 3 phách không lệch." },
+      { id: "downs", label: "Tôi chơi ba cú xuống trên G, cú ở số 1 to hơn, 4 ô nhịp liền." },
+      { id: "waltz", label: "Tôi chơi ↓ ↓↑ ↓↑ trên vòng G, C, D, G chỉ với tiếng tích, 2 vòng." },
+    ],
+    assessment: ["Chơi ↓ ↓↑ ↓↑ trên vòng G, C, D, G 4 vòng liền ở 60 BPM, cú gảy mạnh luôn rơi vào số 1."],
+    mastery: ["Chơi vòng này ở 90 BPM, nghe rõ phách mạnh, không thừa không thiếu phách."],
   },
 ];

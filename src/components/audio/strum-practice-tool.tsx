@@ -22,7 +22,7 @@ export function StrumPracticeTool() {
       <div>
         <h2 className="font-semibold">Tập mẫu gảy</h2>
         <p className="text-sm text-muted-foreground">
-          Chọn mẫu gảy và vòng hợp âm, mỗi hợp âm một ô nhịp. Máy đếm 4 tiếng tích rồi mới gảy.
+          Chọn mẫu gảy và vòng hợp âm, mỗi hợp âm một ô nhịp. Máy đếm một ô nhịp tiếng tích rồi mới gảy.
         </p>
       </div>
       <div className="flex flex-wrap gap-3">
@@ -31,7 +31,7 @@ export function StrumPracticeTool() {
           <select className="h-10 rounded-md border bg-background px-2" value={preset} onChange={(e) => setPreset(e.target.value)} data-testid="strum-tool-pattern">
             {presets.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.name}: {p.strokes.map((s) => (s === "D" ? "↓" : s === "U" ? "↑" : "·")).join(" ")}
+                {p.name} ({p.strokes.length / 2}/4): {p.strokes.map((s) => (s === "D" ? "↓" : s === "U" ? "↑" : "·")).join(" ")}
               </option>
             ))}
           </select>

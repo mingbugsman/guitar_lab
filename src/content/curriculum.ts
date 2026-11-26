@@ -24,7 +24,7 @@ export const LEVELS: Level[] = [
     title: "Rhythm & Strumming",
     subtitle: "Nhịp và gảy",
     outcome: "Gảy xuống, lên đều tay theo máy đếm nhịp, chơi mẫu gảy ↓ ↓↑ ↑↓↑ và đổi hợp âm mỗi ô nhịp.",
-    note: "Bản 0.2 gồm nhịp 4/4 và mẫu gảy đầu tiên. Nhịp 3/4, 6/8, rải hợp âm và capo sẽ có ở các bản sau.",
+    note: "Đã có nhịp 4/4, mẫu gảy đầu tiên và nhịp 3/4. Nhịp 6/8, rải hợp âm và capo sẽ có ở các bản sau.",
   },
 ];
 

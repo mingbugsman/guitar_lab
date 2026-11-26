@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getGuitar } from "@/lib/audio/guitar-synth";
 import { claimTransport, ownsTransport, releaseTransport } from "@/lib/audio/transport-owner";
 import { CHORDS, type ChordId } from "@/lib/music/chords";
-import { BEATS_PER_BAR, countLabel, handMove, strokeNotes, strumTimeline, type Stroke } from "@/lib/practice/strum-pattern";
+import { beatsOf, countLabel, handMove, strokeNotes, strumTimeline, type Stroke } from "@/lib/practice/strum-pattern";
 import { cn } from "@/lib/utils";
 
 const OWNER = "strum-pattern";
@@ -20,12 +20,13 @@ const strokeLabel = (s: Stroke, slot: number) =>
   s === "D" ? "gảy xuống" : s === "U" ? "gảy lên" : handMove(slot) === "down" ? "tay đi xuống, không chạm dây" : "tay đi lên, không chạm dây";
 
 /**
- * A strumming pattern that plays along with the metronome: one bar of 8 slots
+ * A strumming pattern that plays along with the metronome: one bar of 8 slots (6 in 3/4)
  * ("1 và 2 và 3 và 4 và"), ↓ and ↑ where the pick touches the strings, a faint arrow where the
  * hand moves past without touching. The slot lights up exactly when its stroke sounds (both are
  * scheduled on the Web Audio clock). With several chords, each gets one bar, then it loops.
  */
 export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { strokes: Stroke[]; chords: ChordId[]; bpm?: number }) {
+  const beats = beatsOf(strokes);
   const [status, setStatus] = useState<Status>("idle");
   const [bpm, setBpm] = useState(initialBpm);
   const [slot, setSlot] = useState(-1);
@@ -99,7 +100,8 @@ export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { stroke
           }
           if (e.stroke !== "-" && guitarOn.current) {
             const dir = e.stroke === "D" ? "down" : "up";
-            const velocity = dir === "down" ? (e.slot === 0 ? 0.9 : 0.8) : 0.55;
+            // beat 1 is the strong beat: a clearly louder down stroke
+            const velocity = dir === "down" ? (e.slot === 0 ? 0.95 : 0.75) : 0.55;
             strokeNotes(e.chord, dir).forEach((n, k) => pluck(n.string, n.fret, time + k * (dir === "down" ? 0.012 : 0.009), { velocity }));
           }
           draw.schedule(() => {
@@ -111,8 +113,8 @@ export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { stroke
         }, ticks(e.beat));
       }
       t.loop = true;
-      t.loopStart = ticks(BEATS_PER_BAR);
-      t.loopEnd = ticks(BEATS_PER_BAR + chords.length * BEATS_PER_BAR);
+      t.loopStart = ticks(beats);
+      t.loopEnd = ticks(beats + chords.length * beats);
 
       cleanup.current = () => {
         if (ownsTransport(OWNER)) {
@@ -143,7 +145,7 @@ export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { stroke
   const playing = status !== "idle";
   const current = chords[bar] ?? chords[0];
   const next = chords[(bar + 1) % chords.length];
-  const describe = strokes.map((s, i) => `${countLabel(i)}: ${strokeLabel(s, i)}`).join(", ");
+  const describe = strokes.map((s, i) => `${countLabel(i, beats)}: ${strokeLabel(s, i)}`).join(", ");
 
   return (
     <div className="space-y-3" data-testid="strum-pattern" data-status={status} data-slot={slot}>
@@ -166,7 +168,7 @@ export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { stroke
                 ? withGuitar
                   ? "Gảy theo tiếng đàn mẫu"
                   : "Chỉ còn tiếng tích: bạn gảy"
-                : "Máy đếm 4 tiếng tích rồi mới gảy"}
+                : `Máy đếm ${beats} tiếng tích rồi mới gảy`}
           </p>
         </div>
 
@@ -186,8 +188,8 @@ export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { stroke
           </ol>
         )}
 
-        <ol className="grid grid-cols-4 gap-2" aria-label={`Mẫu gảy: ${describe}`}>
-          {Array.from({ length: BEATS_PER_BAR }, (_, beat) => (
+        <ol className="grid gap-2" style={{ gridTemplateColumns: `repeat(${beats}, minmax(0, 1fr))` }} aria-label={`Mẫu gảy nhịp ${beats}/4: ${describe}`}>
+          {Array.from({ length: beats }, (_, beat) => (
             <li key={beat} className="grid grid-cols-2 gap-1">
               {[beat * 2, beat * 2 + 1].map((i) => {
                 const s = strokes[i];
@@ -208,7 +210,7 @@ export function StrumPattern({ strokes, chords, bpm: initialBpm = 70 }: { stroke
                     <span role="img" aria-label={strokeLabel(s, i)} className={cn(ghost && (active ? "text-foreground/60" : "text-muted-foreground/35"))}>
                       {handMove(i) === "down" ? <ArrowDown className="size-5" strokeWidth={2.75} /> : <ArrowUp className="size-5" strokeWidth={2.75} />}
                     </span>
-                    <span className={cn("gl-num text-xs", !active && "text-muted-foreground")}>{countLabel(i)}</span>
+                    <span className={cn("gl-num text-xs", !active && "text-muted-foreground")}>{countLabel(i, beats)}</span>
                   </div>
                 );
               })}

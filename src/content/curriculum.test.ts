@@ -34,7 +34,7 @@ describe("curriculum integrity", () => {
 
   it("Level 2 teaches strumming in order and only uses chords from Level 0 and 1", () => {
     const level2 = lessonsForLevel("level-2");
-    expect(level2.map((l) => l.slug)).toEqual(["strum-down-up", "strum-steady-hand", "strum-first-pattern", "strum-first-progression"]);
+    expect(level2.map((l) => l.slug)).toEqual(["strum-down-up", "strum-steady-hand", "strum-first-pattern", "strum-first-progression", "strum-three-four"]);
     const known = new Set(LESSONS.filter((l) => l.levelId !== "level-2" && l.slug.startsWith("chord-")).map((l) => l.slug.slice(6)));
     for (const l of level2) {
       for (const b of l.blocks) {

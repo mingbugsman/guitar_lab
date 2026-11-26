@@ -40,6 +40,18 @@ describe("strumming patterns", () => {
     for (const s of slots) if (s.kind === "slot" && s.stroke === "U") expect(s.beat % 1).toBe(0.5);
   });
 
+  it("a 6-slot pattern is a 3/4 bar: counts 1 và 2 và 3 và, 3 clicks a bar, accent on every 1", () => {
+    const waltz = STRUM_PRESETS.waltz.strokes;
+    expect(Array.from({ length: 6 }, (_, i) => countLabel(i, 3)).join(" ")).toBe("1 và 2 và 3 và");
+    const ev = strumTimeline(waltz, ["g", "c"]);
+    const clicks = ev.filter((e) => e.kind === "click");
+    expect(clicks).toHaveLength(3 + 6); // a bar of count-in, then two bars
+    expect(clicks.filter((c) => c.kind === "click" && c.accent).map((c) => c.beat)).toEqual([0, 3, 6]);
+    const second = ev.filter((e) => e.kind === "slot" && e.bar === 1);
+    expect(second.map((s) => s.beat)).toEqual([6, 6.5, 7, 7.5, 8, 8.5]);
+    expect(patternProblems("D-D-D".split("") as Stroke[])).not.toEqual([]);
+  });
+
   it("a down stroke sounds every chord string from the thickest; an up stroke the thin ones from string 1", () => {
     const down = strokeNotes("g", "down").map((n) => n.string);
     expect(down).toEqual([6, 5, 4, 3, 2, 1]);
